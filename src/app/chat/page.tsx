@@ -579,12 +579,16 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
       setIsLoading(true);
       try {
         // 获取文件内容（blob URL 和静态 URL 都可以用 fetch）
+        console.log("[PreviewDocModal] fetching doc:", url);
         const resp = await fetch(asset(url));
         if (!resp.ok) throw new Error(`文件获取失败 (${resp.status})`);
         const blob = await resp.blob();
+        console.log("[PreviewDocModal] fetched blob size:", blob.size);
 
         const { convertDocBlobToPreview } = await import("@/lib/doc-preview");
+        console.log("[PreviewDocModal] doc-preview module loaded");
         const result = await convertDocBlobToPreview(blob, name);
+        console.log("[PreviewDocModal] convert result kind:", result.kind, "value:", result.kind === "html" ? `(html len=${result.html.length})` : result.kind === "pdf" ? result.url : result.reason);
         if (revoked) return;
 
         if (result.kind === "html") {
@@ -595,6 +599,7 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
           setConvertError(result.reason);
         }
       } catch (err) {
+        console.error("[PreviewDocModal] convert error:", err);
         if (!revoked) {
           setConvertError(err instanceof Error ? err.message : "解析失败");
         }
