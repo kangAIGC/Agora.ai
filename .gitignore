@@ -62,6 +62,8 @@ logs/
 !public/bg4.mp4
 !public/1.mp4
 !public/2.mp4
+# 保留工作台/素材库默认状态引用的 mock 视频（画布节点输出）
+!public/mock-*/*.mp4
 *.avi
 *.mov
 *.wmv
