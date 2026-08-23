@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>涧溪流觞 — 陶瓷文创产业园二期概念方案</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f5f3f0;
+      --card: #ffffff;
+      --text: #2c2c2c;
+      --text-secondary: #6b6b6b;
+      --accent: #8b7355;
+      --accent-light: #c4a97d;
+      --border: #e0dbd4;
+      --radius: 8px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(245,243,240,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-brand .icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent); opacity: 0.15;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-brand .icon svg { width: 18px; height: 18px; }
+    .header-brand h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+    .header-brand span { font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.2; }
+    .header-nav { display: flex; gap: 24px; }
+    .header-nav a {
+      font-size: 13px; color: var(--text-secondary); text-decoration: none;
+      font-family: -apple-system, "PingFang SC", sans-serif;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--text); }
+
+    /* ===== Video Player ===== */
+    .video-section {
+      margin-top: 56px;
+      position: relative;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 70vh;
+    }
+    .video-wrapper video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: opacity 0.8s ease;
+    }
+    .video-wrapper video.hidden { opacity: 0; pointer-events: none; }
+    .video-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none;
+    }
+    .video-controls {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 24px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      z-index: 10;
+    }
+    .video-controls-left { display: flex; gap: 10px; }
+    .ctrl-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .ctrl-btn:hover { background: rgba(255,255,255,0.3); }
+    .ctrl-btn svg { width: 18px; height: 18px; fill: #fff; }
+    .video-dots { display: flex; gap: 8px; }
+    .video-dot {
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 13px; font-family: -apple-system, "PingFang SC", sans-serif;
+      background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7);
+      border: none; cursor: pointer; transition: all 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .video-dot.active {
+      background: rgba(255,255,255,0.3); color: #fff;
+    }
+    .video-dot:hover { background: rgba(255,255,255,0.25); }
+
+    /* ===== Hero Text ===== */
+    .hero-text {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: 720px; margin: 0 auto;
+    }
+    .hero-text .label {
+      font-family: -apple-system, "PingFang SC", sans-serif;
+      font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .hero-text h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 300; color: var(--text);
+      margin-bottom: 20px; line-height: 1.3;
+    }
+    .hero-text p {
+      font-size: 16px; color: var(--text-secondary);
+      max-width: 560px; margin: 0 auto; line-height: 1.9;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-section {
+      padding: 32px 24px 64px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .gallery-header { margin-bottom: 32px; }
+    .gallery-header h2 { font-size: 28px; font-weight: 400; margin-bottom: 6px; }
+    .gallery-header p { font-size: 15px; color: var(--text-secondary); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 640px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--border);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 20px;
+    }
+    .gallery-item:hover .overlay { opacity: 1; }
+    .gallery-item .overlay h3 { color: #fff; font-size: 16px; margin-bottom: 4px; }
+    .gallery-item .overlay p { color: rgba(255,255,255,0.7); font-size: 13px; font-family: -apple-system, sans-serif; }
+
+    /* ===== Lightbox ===== */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .lightbox.open { opacity: 1; pointer-events: auto; }
+    .lightbox img {
+      max-width: 85vw; max-height: 80vh;
+      object-fit: contain; border-radius: var(--radius);
+    }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-close svg { width: 22px; height: 22px; stroke: #fff; }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-nav svg { width: 22px; height: 22px; stroke: #fff; }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-caption {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      text-align: center; color: #fff;
+    }
+    .lightbox-caption h3 { font-size: 18px; margin-bottom: 4px; }
+    .lightbox-caption p { font-size: 13px; color: rgba(255,255,255,0.6); font-family: -apple-system, sans-serif; }
+
+    /* ===== Report ===== */
+    .report-section {
+      background: rgba(0,0,0,0.02);
+      padding: 64px 24px 80px;
+    }
+    .report-inner {
+      max-width: 760px; margin: 0 auto;
+    }
+    .report-title {
+      text-align: center; margin-bottom: 32px;
+    }
+    .report-title h2 { font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+    .report-title p { font-size: 15px; color: var(--text-secondary); }
+    .report-block { margin-bottom: 24px; }
+    .report-block h3 {
+      font-size: 20px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .report-block h3 .section-icon {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--accent); opacity: 0.12;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--accent);
+      font-family: -apple-system, "PingFang SC", sans-serif;
+      line-height: 1;
+    }
+    .report-block h3 .section-title {
+      line-height: 1;
+    }
+    .report-block h4 {
+      font-size: 15px; font-weight: 700;
+      margin: 16px 0 6px; color: var(--text);
+      letter-spacing: 0.5px;
+    }
+    .report-block p {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 10px;
+    }
+    .report-block strong { color: var(--text); font-weight: 700; }
+    .report-block ul { padding-left: 18px; margin-bottom: 10px; }
+    .report-block li { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    .swot-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin: 12px 0;
+    }
+    @media (max-width: 640px) {
+      .swot-grid { grid-template-columns: 1fr; }
+    }
+    .swot-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px;
+    }
+    .swot-card .swot-label {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    }
+    .swot-card .swot-badge {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; font-family: -apple-system, sans-serif;
+    }
+    .swot-card .swot-badge.s { background: #e8f5e9; color: #2e7d32; }
+    .swot-card .swot-badge.w { background: #fce4ec; color: #c62828; }
+    .swot-card .swot-badge.o { background: #e3f2fd; color: #1565c0; }
+    .swot-card .swot-badge.t { background: #fff3e0; color: #e65100; }
+    .swot-card .swot-name { font-size: 13px; font-weight: 500; font-family: -apple-system, sans-serif; line-height: 24px; }
+    .swot-card ul { list-style: none; padding: 0; }
+    .swot-card li { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 3px; }
+    .swot-card li::before { content: '• '; color: var(--accent-light); }
+
+    .value-cards { display: flex; flex-direction: column; gap: 8px; }
+    .value-card {
+      margin-bottom: 6px;
+    }
+    .value-card:last-child { margin-bottom: 0; }
+    .value-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .value-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+    .strategy-list { display: flex; flex-direction: column; gap: 8px; }
+    .strategy-item { display: flex; flex-direction: column; }
+    .strategy-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .strategy-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+    .quote-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+      margin: 12px 0;
+    }
+    .quote-box p {
+      font-size: 15px; color: var(--text);
+      margin: 0; text-align: center;
+    }
+
+    .layout-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+    .layout-item { display: flex; gap: 10px; align-items: flex-start; }
+    .layout-item .tag {
+      flex-shrink: 0; font-weight: 700; color: var(--accent);
+      font-size: 14px; min-width: 36px; line-height: 1.65;
+    }
+    .layout-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+      font-size: 12px; color: var(--text-secondary);
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .header-nav { display: none; }
+      .video-controls { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .video-dots { flex-wrap: wrap; }
+      .hero-text { padding: 40px 20px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21c0-4 3-7 6-7s6 3 6 7" stroke="var(--accent)"/>
+          <path d="M15 21c0-4 3-7 6-7s6 3 6 7" stroke="var(--accent)" opacity="0.4"/>
+          <path d="M9 14V8a3 3 0 0 1 3-3h0a3 3 0 0 1 3 3v6" stroke="var(--accent)"/>
+          <path d="M12 5V3" stroke="var(--accent)"/>
+          <path d="M9 3h6" stroke="var(--accent)"/>
+        </svg>
+      </div>
+      <div>
+        <h1>涧溪流觞</h1>
+        <span>陶瓷文创产业园二期概念方案</span>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="#video">视频展示</a>
+      <a href="#gallery">效果图</a>
+      <a href="#report">策划报告</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Video Player -->
+<section class="video-section" id="video">
+  <div class="video-wrapper">
+    <video id="videoA" muted playsinline></video>
+    <video id="videoB" muted playsinline class="hidden"></video>
+    <div class="video-overlay"></div>
+    <div class="video-controls">
+      <div class="video-controls-left">
+        <button class="ctrl-btn" id="playBtn" aria-label="播放/暂停">
+          <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
+        <button class="ctrl-btn" id="muteBtn" aria-label="静音/取消静音">
+          <svg id="muteIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg id="unmuteIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+      <div class="video-dots" id="videoDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Hero Text -->
+<div class="hero-text">
+  <h2>流水为脉 · 坊巷成园</h2>
+  <p class="label">Concept Design Proposal</p>
+</div>
+
+<!-- Gallery -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-header">
+    <h2>效果图预览</h2>
+    <p>点击任意图片可全屏查看细节</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose" aria-label="关闭">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="上一张">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img id="lbImg" src="" alt="" />
+  <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="下一张">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lightbox-caption">
+    <h3 id="lbTitle"></h3>
+    <p id="lbDesc"></p>
+  </div>
+</div>
+
+<!-- Report -->
+<section class="report-section" id="report">
+  <div class="report-inner">
+    <!-- 一、项目概况 -->
+    <div class="report-block">
+      <h3><span class="section-icon">一</span><span class="section-title">项目概况</span></h3>
+      <p>本项目为陶瓷文创产业园二期配套工程，定位为集<strong>办公研发、学术交流、生活休闲</strong>于一体的复合型文化创意产业园区。旨在延续一期功能，重点打造办公交流与生活休闲两大板块，构建完整的陶瓷文创产业生态链。</p>
+      <p>项目主要服务于企业办公人员、艺术家、设计师、学术访客及商旅人群。场地选址于<strong>景德镇三宝瓷谷</strong>，为两侧山体环抱的狭长峡谷地带，占地约2.89公顷，自然山水基底优越，但地势高差与山涧汇水的防治是设计的决定性前提。</p>
+      <p>核心设计命题在于：如何在严苛的峡谷地形与防洪安全限定下，将山水景观转化为空间骨架，实现一期风貌延续与创新，并在有限规模内高效复合多元功能。</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 二、项目条件分析 -->
+    <div class="report-block">
+      <h3><span class="section-icon">二</span><span class="section-title">项目条件分析</span></h3>
+      <h4>关键问题梳理</h4>
+      <div class="strategy-list">
+        <div class="strategy-item">
+          <div>
+            <h4>安全与地形的博弈</h4>
+            <p>狭长谷底是唯一可建设区域，但也是山洪行泄通道。设计必须在保障绝对安全的前提下，精细化处理建筑、道路与水系的关系，将防洪工程从制约转化为景观设计的组成部分。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>功能复合与空间品质的平衡</h4>
+            <p>在约1.58万㎡的有限地上面积内，需容纳从公共交流到私密居住的多元功能。如何通过垂直分区与空间渗透，在紧凑布局中创造高品质、有识别度的空间体验，是设计的关键。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>风貌延续与识别度塑造</h4>
+            <p>一期已形成明确的风格锚点，二期需在延续整体意象与塑造升级气质之间取得平衡，既要协调统一，又要避免同质化，使新建筑成为园区品质提升的催化剂。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>动静分区与流线组织</h4>
+            <p>办公交流的公共性与生活休闲的私密性需明确分区，在狭长场地内组织互不干扰的车行、人行、服务流线，并创造促进"非正式交流"的步行系统。</p>
+          </div>
+        </div>
+      </div>
+
+      <h4>SWOT 分析</h4>
+      <div class="swot-grid">
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-badge s">S</span><span class="swot-name">优势</span></div>
+          <ul>
+            <li>区位与产业双重利好：据守三宝瓷谷核心，一期运营成熟</li>
+            <li>景观资源不可复制：独特的山涧峡谷地貌</li>
+            <li>政策与文化势能：景德镇文化名片与产业政策支撑</li>
+          </ul>
+        </div>
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-badge w">W</span><span class="swot-name">劣势</span></div>
+          <ul>
+            <li>用地先天受限：峡谷狭长形态制约建筑排布</li>
+            <li>防洪刚性约束：山洪风险增加设计复杂度</li>
+            <li>高密度功能挑战：有限规模内容纳全业态</li>
+          </ul>
+        </div>
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-badge o">O</span><span class="swot-name">机会</span></div>
+          <ul>
+            <li>消费升级驱动：体验式文创消费兴起</li>
+            <li>劣势转化创新：催生建筑-景观一体化创新</li>
+            <li>交通赋能升级：接入全国高铁网扩展辐射范围</li>
+          </ul>
+        </div>
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-badge t">T</span><span class="swot-name">威胁</span></div>
+          <ul>
+            <li>长期运维风险：极端气候下山洪防御设施维护</li>
+            <li>投资与回报平衡：专项基础设施投入高</li>
+            <li>运营错配可能：客群淡旺季波动影响经营</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 三、设计策略 -->
+    <div class="report-block">
+      <h3><span class="section-icon">三</span><span class="section-title">设计策略</span></h3>
+      <div class="quote-box">
+        <p>以"水"为脉，化"险"为"景"——将场地最大劣势（山洪威胁）与最大优势（山水景观）进行创造性整合。</p>
+      </div>
+      <div class="strategy-list">
+        <div class="strategy-item">
+          <div>
+            <h4>回应安全诉求</h4>
+            <p>不回避谷底汇水，而是将其生态化改造为兼具行泄与景观功能的中央水道。通过抬高首层标高、设置分流堰与调蓄水塘，系统性地将防灾工程融入景观结构。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>挖掘场地价值</h4>
+            <p>摒弃将建筑排布于谷底两侧的常规做法，而是将水系作为空间骨架，让所有建筑沿水展开，形成亲水的"线性聚落"，最大化景观接触面，实现"对外看山，对内看景"。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>破解功能与流线难题</h4>
+            <p>以中央水街为纯步行主轴，串联动静各区，实现彻底的人车分流。车行环道置于西侧高地背侧，服务各功能组团后区，保证内部步行环境的完整与安全。</p>
+          </div>
+        </div>
+        <div class="strategy-item">
+          <div>
+            <h4>回应风貌与空间品质</h4>
+            <p>采用小尺度、群落化的建筑体量，与一期形成尺度上呼应，但以更灵动、亲水的当代姿态形成差异。通过水平错动、底层架空、亲水平台等手法，在有限用地内创造丰富的空间层次。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 四、方案设计 -->
+    <div class="report-block">
+      <h3><span class="section-icon">四</span><span class="section-title">方案设计</span></h3>
+
+      <h4>项目定位</h4>
+      <p>项目定位为陶瓷文创产业生态的<strong>"活力溪谷"</strong>，是洛客设计谷一期的功能延伸与品质升级板块，致力于打造一个集设计办公、艺术交流、轻度假生活于一体的"线性聚落"。</p>
+      <div class="swot-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-name">城市角色</span></div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin:0;">三宝瓷谷国际化陶瓷文创走廊的"柔性节点"，以低密度、高渗透性的形态衔接自然与一期园区</p>
+        </div>
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-name">功能定位</span></div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin:0;">聚焦"工作室+展示+论坛"与"短居+餐饮+康体"的化学融合，形成"工作即生活、交流即生产"的创新微生态</p>
+        </div>
+        <div class="swot-card">
+          <div class="swot-label"><span class="swot-name">形象定位</span></div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin:0;">以"溪石、流水、林间坊"的意象，塑造在自然中创作的诗意品牌气质</p>
+        </div>
+      </div>
+
+      <h4>设计理念</h4>
+      <div class="quote-box">
+        <p>"以流水为设计原点，以坊巷组织生活，让建筑从溪水中生长出来。"</p>
+      </div>
+
+      <h4>空间布局</h4>
+      <p>整体架构为<strong>"一脉两坊三组团"</strong>：</p>
+      <div class="layout-list">
+        <div class="layout-item">
+          <span class="tag">一脉</span>
+          <p>生态化改造现状山涧溪流，形成兼具雨水行泄与景观功能的中央景观水道。</p>
+        </div>
+        <div class="layout-item">
+          <span class="tag">两坊</span>
+          <p>水街两侧各形成一条连接各功能区的内部巷道——创研坊（办公交流）与栖居坊（生活休闲），由小桥、汀步连接。</p>
+        </div>
+        <div class="layout-item">
+          <span class="tag">三组团</span>
+          <div>
+            <p>• <strong>南入口办公组团</strong>：紧邻一期，以水庭为中心围合企业办公、会议中心与展厅</p>
+            <p>• <strong>中部创研组团</strong>：沿水街散落尺度宜人的工作室与阅览中心，营造创作聚落氛围</p>
+            <p>• <strong>北部生活休闲组团</strong>：依山错层布置行政客房、餐饮与健身房</p>
+          </div>
+        </div>
+      </div>
+
+      <h4>建筑造型</h4>
+      <p>总体形态取意<strong>"溪石冲刷"</strong>的动态感。</p>
+      <ul>
+        <li><strong>体量关系</strong>：建筑分解为长条状或L形，沿溪流层层退进，屋顶以单、双坡错动，如同被水流冲刷堆叠的"石群"。</li>
+        <li><strong>立面节奏</strong>：以水平线条为主导，通过悬挑观景盒、外挂楼梯与格栅遮阳打破冗长感。沿水界面呈下虚上实的漂浮感。</li>
+        <li><strong>标志性界面</strong>：在中央水塘处设置通透的"水上客厅"——一个玻璃与木结构的悬挑展亭，作为整个园区的视觉焦点与精神核心。</li>
+        <li><strong>环境关系</strong>：建筑形态刻意压低，屋顶隐于树冠，天际线由自然山体与屋顶绿化共同构成。</li>
+      </ul>
+
+      <h4>材质与色彩</h4>
+      <p>以<strong>"瓷土与柴窑"</strong>为原型，展现手工感与当代性的并存。</p>
+      <ul>
+        <li><strong>主体材料</strong>：灰白色清水混凝土板、超白玻璃幕墙，镶嵌深灰色金属板，灰白、暖灰色调源自高岭土与匣钵。</li>
+        <li><strong>辅助材料</strong>：焦茶色重组竹木饰面与本地红石贴面用于生活休闲区，呼应传统民居的木构与红岩护坡。</li>
+        <li><strong>色彩与质感</strong>：整体为暖灰、米白、木色基调，以孔雀蓝或茶叶末绿点缀构件。通过粗糙混凝土与光滑玻璃、温润木材的对比，营造丰富的光影与触感体验。</li>
+      </ul>
+
+      <h4>景观环境</h4>
+      <p>景观设计追求<strong>"野趣溪涧"</strong>的意境，让建筑成为景观的延伸。</p>
+      <ul>
+        <li><strong>核心策略</strong>："一水、一草、一花、一栈道"，保留原生乔木与芦苇，营造分级跌水、卵石溪滩与浅水湿地，充满自然生机。</li>
+        <li><strong>建筑与景观融合</strong>：建筑首层出挑木平台，屋顶设覆土种植与山坡无缝衔接。防洪护坡通过生态袋与攀缘植物全面柔化，消隐工程痕迹。</li>
+      </ul>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 五、方案价值总结 -->
+    <div class="report-block">
+      <h3><span class="section-icon">五</span><span class="section-title">方案价值总结</span></h3>
+      <div class="value-cards">
+        <div class="value-card">
+          <div>
+            <h4>化险为夷的示范性</h4>
+            <p>将山洪威胁的劣势，转化为山水景观的绝对优势，打造了一个防洪安全与景观体验高度融合的示范样本，为项目赋予了独特的识别度与行业影响力。</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div>
+            <h4>极致的景观溢价</h4>
+            <p>通过"中央水街"这一核心骨架，确保了所有功能和公共空间都能最大化享有亲水景观，极大提升了园区的空间品质与运营溢价能力，吸引了创意阶层与付费意愿更高的客群。</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div>
+            <h4>营造产业生态共同体</h4>
+            <p>通过"工作即生活"的功能混合与尺度亲切的"坊巷"聚落形态，鼓励非正式交流，构建了富有黏性的创意社群微生态，将空间从物理容器升级为产业孵化器。</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div>
+            <h4>传承与创新的平衡范式</h4>
+            <p>在延续瓷都传统聚落智慧的基础上，以现代建筑语言进行了精准转译，创造了一个植根于地域、面向未来的当代文创场所，精准平衡了与一期的协调关系与二期的升级使命。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+
+<script>
+(function() {
+  // ===== Data =====
+  const VIDEOS = [
+    'https://coze-coding-project.tos.coze.site/create_attachment/2026-08-07/4333612560548228_10717a25bd4b324a5c6fe5c88b4011ae_mock-v2.mp4?sign=4908096355-a7ee689f9a-0-3443ae0cc34f153d373e44668d9e0bfd76cd0f70ff39ebed1d94fb84fbcaac53',
+    'https://coze-coding-project.tos.coze.site/create_attachment/2026-08-07/4333612560548228_7bc40683ce8066de941354be46a540c7_mock-v1.mp4?sign=4908096347-5ffd4cd0bf-0-f3bb7b6ff4be8d243cd34018c86e8c5d54475134c768f17f506365f5268eb899',
+    'https://coze-coding-project.tos.coze.site/create_attachment/2026-08-07/4333612560548228_507578be42caeffec591cce8948916f7_mock-v4.mp4?sign=4908096353-f169dd4b69-0-1cceda7a9ea365bdc86bbdceb192b105ae42bd55710f594c6bced0b17bf2203f',
+    'https://coze-coding-project.tos.coze.site/create_attachment/2026-08-07/4333612560548228_603ebfbae4b7e425083d2c725c771ebe_mock-v3.mp4?sign=4908096352-a325b2482f-0-c5f50492b1d26a2a3c540d4265d94001ec8065ad29ebd7136c040200ffe2e440'
+  ];
+  const VIDEO_LABELS = ['鸟瞰全景', '溪谷漫步', '建筑细节', '室内空间'];
+
+  const IMAGES = [
+    { src: '1.png', caption: '鸟瞰全景', desc: '建筑群落沿溪谷展开，有机形态的穹顶建筑与山体自然融合' },
+    { src: '13.jpeg', caption: '溪谷漫步', desc: '中央水街串联各功能区，建筑立面随溪岸进退形成连续界面' },
+    { src: '2.png', caption: '建筑细节', desc: '通透的玻璃与木结构悬挑展亭，作为园区的视觉焦点与精神核心' },
+    { src: '28.jpeg', caption: '室内空间', desc: '拱形玻璃幕墙将山景引入室内，营造内外交融的空间体验' }
+  ];
+
+  // ===== Video Player =====
+  const videoA = document.getElementById('videoA');
+  const videoB = document.getElementById('videoB');
+  const playBtn = document.getElementById('playBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const muteIcon = document.getElementById('muteIcon');
+  const unmuteIcon = document.getElementById('unmuteIcon');
+  const dotsContainer = document.getElementById('videoDots');
+
+  let activeIndex = 0;
+  let activeLayer = 'A'; // 'A' or 'B'
+  let isPlaying = true;
+  let isMuted = true;
+  let isTransitioning = false;
+
+  // Create dots
+  VIDEO_LABELS.forEach(function(label, i) {
+    var dot = document.createElement('button');
+    dot.className = 'video-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = label;
+    dot.addEventListener('click', function() { switchTo(i); });
+    dotsContainer.appendChild(dot);
+  });
+
+  function getActiveVideo() { return activeLayer === 'A' ? videoA : videoB; }
+  function getNextVideo() { return activeLayer === 'A' ? videoB : videoA; }
+
+  function switchTo(index) {
+    if (isTransitioning || index === activeIndex) return;
+    isTransitioning = true;
+
+    var next = getNextVideo();
+    next.src = VIDEOS[index];
+    next.load();
+    if (isPlaying) {
+      next.play().catch(function(){});
+    }
+
+    // Fade transition
+    var current = getActiveVideo();
+    current.classList.add('hidden');
+    next.classList.remove('hidden');
+
+    activeLayer = activeLayer === 'A' ? 'B' : 'A';
+    activeIndex = index;
+
+    updateDots();
+
+    setTimeout(function() { isTransitioning = false; }, 800);
+  }
+
+  function updateDots() {
+    var dots = dotsContainer.querySelectorAll('.video-dot');
+    dots.forEach(function(d, i) {
+      d.className = 'video-dot' + (i === activeIndex ? ' active' : '');
+    });
+  }
+
+  // Initialize
+  videoA.src = VIDEOS[0];
+  videoA.muted = true;
+  videoB.muted = true;
+  videoB.src = VIDEOS[1];
+  videoB.load();
+
+  videoA.addEventListener('ended', function() {
+    var nextIndex = (activeIndex + 1) % VIDEOS.length;
+    switchTo(nextIndex);
+  });
+
+  videoA.play().catch(function(){});
+
+  // Play/Pause
+  playBtn.addEventListener('click', function() {
+    isPlaying = !isPlaying;
+    var v = getActiveVideo();
+    if (isPlaying) { v.play().catch(function(){}); } else { v.pause(); }
+    playIcon.style.display = isPlaying ? 'none' : 'block';
+    pauseIcon.style.display = isPlaying ? 'block' : 'none';
+  });
+
+  // Mute/Unmute
+  muteBtn.addEventListener('click', function() {
+    isMuted = !isMuted;
+    videoA.muted = isMuted;
+    videoB.muted = isMuted;
+    muteIcon.style.display = isMuted ? 'block' : 'none';
+    unmuteIcon.style.display = isMuted ? 'none' : 'block';
+  });
+
+  // ===== Gallery =====
+  var grid = document.getElementById('galleryGrid');
+  IMAGES.forEach(function(img, i) {
+    var item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = '<img src="' + img.src + '" alt="' + img.caption + '" loading="lazy" />' +
+      '<div class="overlay"><div><h3>' + img.caption + '</h3><p>' + img.desc + '</p></div></div>';
+    item.addEventListener('click', function() { openLightbox(i); });
+    grid.appendChild(item);
+  });
+
+  // ===== Lightbox =====
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbTitle = document.getElementById('lbTitle');
+  var lbDesc = document.getElementById('lbDesc');
+  var lbIndex = null;
+
+  function openLightbox(i) {
+    lbIndex = i;
+    lbImg.src = IMAGES[i].src;
+    lbTitle.textContent = IMAGES[i].caption;
+    lbDesc.textContent = IMAGES[i].desc + '  (' + (i+1) + '/' + IMAGES.length + ')';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbIndex = null;
+  }
+
+  function lbPrev() { if (lbIndex !== null) openLightbox((lbIndex - 1 + IMAGES.length) % IMAGES.length); }
+  function lbNext() { if (lbIndex !== null) openLightbox((lbIndex + 1) % IMAGES.length); }
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', function(e) { e.stopPropagation(); lbPrev(); });
+  document.getElementById('lbNext').addEventListener('click', function(e) { e.stopPropagation(); lbNext(); });
+  lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+
+  document.addEventListener('keydown', function(e) {
+    if (lbIndex === null) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+  });
+})();
+</script>
+
+</body>
+</html>

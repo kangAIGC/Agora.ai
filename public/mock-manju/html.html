@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《神骨》</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --card: #1a1a1a;
+      --text: #e8e8e8;
+      --text-secondary: #999;
+      --accent: #c9a96e;
+      --accent-light: #d4b87a;
+      --border: #2a2a2a;
+      --radius: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-brand h1 { font-size: 18px; font-weight: 600; color: var(--accent); }
+    .header-nav { display: flex; gap: 24px; }
+    .header-nav a {
+      font-size: 13px; color: var(--text-secondary); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--text); }
+
+    /* ===== Video Player ===== */
+    .video-section {
+      margin-top: 56px;
+      position: relative;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 80vh;
+    }
+    .video-wrapper video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+    .video-controls {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 12px;
+      z-index: 10;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+    }
+    .ctrl-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .ctrl-btn:hover { background: rgba(255,255,255,0.25); }
+    .ctrl-btn svg { width: 16px; height: 16px; fill: #fff; }
+
+    /* ===== Hero Title ===== */
+    .hero-title {
+      text-align: center;
+      padding: 48px 24px 32px;
+    }
+    .hero-title h2 {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 300; color: var(--accent);
+      letter-spacing: 8px;
+    }
+    .hero-title .subtitle {
+      font-size: 14px; color: var(--text-secondary);
+      margin-top: 12px; letter-spacing: 2px;
+    }
+
+    /* ===== Gallery Grid ===== */
+    .gallery-section {
+      padding: 32px 24px 48px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .gallery-row {
+      margin-bottom: 32px;
+    }
+    .gallery-row-title {
+      font-size: 16px; color: var(--accent);
+      margin-bottom: 12px;
+      padding-left: 4px;
+      letter-spacing: 2px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 640px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+    .gallery-item {
+      position: relative;
+      min-height: 200px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--card);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 16px;
+    }
+    .gallery-item:hover .overlay { opacity: 1; }
+    .gallery-item .overlay span {
+      color: #fff; font-size: 14px;
+    }
+
+    /* ===== Lightbox ===== */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.95);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .lightbox.open { opacity: 1; pointer-events: auto; }
+    .lightbox img {
+      max-width: 90vw; max-height: 85vh;
+      object-fit: contain; border-radius: var(--radius);
+    }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 24px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-close svg { width: 20px; height: 20px; stroke: #fff; }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-nav svg { width: 20px; height: 20px; stroke: #fff; }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-caption {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      text-align: center; color: #fff;
+    }
+    .lightbox-caption span { font-size: 15px; }
+
+    /* ===== Script Section ===== */
+    .script-section {
+      background: var(--card);
+      padding: 48px 24px 64px;
+    }
+    .script-inner {
+      max-width: 1200px; margin: 0 auto;
+    }
+    .script-title {
+      text-align: center; margin-bottom: 32px;
+    }
+    .script-title h2 {
+      font-size: 24px; font-weight: 400; color: var(--accent);
+      letter-spacing: 4px;
+    }
+    .script-meta {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .script-meta p {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .scene-block {
+      margin-bottom: 32px;
+    }
+    .scene-header {
+      font-size: 15px; color: var(--accent);
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: rgba(201,169,110,0.08);
+      border-radius: 4px;
+      border-left: 3px solid var(--accent);
+    }
+    .scene-content {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 2;
+    }
+    .scene-content p {
+      margin-bottom: 8px;
+    }
+    .scene-content .stage-dir {
+      color: #777;
+    }
+    .scene-content .dialogue {
+      color: var(--text);
+      padding-left: 16px;
+      margin: 8px 0;
+    }
+    .scene-content .dialogue .char-name {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .scene-content .beat {
+      color: var(--accent-light);
+      font-size: 13px;
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: rgba(201,169,110,0.05);
+      border-radius: 4px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .header-nav { display: none; }
+      .video-controls { padding: 12px 16px; }
+      .hero-title { padding: 32px 16px 24px; }
+      .gallery-section { padding: 24px 16px 32px; }
+      .script-section { padding: 32px 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>《神骨》</h1>
+    </div>
+    <nav class="header-nav">
+      <a href="#video">视频</a>
+      <a href="#gallery">主图</a>
+      <a href="#script">剧本</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Video Player -->
+<section class="video-section" id="video">
+  <div class="video-wrapper">
+    <video id="mainVideo" muted playsinline loop>
+      <source src="半块碎玉.png" type="video/mp4">
+    </video>
+    <div class="video-controls">
+      <button class="ctrl-btn" id="playBtn" aria-label="播放/暂停">
+        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
+      <button class="ctrl-btn" id="muteBtn" aria-label="静音/取消静音">
+        <svg id="muteIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <svg id="unmuteIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Hero Title -->
+<div class="hero-title">
+  <h2>《神骨》</h2>
+  <p class="subtitle">仙侠悬疑 · 掉马甲觉醒 · 灭门复仇</p>
+</div>
+
+<!-- Gallery -->
+<section class="gallery-section" id="gallery">
+  <!-- Row 1: 人物 -->
+  <div class="gallery-row">
+    <div class="gallery-row-title">人物</div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-index="0">
+        <img src="墨断剑红绳.png" alt="苏挽" loading="lazy" />
+        <div class="overlay"><span>苏挽</span></div>
+      </div>
+      <div class="gallery-item" data-index="1">
+        <img src="墨玉牌.png" alt="萧珩" loading="lazy" />
+        <div class="overlay"><span>萧珩</span></div>
+      </div>
+      <div class="gallery-item" data-index="2">
+        <img src="灭门旧夜.png" alt="玄青上人" loading="lazy" />
+        <div class="overlay"><span>玄青上人</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: 场景 -->
+  <div class="gallery-row">
+    <div class="gallery-row-title">场景</div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-index="3">
+        <img src="玄青上人.png" alt="诛仙台" loading="lazy" />
+        <div class="overlay"><span>诛仙台</span></div>
+      </div>
+      <div class="gallery-item" data-index="4">
+        <img src="苏挽.png" alt="青云大殿" loading="lazy" />
+        <div class="overlay"><span>青云大殿</span></div>
+      </div>
+      <div class="gallery-item" data-index="5">
+        <img src="萧珩.png" alt="灭门旧夜" loading="lazy" />
+        <div class="overlay"><span>灭门旧夜</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: 道具 -->
+  <div class="gallery-row">
+    <div class="gallery-row-title">道具</div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-index="6">
+        <img src="诛仙台.png" alt="墨玉牌" loading="lazy" />
+        <div class="overlay"><span>墨玉牌</span></div>
+      </div>
+      <div class="gallery-item" data-index="7">
+        <img src="青云大殿.png" alt="墨断剑红绳" loading="lazy" />
+        <div class="overlay"><span>墨断剑红绳</span></div>
+      </div>
+      <div class="gallery-item" data-index="8">
+        <img src="" alt="预览图暂不可用" alt="半块碎玉" loading="lazy" />
+        <div class="overlay"><span>半块碎玉</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose" aria-label="关闭">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="上一张">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img id="lbImg" src="" alt="" />
+  <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="下一张">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lightbox-caption">
+    <span id="lbCaption"></span>
+  </div>
+</div>
+
+<!-- Script -->
+<section class="script-section" id="script">
+  <div class="script-inner">
+    <div class="script-title">
+      <h2>剧本</h2>
+    </div>
+
+    <div class="script-meta">
+      <p>类型：短篇短剧（单集 2 分钟，系列开篇）</p>
+      <p>风格：王家卫《东邪西毒》风格的电影</p>
+      <p>标签：仙侠悬疑 + 掉马甲觉醒 + 灭门复仇 + 强钩子</p>
+      <p>人设：隐忍废灵根遗孤神女 × 仙风道骨食人骨伪善师父</p>
+      <p>单集时长：2 分钟 | 剧作基调：短视频钩子驱动</p>
+    </div>
+
+    <!-- Scene 1 -->
+    <div class="scene-block">
+      <div class="scene-header">1-1 诛仙台 夜 外 | 人物：苏挽、萧珩、众弟子</div>
+      <div class="scene-content">
+        <p class="stage-dir">△（大远景）黑云压顶，诛仙台上火把猎猎，四根盘龙石柱之间，苏挽被玄铁锁链吊起，双手锁链穿透琵琶骨，白衣被血浸透。</p>
+        <p class="stage-dir">△（特写）苏挽垂着头，血珠从下颌滴落，在青石上洇开。</p>
+        <p class="stage-dir">△萧珩长剑出鞘，剑尖抬起苏挽的下巴，他的手在抖。</p>
+        <p class="dialogue"><span class="char-name">萧珩：</span>（声音发紧）小师妹，聚魂鼎是不是你偷的？你认了，师父或许还能留你全尸。</p>
+        <p class="stage-dir">△苏挽缓缓抬眼，没有看他，目光越过他的肩头，望向台尽头。</p>
+        <p class="stage-dir">△台下弟子齐声高喊。</p>
+        <p class="dialogue"><span class="char-name">众弟子：</span>妖女！逐出师门！</p>
+        <p class="dialogue"><span class="char-name">苏挽：</span>（极轻，气音）……他来了。</p>
+        <p class="beat">【节拍：开场钩子 —— 她等的不是求饶，是那个人】</p>
+      </div>
+    </div>
+
+    <!-- Scene 2 -->
+    <div class="scene-block">
+      <div class="scene-header">1-2 诛仙台 夜 外 | 人物：苏挽、萧珩、玄清真人、众弟子</div>
+      <div class="scene-content">
+        <p class="stage-dir">△人群自动分开一条路。玄清真人月白道袍一尘不染，缓步登台，火把的光在他玉冠上流转。</p>
+        <p class="stage-dir">△他抬袖，一股柔力震开萧珩的剑。</p>
+        <p class="dialogue"><span class="char-name">玄清真人：</span>（温和）珩儿，退下。为师说过，挽儿是我青云的人，要审，也该由我亲自审。</p>
+        <p class="stage-dir">△萧珩收剑，低头退到一旁。</p>
+        <p class="stage-dir">△玄清走到苏挽面前，抬手，指尖极轻地拂去她肩头的血迹，像拂去一片落花。</p>
+        <p class="dialogue"><span class="char-name">玄清真人：</span>（低声，只两人听见）挽儿，别怕，师父是来救你的。</p>
+        <p class="stage-dir">△苏挽的睫毛颤了一下。</p>
+        <p class="stage-dir">△（特写）玄清的手顺着她肩头滑上后颈，最终按在她天灵盖上，指尖骤然泛起幽黑灵力。</p>
+        <p class="dialogue"><span class="char-name">玄清真人：</span>（气音，含笑）养你十八年，你的神骨，终于成熟了。</p>
+        <p class="stage-dir">△（大特写）苏挽的瞳孔猛地收缩。</p>
+        <p class="beat">【节拍：反转 —— 恩人即屠夫】</p>
+      </div>
+    </div>
+
+    <!-- Scene 3 -->
+    <div class="scene-block">
+      <div class="scene-header">1-3 灭门旧夜 夜 外（闪回） | 人物：幼年苏挽、白衣凶手（玄清，不露脸）</div>
+      <div class="scene-content">
+        <p class="stage-dir">△画面骤然过曝、手持晃动。火光、惨叫、坍塌的梁木。</p>
+        <p class="stage-dir">△（低机位）三岁的苏挽趴在血泊里，小手向前伸。</p>
+        <p class="stage-dir">△一双白靴踩过血水，停在她面前。镜头缓缓上摇，停在凶手腰间 ——</p>
+        <p class="stage-dir">△一枚墨玉牌，火光下刻着一个"清"字。</p>
+        <p class="stage-dir">△（闪回切回，特写）苏挽颤抖的视线，落在眼前玄清腰间 —— 同一枚墨玉牌，正随着夜风轻轻晃动。</p>
+        <p class="dialogue"><span class="char-name">苏挽：</span>（嘴唇发抖）……是你。</p>
+        <p class="dialogue"><span class="char-name">玄清真人：</span>（微笑）记起来了？那就更好了。</p>
+        <p class="beat">【节拍：真相刺痛 —— 灭门仇人就在眼前】</p>
+      </div>
+    </div>
+
+    <!-- Scene 4 -->
+    <div class="scene-block">
+      <div class="scene-header">1-4 诛仙台 夜 外 | 人物：苏挽、玄清真人、萧珩</div>
+      <div class="scene-content">
+        <p class="stage-dir">△玄清掌心发力，幽黑灵力灌入苏挽天灵盖。苏挽仰头，喉间压出一声痛极的闷哼，七窍渗血。</p>
+        <p class="stage-dir">△（特写）她垂在身侧的手死死攥紧，指甲崩裂，掌心半块碎玉被血浸透。</p>
+        <p class="stage-dir">△突然，她额间皮肤裂开一道金色纹路，像有什么东西从骨头里亮起来。</p>
+        <p class="stage-dir">△鎏金的光从她眼底燃起。她猛地睁眼 —— 双瞳已化为纯金。</p>
+        <p class="dialogue"><span class="char-name">苏挽：</span>（低声，不像自己的声音）……我的骨头，你也配碰？</p>
+        <p class="stage-dir">△金光炸开，玄铁锁链寸寸崩断！</p>
+        <p class="stage-dir">△苏挽抬手，一把攥住玄清按在她天灵盖上的手腕。玄清面色骤变，被一股巨力震得连退三步，月白道袍第一次沾上了尘灰。</p>
+        <p class="stage-dir">△萧珩震惊抬头，长剑当啷落地。</p>
+        <p class="beat">【节拍：爽点释放 —— 废灵根觉醒，神女归来】</p>
+      </div>
+    </div>
+
+    <!-- Scene 5 -->
+    <div class="scene-block">
+      <div class="scene-header">1-5 青云大殿 夜 内/外（诛仙台望向大殿） | 人物：苏挽、玄清真人、面具人若干</div>
+      <div class="scene-content">
+        <p class="stage-dir">△苏挽悬在半空，金纹沿脖颈蔓延，衣袂无风自动。她缓缓转头，目光越过诛仙台，落向后方黑黢黢的青云大殿。</p>
+        <p class="stage-dir">△（苏挽POV，远景推近）殿门未关，一盏长明灯幽幽摇晃。风掀起匾额上半掩的黑布一角 ——</p>
+        <p class="stage-dir">△（特写）匾额后不是青云祖师牌位，而是一块古朴的神族牌位，上刻一个"苏"字；牌位前横放一柄断剑，剑穗上系着一条褪色的红绳。</p>
+        <p class="stage-dir">△（大特写）苏挽的鎏金瞳孔剧烈一缩 —— 那条红绳，是她幼时编的。</p>
+        <p class="stage-dir">△玄清顺着她的目光看去，不怒反笑，轻轻拍了三下手。</p>
+        <p class="stage-dir">△大殿的阴影里，缓缓走出三道戴着青铜面具的身影，气息深不见底。</p>
+        <p class="dialogue"><span class="char-name">玄清真人：</span>（整理衣袖，语气平淡）你以为，你是第一个？</p>
+        <p class="stage-dir">△苏挽猛地回头，金光与杀意同时暴涨。</p>
+        <p class="stage-dir">△画面骤然切黑。</p>
+        <p class="stage-dir" style="text-align:center; color: var(--accent); margin-top: 16px;">字幕浮现：她的骨头里，锁着一整个神族的秘密。</p>
+        <p class="beat">【节拍：终极悬念 —— 更大的阴谋浮出水面】</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  // ===== Video Player =====
+  var video = document.getElementById('mainVideo');
+  var playBtn = document.getElementById('playBtn');
+  var muteBtn = document.getElementById('muteBtn');
+  var playIcon = document.getElementById('playIcon');
+  var pauseIcon = document.getElementById('pauseIcon');
+  var muteIcon = document.getElementById('muteIcon');
+  var unmuteIcon = document.getElementById('unmuteIcon');
+  var isPlaying = true;
+  var isMuted = true;
+
+  video.play().catch(function(){});
+
+  playBtn.addEventListener('click', function() {
+    isPlaying = !isPlaying;
+    if (isPlaying) { video.play().catch(function(){}); } else { video.pause(); }
+    playIcon.style.display = isPlaying ? 'none' : 'block';
+    pauseIcon.style.display = isPlaying ? 'block' : 'none';
+  });
+
+  muteBtn.addEventListener('click', function() {
+    isMuted = !isMuted;
+    video.muted = isMuted;
+    muteIcon.style.display = isMuted ? 'block' : 'none';
+    unmuteIcon.style.display = isMuted ? 'none' : 'block';
+  });
+
+  // ===== Gallery / Lightbox =====
+  var allImages = [
+    { src: '半块碎玉.png', caption: '苏挽' },
+    { src: '墨断剑红绳.png', caption: '萧珩' },
+    { src: '墨玉牌.png', caption: '玄青上人' },
+    { src: '灭门旧夜.png', caption: '诛仙台' },
+    { src: '玄青上人.png', caption: '青云大殿' },
+    { src: '苏挽.png', caption: '灭门旧夜' },
+    { src: '萧珩.png', caption: '墨玉牌' },
+    { src: '诛仙台.png', caption: '墨断剑红绳' },
+    { src: '青云大殿.png', caption: '半块碎玉' }
+  ];
+
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCaption = document.getElementById('lbCaption');
+  var lbClose = document.getElementById('lbClose');
+  var lbPrev = document.getElementById('lbPrev');
+  var lbNext = document.getElementById('lbNext');
+  var currentIndex = 0;
+
+  document.querySelectorAll('.gallery-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var idx = parseInt(this.getAttribute('data-index'));
+      openLightbox(idx);
+    });
+  });
+
+  function openLightbox(i) {
+    currentIndex = i;
+    updateLightbox();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function updateLightbox() {
+    lbImg.src = allImages[currentIndex].src;
+    lbCaption.textContent = allImages[currentIndex].caption + '  (' + (currentIndex + 1) + '/' + allImages.length + ')';
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+    updateLightbox();
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % allImages.length;
+    updateLightbox();
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', prevImage);
+  lbNext.addEventListener('click', nextImage);
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+  });
+})();
+</script>
+
+</body>
+</html>
