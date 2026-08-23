@@ -9,6 +9,7 @@ import {
 import { toast } from "sonner";
 import WorkCard, { type WorkItem, type Domain } from "@/components/WorkCard";
 import WorkPreviewModal from "@/components/WorkPreviewModal";
+import { asset } from "@/lib/asset";
 import {
   getWorksByScope,
   getFileBlobs,
@@ -420,7 +421,7 @@ export default function ProfilePage() {
             <div className="relative flex-shrink-0">
               <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 border-4 border-[#0a0a0a] flex items-center justify-center shadow-2xl overflow-hidden">
                 {MOCK_PROFILE.avatar ? (
-                  <img src={MOCK_PROFILE.avatar} alt="avatar" className="w-full h-full object-cover" />
+                  <img src={asset(MOCK_PROFILE.avatar)} alt="avatar" className="w-full h-full object-cover" />
                 ) : (
                   <User className="w-14 h-14 md:w-16 md:h-16 text-white" />
                 )}

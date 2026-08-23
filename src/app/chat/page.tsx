@@ -54,6 +54,7 @@ import {
   mockDifyUpload,
   mockDoc2Pdf,
 } from "@/lib/client-mock";
+import { asset } from "@/lib/asset";
 import {
   createDebouncedFn,
   safeLocalSet,
@@ -385,7 +386,7 @@ function PreviewImageModal({ previewImageUrl, name, onClose }: PreviewImageModal
         {/* 图片预览区 */}
         <div className="flex-1 min-h-0 bg-black/60 flex items-center justify-center p-4 relative overflow-hidden">
           <img
-            src={previewImageUrl}
+            src={asset(previewImageUrl)}
             alt="预览"
             className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
           />
@@ -452,7 +453,7 @@ function PreviewVideoModal({ url, name, onClose }: PreviewVideoModalProps) {
         {/* 视频预览区 */}
         <div className="flex-1 min-h-0 bg-black flex items-center justify-center p-4">
           <video
-            src={url}
+            src={asset(url)}
             controls
             autoPlay
             className="max-w-full max-h-full object-contain rounded-lg shadow-2xl bg-black"
@@ -528,7 +529,7 @@ function PreviewHtmlModal({ url, onClose }: PreviewHtmlModalProps) {
         {/* 网页预览区 */}
         <div className="flex-1 min-h-0 bg-white">
           <iframe
-            src={url}
+            src={asset(url)}
             title="网页预览"
             className="w-full h-full border-0 bg-white"
           />
@@ -654,7 +655,7 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
           )}
           {finalPdfUrl && !isLoading && !convertError && (
             <iframe
-              src={finalPdfUrl}
+              src={asset(finalPdfUrl)}
               title="文档预览"
               className="w-full h-full"
             />
@@ -1919,26 +1920,15 @@ function ChatPageInner() {
   // ============ 下载逻辑 ============
 
   const downloadGenerated = (file: GeneratedFile) => {
-    if (file.url.startsWith("/uploads/")) {
-      const fileName = file.url.replace("/uploads/", "");
-      // 使用下载 API，确保正确的 MIME 类型和 Content-Disposition
-      const apiUrl = `/api/download?file=${encodeURIComponent(fileName)}&name=${encodeURIComponent(file.name)}`;
-      const a = document.createElement("a");
-      a.href = apiUrl;
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } else if (file.url.startsWith("/")) {
-      const a = document.createElement("a");
-      a.href = file.url;
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } else {
-      window.open(file.url, "_blank");
-    }
+    // 静态导出模式下统一通过 asset() 处理 URL（自动加 basePath 前缀）
+    // 完整 URL（https://...）原样返回，相对路径直接打开
+    const url = asset(file.url);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const openImagePreview = useCallback((url: string, name?: string) => {
@@ -3608,7 +3598,7 @@ function ChatPageInner() {
       {/* 顶部导航栏 */}
       <header className="h-14 flex-shrink-0 border-b border-gray-300/20 flex items-center justify-between px-4 bg-transparent backdrop-blur-md relative z-10">
         <div className="flex items-center gap-3">
-          <img src="/archda-icon.svg" alt="ArchDA" className="w-8 h-8" />
+          <img src={asset("/archda-icon.svg")} alt="ArchDA" className="w-8 h-8" />
           <span className="text-xl font-bold text-white">Agora</span>
           <div className="h-6 w-px bg-white/20 mx-2" />
           <div className="flex items-center gap-2 text-base text-white/60">
@@ -3982,7 +3972,7 @@ function ChatPageInner() {
                                   return (
                                     <video
                                       key={file.id}
-                                      src={file.url}
+                                      src={asset(file.url)}
                                       controls
                                       muted
                                       className="w-full rounded-lg"
@@ -3993,7 +3983,7 @@ function ChatPageInner() {
                                   return (
                                     <div key={file.id} className="relative group rounded-lg overflow-hidden">
                                       <img
-                                        src={file.url}
+                                        src={asset(file.url)}
                                         alt={file.name}
                                         className="w-full h-32 object-cover cursor-pointer hover:opacity-90 transition-opacity"
                                         onClick={() => openImagePreview(file.url, file.name)}
@@ -4086,7 +4076,7 @@ function ChatPageInner() {
                                   return (
                                     <video
                                       key={file.id}
-                                      src={file.url}
+                                      src={asset(file.url)}
                                       controls
                                       autoPlay
                                       muted
@@ -4099,7 +4089,7 @@ function ChatPageInner() {
                                     return (
                                       <div key={file.id} className="relative group rounded-lg overflow-hidden">
                                         <img
-                                          src={file.url}
+                                          src={asset(file.url)}
                                           alt={file.name}
                                           className="w-full h-32 object-cover cursor-pointer hover:opacity-90 transition-opacity"
                                           onClick={() => openImagePreview(file.url, file.name)}

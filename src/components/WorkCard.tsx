@@ -3,6 +3,7 @@
 import { Heart, Bookmark, Copy, User, Trash2, Pencil, Check, X, Video, FileCode, FileText, MessageCircle, ChevronDown, Clock } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { asset } from "@/lib/asset";
 
 export type Domain = "architecture" | "ecommerce" | "comic";
 export type ContentType = "design" | "image" | "video" | "html";
@@ -146,7 +147,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
         {/* 根据内容类型渲染缩略图 */}
         {item.contentType === "image" && (
           <img
-            src={item.preview}
+            src={asset(item.preview)}
             alt={item.title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
@@ -158,7 +159,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
             return (
               <>
                 <video
-                  src={item.preview}
+                  src={asset(item.preview)}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   muted
                   preload="metadata"
@@ -175,7 +176,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
           return (
             <>
               <img
-                src={item.preview}
+                src={asset(item.preview)}
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
@@ -194,7 +195,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
             return (
               <>
                 <iframe
-                  src={item.preview}
+                  src={asset(item.preview)}
                   title={item.title}
                   className="w-full h-full border-0 bg-white pointer-events-none"
                   loading="lazy"
@@ -211,7 +212,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
           return (
             <>
               <img
-                src={item.preview}
+                src={asset(item.preview)}
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
@@ -328,7 +329,7 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
             <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
               {item.author.avatar ? (
                 <img
-                  src={item.author.avatar}
+                  src={asset(item.author.avatar)}
                   alt={item.author.name}
                   className="w-full h-full rounded-full object-cover"
                 />

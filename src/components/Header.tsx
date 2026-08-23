@@ -8,6 +8,7 @@ import MembershipModal from "./MembershipModal";
 import { ProfileModal } from "./ProfileModal";
 import PointsMarketModal from "./PointsMarketModal";
 import { getPointsBalance } from "@/lib/points-store";
+import { asset } from "@/lib/asset";
 
 const navItems = [
   { label: "首页", href: "/", icon: Home },
@@ -61,7 +62,7 @@ export default function Header() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/mock-arch/Image-3.png"
+                src={asset("/mock-arch/Image-3.png")}
                 alt="Agora.ai"
                 className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover flex-none"
               />

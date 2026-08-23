@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { X, Heart, Bookmark, MessageCircle, Clock, User, Download, Share2, Flag, ZoomIn, ZoomOut, RotateCcw, Loader2, FileText, Shield } from "lucide-react";
 import type { WorkItem } from "@/components/WorkCard";
+import { asset } from "@/lib/asset";
 
 interface Comment {
   id: string;
@@ -148,7 +149,7 @@ export default function WorkPreviewModal({ item, onClose, onLike, onFavorite }: 
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-sm font-medium overflow-hidden">
                     {item.author.avatar ? (
-                      <img src={item.author.avatar} alt={item.author.name} className="w-full h-full object-cover" />
+                      <img src={asset(item.author.avatar)} alt={item.author.name} className="w-full h-full object-cover" />
                     ) : (
                       <User className="w-5 h-5" />
                     )}
@@ -328,7 +329,7 @@ function ImageContent({ url, name }: { url: string; name: string }) {
       style={{ cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
     >
       <img
-        src={url}
+        src={asset(url)}
         alt={name}
         draggable={false}
         className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
@@ -374,7 +375,7 @@ function VideoContent({ url }: { url: string }) {
       )}
       <video
         ref={videoRef}
-        src={url}
+        src={asset(url)}
         controls
         autoPlay
         playsInline

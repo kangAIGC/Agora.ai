@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Download, X, Maximize2, Loader2, FileText, ZoomIn, ZoomOut, RotateCcw, Maximize } from "lucide-react";
+import { asset } from "@/lib/asset";
 
 type FileType = "image" | "video" | "html" | "doc";
 
@@ -133,7 +134,7 @@ export default function FilePreviewModal({ url, name, type, onClose }: FilePrevi
           {type === "html" && (
             <div className="absolute inset-0 bg-white">
               <iframe
-                src={url}
+                src={asset(url)}
                 title="网页预览"
                 className="w-full h-full border-0 bg-white"
               />
@@ -226,7 +227,7 @@ function ImagePreviewContent({ url, name }: { url: string; name: string }) {
       style={{ cursor: zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
     >
       <img
-        src={url}
+        src={asset(url)}
         alt={name || "预览"}
         draggable={false}
         className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
@@ -320,7 +321,7 @@ function VideoPreviewContent({ url }: { url: string }) {
       )}
       <video
         ref={videoRef}
-        src={url}
+        src={asset(url)}
         controls
         autoPlay
         playsInline
@@ -400,7 +401,7 @@ function DocPreviewContent({ url, name }: { url: string; name: string }) {
       )}
       {finalPdfUrl && !isLoading && !convertError && (
         <iframe
-          src={finalPdfUrl}
+          src={asset(finalPdfUrl)}
           title="文档预览"
           className="w-full h-full border-0"
         />

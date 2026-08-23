@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useProject } from "@/lib/project-store";
 import type { UploadedFile, GeneratedFile } from "@/lib/types";
+import { asset } from "@/lib/asset";
 
 interface WorkspaceSidebarProps {
   textFiles: UploadedFile[];
@@ -533,7 +534,7 @@ export default function WorkspaceSidebar({
                 ) : (
                   <>
                     <img
-                      src={file.previewUrl}
+                      src={asset(file.previewUrl)}
                       alt={file.name}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => onPreviewImage(file.previewUrl!)}

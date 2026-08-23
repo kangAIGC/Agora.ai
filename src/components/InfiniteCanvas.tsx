@@ -24,6 +24,7 @@ import FloatingToolbar, {
   type ShapeType,
   DEFAULT_CONFIG,
 } from "./FloatingToolbar";
+import { asset } from "@/lib/asset";
 
 export interface CanvasItem {
   id: string;
@@ -1162,7 +1163,7 @@ function CanvasItemCard({
       return (
         <div className="relative w-full h-full group bg-black/20">
           <img
-            src={item.content}
+            src={asset(item.content)}
             alt={item.meta?.name || ""}
             className="w-full h-full object-contain cursor-pointer"
             onClick={(e) => {
@@ -1204,7 +1205,7 @@ function CanvasItemCard({
       return (
         <div className="relative w-full h-full group">
           <video
-            src={item.content}
+            src={asset(item.content)}
             controls
             className="w-full h-full object-cover"
             onClick={(e) => e.stopPropagation()}
@@ -1254,7 +1255,7 @@ function CanvasItemCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.open(item.content, "_blank");
+                  window.open(asset(item.content), "_blank");
                 }}
                 className="p-1 rounded hover:bg-white/10 text-white/60 hover:text-white transition-colors"
                 title="在新标签页打开"
@@ -1276,7 +1277,7 @@ function CanvasItemCard({
           {/* iframe 实时预览 */}
           <div className="flex-1 overflow-hidden bg-white relative">
             <iframe
-              src={item.content}
+              src={asset(item.content)}
               title={item.meta?.name || "网页预览"}
               className="w-full h-full border-0"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups"

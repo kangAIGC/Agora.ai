@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { asset } from "@/lib/asset";
 
 // 首页背景视频循环（单一事实来源，顺序即播放顺序，循环往复）
 // 当前循环：bg3.mp4 → 3.mp4 → bg3.mp4 → ...
-const BG_VIDEO_SOURCES = ["/bg3.mp4", "/3.mp4"] as const;
+// 通过 asset() 自动添加 basePath 前缀，确保 GitHub Pages 子路径下可访问
+const BG_VIDEO_SOURCES = [asset("/bg3.mp4"), asset("/3.mp4")] as const;
 
 const features = [
   {

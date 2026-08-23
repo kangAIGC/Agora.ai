@@ -9,6 +9,8 @@
  * 5. doc2pdf - 静态模式下不支持，返回提示
  */
 
+import { asset } from "@/lib/asset";
+
 // ============ 类型定义 ============
 
 export interface MockFile {
@@ -237,7 +239,7 @@ export async function mockGetWorkspaceState(): Promise<{
 
   // 2. 尝试加载静态种子文件
   try {
-    const res = await fetch("/workspace-default.json", { cache: "no-store" });
+    const res = await fetch(asset("/workspace-default.json"), { cache: "no-store" });
     if (res.ok) {
       const seed = await res.json();
       return { source: "seed", data: seed };
