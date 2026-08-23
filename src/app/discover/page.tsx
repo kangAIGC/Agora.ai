@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Compass, Upload, X, Loader2, ArrowUpDown, ChevronDown } from "lucide-react";
+import { Compass, Upload, X, Loader2, ArrowUpDown, ChevronDown, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import WorkCard, { type WorkItem, type Domain, type ContentType } from "@/components/WorkCard";
 import WorkPreviewModal from "@/components/WorkPreviewModal";
@@ -13,6 +13,7 @@ import {
   getFileBlobs,
   getDeletedMockIds,
   addDeletedMockId,
+  clearDeletedMockIds,
   type StoredWork,
   type WorkScope,
 } from "@/lib/ugc-storage";
@@ -435,12 +436,14 @@ export default function DiscoverPage() {
     const filtered = works.filter((w) => {
       if (w.domain !== activeDomain) return false;
       if (activeType && w.contentType !== activeType) return false;
-      // 建筑分类仅展示永久作品集（8 图 + 4 视频），排除任何无关 mock / 旧数据
-      if (activeDomain === "architecture" && !isPermanentArchitectureWork(w.id)) return false;
-      // 电商分类仅展示永久作品集（4 图 + 5 视频），排除任何无关 mock / 旧数据
-      if (activeDomain === "ecommerce" && !isPermanentEcommerceWork(w.id)) return false;
-      // 漫剧分类仅展示永久作品集（9 图 + 1 视频），排除任何无关 mock / 旧数据
-      if (activeDomain === "comic" && !isPermanentComicWork(w.id)) return false;
+      // 用户上传作品（upload-*）始终允许在所属分类展示，不受永久作品白名单限制
+      const isUserUpload = w.id.startsWith("upload-");
+      // 建筑分类仅展示永久作品集 + 用户上传作品，排除任何无关 mock / 旧数据
+      if (activeDomain === "architecture" && !isUserUpload && !isPermanentArchitectureWork(w.id)) return false;
+      // 电商分类仅展示永久作品集 + 用户上传作品，排除任何无关 mock / 旧数据
+      if (activeDomain === "ecommerce" && !isUserUpload && !isPermanentEcommerceWork(w.id)) return false;
+      // 漫剧分类仅展示永久作品集 + 用户上传作品，排除任何无关 mock / 旧数据
+      if (activeDomain === "comic" && !isUserUpload && !isPermanentComicWork(w.id)) return false;
       return true;
     });
     if (sortBy === "hot") {
@@ -496,30 +499,105 @@ export default function DiscoverPage() {
   };
 
   const handleDelete = (id: string) => {
-    // 永久建筑作品不可删除
-    if (isPermanentArchitectureWork(id)) {
-      toast.error("该作品为永久保留内容，不可删除");
-      return;
-    }
-    // 永久电商作品不可删除
-    if (isPermanentEcommerceWork(id)) {
-      toast.error("该作品为永久保留内容，不可删除");
-      return;
-    }
-    // 永久漫剧作品不可删除
-    if (isPermanentComicWork(id)) {
-      toast.error("该作品为永久保留内容，不可删除");
-      return;
-    }
+    // 所有作品均允许用户主动删除（含建筑/电商/漫剧默认作品集与用户上传作品）
     setWorks((prev) => prev.filter((w) => w.id !== id));
     if (id.startsWith("upload-")) {
       // 用户上传作品：从 IndexedDB 删除元数据 + 文件 Blob
       deleteWork(id).catch((err) => console.error("删除持久化作品失败:", err));
     } else {
-      // Mock 作品：记录已删除 id，刷新后不再加载
+      // 默认作品集 / Mock 作品：记录已删除 id，刷新后不再加载；
+      // 用户可通过"恢复默认作品"按钮强制重新 seed 复原
       addDeletedMockId(id).catch((err) => console.error("记录 Mock 删除失败:", err));
+      // 同时尝试从 IndexedDB 清理（默认作品集已被 seed 入库的情境）
+      deleteWork(id).catch(() => { /* 默认作品可能未入库，忽略错误 */ });
     }
     toast.success("作品已删除");
+  };
+
+  /**
+   * 恢复默认作品集：强制重新 seed 建筑/电商/漫剧三类永久作品到 IndexedDB，
+   * 并清除对应已删除记录，让用户重新看到全部默认内容。
+   * 不影响用户上传作品（upload-*）与交互状态（点赞/收藏/已读）。
+   */
+  const [restoring, setRestoring] = useState(false);
+  const handleRestoreDefaults = async () => {
+    if (restoring) return;
+    setRestoring(true);
+    try {
+      await Promise.all([
+        seedPermanentArchitectureWorks(true).catch(() => {}),
+        seedPermanentEcommerceWorks(true).catch(() => {}),
+        seedPermanentComicWorks(true).catch(() => {}),
+      ]);
+      // 清空已删除 Mock 记录，让默认作品集在下次加载时全部可见
+      await clearDeletedMockIds().catch(() => {});
+      // 重新拉取社区作品并合并展示
+      const storedWorks = await getWorksByScope("community").catch(() => [] as StoredWork[]);
+      const userStoredWorks = storedWorks.filter((w) => w.id.startsWith("upload-"));
+      userStoredWorks.sort((a, b) => b.createdAt - a.createdAt);
+      const blobs: Map<string, Blob> = await getFileBlobs(
+        userStoredWorks.map((w) => w.id),
+      ).catch(() => new Map());
+      const seedEngagement = (work: StoredWork) => {
+        if (work.likes === 0 || work.likes == null) {
+          const hash = [...work.id].reduce((acc, c) => acc + c.charCodeAt(0), 0);
+          return { likes: 8 + (hash % 50), favoriteCount: 2 + (hash % 15), commentCount: 1 + (hash % 8) };
+        }
+        return { likes: work.likes, favoriteCount: work.favoriteCount ?? 0, commentCount: work.commentCount ?? 0 };
+      };
+      const userWorks: WorkItem[] = userStoredWorks
+        .map((w) => {
+          const blob = blobs.get(w.id);
+          const preview = blob
+            ? (() => {
+                const url = URL.createObjectURL(blob);
+                blobUrlsRef.current.add(url);
+                return url;
+              })()
+            : w.previewUrl;
+          if (!preview) return null;
+          const engagement = seedEngagement(w);
+          return {
+            id: w.id,
+            title: w.title,
+            preview,
+            domain: w.domain,
+            contentType: w.contentType,
+            author: w.author,
+            likes: engagement.likes,
+            liked: w.liked,
+            favorited: w.favorited,
+            favoriteCount: engagement.favoriteCount,
+            commentCount: engagement.commentCount,
+          } as WorkItem;
+        })
+        .filter((w): w is WorkItem => w !== null);
+      // 恢复交互状态
+      const savedState = loadDiscoverState();
+      const savedLiked = new Set<string>(savedState?.likedIds ?? []);
+      const savedFavorited = new Set<string>(savedState?.favoritedIds ?? []);
+      setWorks((prev) => {
+        const userInteractions = new Map(prev.filter((w) => w.id.startsWith("upload-")).map((w) => [w.id, w]));
+        const restoredUserWorks = userWorks.map((w) => userInteractions.get(w.id) ?? w);
+        const merged = [
+          ...restoredUserWorks,
+          ...PERMANENT_ARCHITECTURE_WORKS,
+          ...PERMANENT_ECOMMERCE_WORKS,
+          ...PERMANENT_COMIC_WORKS,
+        ].map((w) => ({
+          ...w,
+          liked: savedLiked.has(w.id) || w.liked,
+          favorited: savedFavorited.has(w.id) || w.favorited,
+        }));
+        return merged;
+      });
+      toast.success("已恢复默认作品集");
+    } catch (err) {
+      console.error("恢复默认作品失败:", err);
+      toast.error("恢复失败，请重试");
+    } finally {
+      setRestoring(false);
+    }
   };
 
   const handleRename = (id: string, newTitle: string) => {
@@ -699,6 +777,24 @@ export default function DiscoverPage() {
                 {CONTENT_TYPES.find((t) => t.key === activeType)?.label ?? "全部"}
               </span>
               <span className="text-xs text-white/30">· 共 {filteredWorks.length} 个作品</span>
+              <button
+                onClick={handleRestoreDefaults}
+                disabled={restoring}
+                className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                title="恢复默认作品集（建筑/电商/漫剧）"
+              >
+                {restoring ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    恢复中...
+                  </>
+                ) : (
+                  <>
+                    <RotateCcw className="w-3 h-3" />
+                    恢复默认作品
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

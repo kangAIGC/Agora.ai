@@ -25,6 +25,7 @@ import FloatingToolbar, {
   DEFAULT_CONFIG,
 } from "./FloatingToolbar";
 import { asset } from "@/lib/asset";
+import { toast } from "sonner";
 
 export interface CanvasItem {
   id: string;
@@ -55,6 +56,10 @@ export interface CanvasItem {
     textColor?: string;
     textAlign?: "left" | "center" | "right";
     editing?: boolean;
+    /** 文件拖放来源 id（UploadedFile.id / GeneratedFile.id），用于堆叠错开 */
+    sourceId?: string;
+    /** 拖放来源分区 */
+    sourceType?: "text" | "image" | "generated";
   };
 }
 
@@ -292,6 +297,28 @@ export default function InfiniteCanvas({
     items: { id: string; x: number; y: number }[];
   }>({ mouseX: 0, mouseY: 0, items: [] });
 
+  // ---- 连接交互状态 ----
+  // 正在拖拽建立的连接（从源 handle 拉向目标）
+  const [connecting, setConnecting] = useState<{
+    sourceId: string;
+    sourcePos: { x: number; y: number };
+    currentPos: { x: number; y: number };
+  } | null>(null);
+  // 右键连线待删除（含确认弹层定位）
+  const [pendingDeleteEdge, setPendingDeleteEdge] = useState<{
+    sourceId: string;
+    targetId: string;
+    idx: number;
+    screenX: number;
+    screenY: number;
+  } | null>(null);
+  // 悬停的连线（用于加粗高亮）
+  const [hoveredEdge, setHoveredEdge] = useState<string | null>(null);
+
+  // ---- 拖放状态 ----
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
+
   const screenToCanvas = (clientX: number, clientY: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return { x: 0, y: 0 };
@@ -337,7 +364,8 @@ export default function InfiniteCanvas({
         const active = document.activeElement;
         if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
         const toDelete = new Set(selectedIds);
-        onItemsChange(items.filter((i) => !toDelete.has(i.id)));
+        const remaining = items.filter((i) => !toDelete.has(i.id));
+        onItemsChange(cleanupDanglingConnections(remaining, toDelete));
         setSelectedIds(new Set());
         if (maximizedId && toDelete.has(maximizedId)) setMaximizedId(null);
       }
@@ -383,6 +411,9 @@ export default function InfiniteCanvas({
   const handleCanvasMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const isCanvasBg = target.dataset?.canvasBg === "true" || target === e.currentTarget;
+
+    // 正在拖拽建立连接时，不触发其它画布操作
+    if (connecting) return;
 
     if (activeTool === "grab") {
       setIsPanning(true);
@@ -471,6 +502,20 @@ export default function InfiniteCanvas({
   };
 
   const handleCanvasMouseMove = (e: React.MouseEvent) => {
+    // 拖拽建立连接：更新临时连线终点跟随鼠标
+    if (connecting) {
+      setConnecting({
+        ...connecting,
+        currentPos: screenToCanvas(e.clientX, e.clientY),
+      });
+      return;
+    }
+
+    // 拖放悬停反馈：更新预览位置
+    if (isDragOver) {
+      setDragPos(screenToCanvas(e.clientX, e.clientY));
+    }
+
     if (isPanning) {
       const dx = e.clientX - panStart.current.x;
       const dy = e.clientY - panStart.current.y;
@@ -564,6 +609,12 @@ export default function InfiniteCanvas({
   };
 
   const handleCanvasMouseUp = () => {
+    // 连接拖拽结束：若未在目标 handle 上完成则取消
+    if (connecting) {
+      setConnecting(null);
+      return;
+    }
+
     if (isPanning) {
       setIsPanning(false);
       return;
@@ -708,13 +759,230 @@ export default function InfiniteCanvas({
   };
 
   const deleteItem = (id: string) => {
-    onItemsChange(items.filter((i) => i.id !== id));
+    const remaining = items.filter((i) => i.id !== id);
+    onItemsChange(cleanupDanglingConnections(remaining, new Set([id])));
     setSelectedIds((prev) => {
       const next = new Set(prev);
       next.delete(id);
       return next;
     });
     if (maximizedId === id) setMaximizedId(null);
+  };
+
+  // ---- 连接 / 拖放 辅助函数 ----
+
+  // 连线轮转调色板
+  const CONNECTION_COLORS = ["#60a5fa", "#a78bfa", "#4ade80", "#fbbf24", "#f472b6"];
+  const pickConnectionColor = (idx: number) =>
+    CONNECTION_COLORS[idx % CONNECTION_COLORS.length];
+
+  // 标准化 connectionFrom 为数组
+  const normalizeSources = (item: CanvasItem): string[] =>
+    Array.isArray(item.connectionFrom)
+      ? item.connectionFrom
+      : item.connectionFrom
+        ? [item.connectionFrom]
+        : [];
+
+  // 清理指向已删除节点 id 的悬空连接引用
+  const cleanupDanglingConnections = (
+    list: CanvasItem[],
+    deletedIds: Set<string>,
+  ): CanvasItem[] => {
+    if (deletedIds.size === 0) return list;
+    return list.map((i) => {
+      if (!i.connectionFrom) return i;
+      const sources = normalizeSources(i);
+      const colors = i.connectionColors || [];
+      const kept: { s: string; c: string }[] = [];
+      sources.forEach((s, k) => {
+        if (!deletedIds.has(s)) kept.push({ s, c: colors[k] || pickConnectionColor(k) });
+      });
+      if (kept.length === sources.length) return i; // 无变化
+      if (kept.length === 0) {
+        const { connectionFrom: _cf, connectionColors: _cc, ...rest } = i;
+        return rest as CanvasItem;
+      }
+      const newSources = kept.map((k) => k.s);
+      return {
+        ...i,
+        connectionFrom: newSources.length === 1 ? newSources[0] : newSources,
+        connectionColors: kept.map((k) => k.c),
+      };
+    });
+  };
+
+  // 建立连接：source → target
+  const addConnection = (sourceId: string, targetId: string) => {
+    if (sourceId === targetId) {
+      toast.warning("不能连接自身");
+      return;
+    }
+    const target = items.find((i) => i.id === targetId);
+    if (!target) return;
+    const existing = normalizeSources(target);
+    if (existing.includes(sourceId)) {
+      toast.warning("该连接已存在");
+      return;
+    }
+    const color = pickConnectionColor(existing.length);
+    onItemsChange(
+      items.map((i) =>
+        i.id === targetId
+          ? {
+              ...i,
+              connectionFrom: [...existing, sourceId],
+              connectionColors: [...(i.connectionColors || []), color],
+            }
+          : i,
+      ),
+    );
+    toast.success("已建立连接");
+  };
+
+  // 删除指定连接（target 的 connectionFrom 第 idx 项）
+  const removeConnection = (edge: {
+    sourceId: string;
+    targetId: string;
+    idx: number;
+  }) => {
+    onItemsChange(
+      items.map((i) => {
+        if (i.id !== edge.targetId) return i;
+        const sources = normalizeSources(i);
+        const colors = i.connectionColors || [];
+        const newSources = sources.filter((_, k) => k !== edge.idx);
+        const newColors = colors.filter((_, k) => k !== edge.idx);
+        if (newSources.length === 0) {
+          const { connectionFrom: _cf, connectionColors: _cc, ...rest } = i;
+          return rest as CanvasItem;
+        }
+        return {
+          ...i,
+          connectionFrom:
+            newSources.length === 1 ? newSources[0] : newSources,
+          connectionColors: newColors.length === 0 ? undefined : newColors,
+        };
+      }),
+    );
+    toast.success("连接已删除");
+  };
+
+  // 计算连接线 SVG 路径 + 端点（方向自适应 + 同源偏移 + 简单穿越避让）
+  const computeConnectionPath = (
+    source: CanvasItem,
+    target: CanvasItem,
+    idx: number,
+    allItems: CanvasItem[],
+  ): { d: string; x1: number; y1: number; x2: number; y2: number } => {
+    // 方向自适应：默认源右中→目标左中；源在目标右侧时改为源左中→目标右中
+    const sourceOnRight = source.x + source.width / 2 > target.x + target.width / 2;
+    let x1: number, y1: number, x2: number, y2: number;
+    if (sourceOnRight) {
+      x1 = source.x; // 源左中
+      y1 = source.y + source.height / 2;
+      x2 = target.x + target.width; // 目标右中
+      y2 = target.y + target.height / 2;
+    } else {
+      x1 = source.x + source.width; // 源右中
+      y1 = source.y + source.height / 2;
+      x2 = target.x; // 目标左中
+      y2 = target.y + target.height / 2;
+    }
+    // 同源/同目标偏移：多条边按 idx 错开 ±8px
+    const offset = idx * 8 - (idx > 0 ? 4 : 0);
+    y1 += offset;
+    y2 += offset;
+    // 贝塞尔控制点（水平 S 形），方向自适应时取反
+    const dx = Math.max(40, Math.abs(x2 - x1) * 0.4);
+    const cx1 = sourceOnRight ? x1 - dx : x1 + dx;
+    const cx2 = sourceOnRight ? x2 + dx : x2 - dx;
+    let d = `M ${x1} ${y1} C ${cx1} ${y1}, ${cx2} ${y2}, ${x2} ${y2}`;
+    // 简单穿越避让：若贝塞尔中点落在其他节点 bbox 内，插入一个折点绕开
+    const midX = (x1 + x2) / 2;
+    const midY = (y1 + y2) / 2;
+    const blocker = allItems.find(
+      (it) =>
+        it.id !== source.id &&
+        it.id !== target.id &&
+        midX > it.x &&
+        midX < it.x + it.width &&
+        midY > it.y &&
+        midY < it.y + it.height,
+    );
+    if (blocker) {
+      // 绕到 blocker 上方或下方
+      const detourY = midY < blocker.y + blocker.height / 2 ? blocker.y - 20 : blocker.y + blocker.height + 20;
+      d = `M ${x1} ${y1} C ${cx1} ${y1}, ${midX} ${detourY}, ${midX} ${detourY} S ${cx2} ${y2}, ${x2} ${y2}`;
+    }
+    return { d, x1, y1, x2, y2 };
+  };
+
+  // 计算节点右中点（连接源 handle 位置，画布坐标）
+  const getNodeAnchor = (item: CanvasItem, side: "right" | "left") => ({
+    x: side === "right" ? item.x + item.width : item.x,
+    y: item.y + item.height / 2,
+  });
+
+  // ---- 拖放：处理 drop ----
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    setDragPos(null);
+    const raw = e.dataTransfer.getData("application/json");
+    if (!raw) return;
+    let specs: Array<{
+      id: string;
+      name: string;
+      url: string;
+      fileType: string;
+      sourceType: string;
+    }>;
+    try {
+      specs = JSON.parse(raw);
+    } catch {
+      return;
+    }
+    if (!Array.isArray(specs) || specs.length === 0) return;
+    const dropPos = screenToCanvas(e.clientX, e.clientY);
+    const newItems: CanvasItem[] = specs.map((spec, idx) => {
+      const isMedia = spec.fileType === "image" || spec.fileType === "video";
+      const width = isMedia ? 320 : 260;
+      const height = isMedia ? 240 : 200;
+      // 重复文件错开偏移：统计画布已有同 sourceId 节点数
+      const dupCount = items.filter((it) => it.meta?.sourceId === spec.id).length;
+      const offX = (idx % 3) * 24 + dupCount * 30;
+      const offY = Math.floor(idx / 3) * 24 + dupCount * 30;
+      const typeMap: Record<string, CanvasItem["type"]> = {
+        doc: "file",
+        image: "image",
+        video: "video",
+        html: "html",
+      };
+      return {
+        id: `canvas-${spec.id}-${Date.now()}-${idx}`,
+        type: typeMap[spec.fileType] || "file",
+        content: spec.url,
+        x: dropPos.x - width / 2 + offX,
+        y: dropPos.y - height / 2 + offY,
+        width,
+        height,
+        zIndex: nextZ.current++,
+        meta: {
+          name: spec.name,
+          fileType: spec.fileType,
+          sourceId: spec.id,
+          sourceType: spec.sourceType as "text" | "image" | "generated",
+        },
+      };
+    });
+    onItemsChange([...items, ...newItems]);
+    setActiveTool("select");
+    if (specs.some((s) => s.url.startsWith("blob:"))) {
+      toast.info("部分文件为本地副本，刷新后可能失效，建议先在侧栏完成上传");
+    } else {
+      toast.success(`已添加 ${newItems.length} 个节点到画布`);
+    }
   };
 
   const resetView = () => {
@@ -759,6 +1027,22 @@ export default function InfiniteCanvas({
       onMouseMove={handleCanvasMouseMove}
       onMouseUp={handleCanvasMouseUp}
       onMouseLeave={handleCanvasMouseUp}
+      onDragOver={(e) => {
+        if (e.dataTransfer.types.includes("application/json")) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "copy";
+          if (!isDragOver) setIsDragOver(true);
+          setDragPos(screenToCanvas(e.clientX, e.clientY));
+        }
+      }}
+      onDragLeave={(e) => {
+        // 仅当真正离开容器（不是进入子元素）时清空
+        if (e.currentTarget === e.target) {
+          setIsDragOver(false);
+          setDragPos(null);
+        }
+      }}
+      onDrop={handleDrop}
     >
       {/* Hidden file input */}
       <input
@@ -799,45 +1083,78 @@ export default function InfiniteCanvas({
       >
         {/* 连接线层：在有 connectionFrom 的项之间绘制亮色连线 */}
         <svg
-          className="absolute top-0 left-0 pointer-events-none"
+          className="absolute top-0 left-0"
           style={{ overflow: "visible", width: "10000px", height: "10000px" }}
         >
           {items
             .filter((item) => item.connectionFrom)
             .flatMap((item) => {
-              const sources = Array.isArray(item.connectionFrom)
+              const sources: string[] = Array.isArray(item.connectionFrom)
                 ? item.connectionFrom
-                : [item.connectionFrom];
+                : item.connectionFrom
+                  ? [item.connectionFrom]
+                  : [];
               return sources.map((srcId, idx) => {
                 const source = items.find((i) => i.id === srcId);
                 if (!source) return null;
-                // 源项右边中点 → 目标项左边中点
-                const x1 = source.x + source.width;
-                const y1 = source.y + source.height / 2;
-                const x2 = item.x;
-                const y2 = item.y + item.height / 2;
-                // 贝塞尔曲线控制点（水平 S 形）
-                const dx = Math.max(40, Math.abs(x2 - x1) * 0.4);
-                const cx1 = x1 + dx;
-                const cx2 = x2 - dx;
-                const color = item.connectionColors?.[idx] || "#60a5fa";
+                const { d, x1, y1, x2, y2 } = computeConnectionPath(source, item, idx, items);
+                const color = item.connectionColors?.[idx] || pickConnectionColor(idx);
+                const edgeKey = `conn-${item.id}-${idx}`;
+                const isHovered = hoveredEdge === edgeKey;
                 return (
-                  <g key={`conn-${item.id}-${idx}`}>
+                  <g
+                    key={edgeKey}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setPendingDeleteEdge({
+                        sourceId: srcId,
+                        targetId: item.id,
+                        idx,
+                        screenX: e.clientX,
+                        screenY: e.clientY,
+                      });
+                    }}
+                    onMouseEnter={() => setHoveredEdge(edgeKey)}
+                    onMouseLeave={() => setHoveredEdge((cur) => (cur === edgeKey ? null : cur))}
+                  >
+                    {/* 不可见宽命中带，便于右键命中 */}
                     <path
-                      d={`M ${x1} ${y1} C ${cx1} ${y1}, ${cx2} ${y2}, ${x2} ${y2}`}
+                      d={d}
+                      fill="none"
+                      stroke="transparent"
+                      strokeWidth={14}
+                      style={{ pointerEvents: "stroke", cursor: "context-menu" }}
+                    />
+                    {/* 可见细线 */}
+                    <path
+                      d={d}
                       fill="none"
                       stroke={color}
-                      strokeWidth={2.5}
+                      strokeWidth={isHovered ? 3.5 : 2.5}
                       strokeLinecap="round"
+                      style={{ pointerEvents: "none", filter: isHovered ? "drop-shadow(0 0 4px rgba(96,165,250,0.5))" : undefined }}
                     />
-                    {/* 目标端箭头 */}
-                    <circle cx={x2} cy={y2} r={4} fill={color} />
+                    {/* 目标端圆点 */}
+                    <circle cx={x2} cy={y2} r={4} fill={color} style={{ pointerEvents: "none" }} />
                     {/* 源端圆点 */}
-                    <circle cx={x1} cy={y1} r={4} fill={color} />
+                    <circle cx={x1} cy={y1} r={4} fill={color} style={{ pointerEvents: "none" }} />
                   </g>
                 );
               });
             })}
+          {/* 临时连接线（拖拽建立连接时） */}
+          {connecting && (
+            <path
+              d={`M ${connecting.sourcePos.x} ${connecting.sourcePos.y} C ${connecting.sourcePos.x + 40} ${connecting.sourcePos.y}, ${connecting.currentPos.x - 40} ${connecting.currentPos.y}, ${connecting.currentPos.x} ${connecting.currentPos.y}`}
+              fill="none"
+              stroke="#60a5fa"
+              strokeWidth={2.5}
+              strokeDasharray="6 4"
+              strokeLinecap="round"
+              style={{ pointerEvents: "none" }}
+            />
+          )}
         </svg>
         {/* Items */}
         {items.map((item) => (
@@ -871,6 +1188,22 @@ export default function InfiniteCanvas({
                     : i,
                 ),
               );
+            }}
+            onStartConnection={(e) => {
+              e.stopPropagation();
+              const anchor = getNodeAnchor(item, "right");
+              setConnecting({
+                sourceId: item.id,
+                sourcePos: anchor,
+                currentPos: anchor,
+              });
+            }}
+            onCompleteConnection={(e) => {
+              e.stopPropagation();
+              if (connecting) {
+                addConnection(connecting.sourceId, item.id);
+                setConnecting(null);
+              }
             }}
           />
         ))}
@@ -1006,7 +1339,8 @@ export default function InfiniteCanvas({
         <button
           onClick={() => {
             const toDelete = new Set(selectedIds);
-            onItemsChange(items.filter((i) => !toDelete.has(i.id)));
+            const remaining = items.filter((i) => !toDelete.has(i.id));
+            onItemsChange(cleanupDanglingConnections(remaining, toDelete));
             setSelectedIds(new Set());
             if (maximizedId && toDelete.has(maximizedId)) setMaximizedId(null);
           }}
@@ -1026,6 +1360,67 @@ export default function InfiniteCanvas({
           </div>
         </div>
       )}
+
+      {/* 拖放悬停遮罩 */}
+      {isDragOver && (
+        <div className="absolute inset-0 bg-blue-500/5 border-2 border-dashed border-blue-400/40 rounded-lg pointer-events-none transition-all duration-300 z-40" />
+      )}
+
+      {/* 拖放跟随预览卡片 */}
+      {isDragOver && dragPos && (
+        <div
+          className="absolute pointer-events-none z-50 flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/20 border border-blue-400/50 rounded-lg backdrop-blur-sm"
+          style={{
+            left: dragPos.x * scale + offset.x + 12,
+            top: dragPos.y * scale + offset.y + 12,
+          }}
+        >
+          <Download className="w-3.5 h-3.5 text-blue-300" />
+          <span className="text-xs text-blue-200">松开以添加到画布</span>
+        </div>
+      )}
+
+      {/* 连接删除确认弹层 */}
+      {pendingDeleteEdge && (
+        <>
+          {/* 半透明遮罩，点击空白处取消 */}
+          <div
+            className="absolute inset-0 z-50"
+            onClick={() => setPendingDeleteEdge(null)}
+          />
+          <div
+            className="absolute z-50 bg-[#1a1a1a] border border-white/15 rounded-lg shadow-2xl p-3 text-xs"
+            style={{
+              left: pendingDeleteEdge.screenX - (containerRef.current?.getBoundingClientRect().left ?? 0),
+              top: pendingDeleteEdge.screenY - (containerRef.current?.getBoundingClientRect().top ?? 0),
+              minWidth: 140,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-white/80 mb-3 flex items-center gap-1.5">
+              <Trash2 className="w-3.5 h-3.5 text-red-400" />
+              删除此连接？
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  removeConnection(pendingDeleteEdge);
+                  setPendingDeleteEdge(null);
+                }}
+                className="flex-1 px-2 py-1.5 bg-red-500/80 hover:bg-red-500 rounded text-white transition-colors"
+              >
+                删除
+              </button>
+              <button
+                onClick={() => setPendingDeleteEdge(null)}
+                className="flex-1 px-2 py-1.5 bg-white/10 hover:bg-white/20 rounded text-white/70 transition-colors"
+              >
+                取消
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -1044,6 +1439,10 @@ interface CanvasItemCardProps {
   onDownloadFile: (item: CanvasItem) => void;
   onPreviewFile: (item: CanvasItem) => void;
   onTextEdit: (content: string) => void;
+  /** 源 handle（右侧）按下：开始拖拽建立连接 */
+  onStartConnection?: (e: React.MouseEvent) => void;
+  /** 目标 handle（左侧）释放：完成连接 */
+  onCompleteConnection?: (e: React.MouseEvent) => void;
 }
 
 function CanvasItemCard({
@@ -1060,6 +1459,8 @@ function CanvasItemCard({
   onDownloadFile,
   onPreviewFile,
   onTextEdit,
+  onStartConnection,
+  onCompleteConnection,
 }: CanvasItemCardProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [editingText, setEditingText] = useState(item.meta?.editing || false);
@@ -1548,6 +1949,22 @@ function CanvasItemCard({
         >
           <div className="absolute bottom-1 right-1 w-2.5 h-2.5 border-r-2 border-b-2 border-white/40 rounded-br-sm" />
         </div>
+      )}
+
+      {/* 连接手柄：悬停节点时显示 */}
+      {onStartConnection && (
+        <div
+          title="拖拽建立连接"
+          onMouseDown={onStartConnection}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 rounded-full bg-blue-400 border-2 border-[#1e1e1e] opacity-0 group-hover:opacity-100 hover:scale-150 transition-all cursor-crosshair z-20"
+        />
+      )}
+      {onCompleteConnection && (
+        <div
+          title="拖到此处完成连接"
+          onMouseUp={onCompleteConnection}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white/60 border-2 border-[#1e1e1e] opacity-0 group-hover:opacity-100 hover:scale-150 hover:bg-white transition-all cursor-cell z-20"
+        />
       )}
     </div>
   );

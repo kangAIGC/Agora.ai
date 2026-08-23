@@ -63,6 +63,30 @@ function getFileIconStyle(type: string) {
   }
 }
 
+/** 拖放传输的文件规格（写入 dataTransfer，画布 onDrop 解析） */
+export type DroppedFileSpec = {
+  id: string;
+  name: string;
+  url: string;
+  fileType: "doc" | "image" | "video" | "html";
+  sourceType: "text" | "image" | "generated";
+};
+
+/** 把侧栏文件卡片转换为拖放规格并写入 dataTransfer */
+function startDragForFile(
+  e: React.DragEvent,
+  spec: DroppedFileSpec,
+) {
+  e.dataTransfer.setData("application/json", JSON.stringify([spec]));
+  e.dataTransfer.effectAllowed = "copy";
+  // 拖拽过程中显示半透明快照（部分浏览器需要 setData 才生效）
+  try {
+    e.dataTransfer.setDragImage(e.currentTarget as HTMLElement, 10, 10);
+  } catch {
+    /* ignore */
+  }
+}
+
 function CollapsibleSection({
   title,
   icon,
@@ -146,6 +170,8 @@ export default function WorkspaceSidebar({
   const [newProjectName, setNewProjectName] = useState("");
   const [showNewProject, setShowNewProject] = useState(false);
   const [savingProjectId, setSavingProjectId] = useState<string | null>(null);
+  // 正在拖拽的卡片 id（用于半透明视觉反馈）
+  const [draggingId, setDraggingId] = useState<string | null>(null);
 
   // Internal collapsed state with localStorage persistence
   const [internalCollapsed, setInternalCollapsed] = useState(false);
@@ -495,7 +521,23 @@ export default function WorkspaceSidebar({
             {textFiles.map((file) => (
               <div
                 key={file.id}
-                className="group flex items-center gap-2 p-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-colors"
+                draggable={file.status === "success"}
+                onDragStart={(e) => {
+                  const url = file.previewUrl || URL.createObjectURL(file.file);
+                  if (!file.previewUrl) {
+                    toast.info("该文档为本地副本，刷新后可能失效");
+                  }
+                  startDragForFile(e, {
+                    id: file.id,
+                    name: file.name,
+                    url,
+                    fileType: "doc",
+                    sourceType: "text",
+                  });
+                  setDraggingId(file.id);
+                }}
+                onDragEnd={() => setDraggingId(null)}
+                className={`group flex items-center gap-2 p-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-colors ${file.status === "success" ? "cursor-grab active:cursor-grabbing" : ""} ${draggingId === file.id ? "opacity-50" : ""}`}
               >
                 {file.status === "uploading" ? (
                   <span className="w-4 h-4 border-2 border-white/20 border-t-white/60 rounded-full animate-spin flex-shrink-0" />
@@ -523,7 +565,19 @@ export default function WorkspaceSidebar({
             {imageFiles.map((file) => (
               <div
                 key={file.id}
-                className="group relative aspect-square bg-white/5 rounded-lg overflow-hidden flex items-center justify-center"
+                draggable={file.status === "success"}
+                onDragStart={(e) => {
+                  startDragForFile(e, {
+                    id: file.id,
+                    name: file.name,
+                    url: file.previewUrl || "",
+                    fileType: "image",
+                    sourceType: "image",
+                  });
+                  setDraggingId(file.id);
+                }}
+                onDragEnd={() => setDraggingId(null)}
+                className={`group relative aspect-square bg-white/5 rounded-lg overflow-hidden flex items-center justify-center ${file.status === "success" ? "cursor-grab active:cursor-grabbing" : ""} ${draggingId === file.id ? "opacity-50" : ""}`}
               >
                 {file.status === "uploading" ? (
                   <span className="w-4 h-4 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
@@ -536,6 +590,7 @@ export default function WorkspaceSidebar({
                     <img
                       src={asset(file.previewUrl)}
                       alt={file.name}
+                      draggable={false}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => onPreviewImage(file.previewUrl!)}
                     />
@@ -587,7 +642,19 @@ export default function WorkspaceSidebar({
               return (
                 <div
                   key={file.id}
-                  className="group flex items-center gap-2 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+                  draggable
+                  onDragStart={(e) => {
+                    startDragForFile(e, {
+                      id: file.id,
+                      name: file.name,
+                      url: file.url,
+                      fileType: file.type,
+                      sourceType: "generated",
+                    });
+                    setDraggingId(file.id);
+                  }}
+                  onDragEnd={() => setDraggingId(null)}
+                  className={`group flex items-center gap-2 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs transition-colors cursor-grab active:cursor-grabbing ${draggingId === file.id ? "opacity-50" : ""}`}
                   onClick={() => onDownloadGenerated(file)}
                 >
                   <div className={`w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 ${iconStyle.bg}`}>

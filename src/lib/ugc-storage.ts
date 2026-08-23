@@ -33,7 +33,11 @@ export interface StoredWork {
   createdAt: number;
   previewUrl?: string;
   scope?: WorkScope;
-  /** 永久作品标记：标记后不可删除（如电商社区永久数据集） */
+  /**
+   * 历史遗留字段：早期用于阻止永久作品被删除。
+   * 当前实现下所有作品均允许用户主动删除，此字段仅作向后兼容保留，
+   * 不再产生任何阻止删除的副作用。新数据可不再写入此字段。
+   */
   permanent?: boolean;
 }
 
@@ -162,20 +166,11 @@ export async function getFileBlobs(ids: string[]): Promise<Map<string, Blob>> {
 
 /**
  * 删除作品元数据 + 文件 Blob
- * 永久作品（permanent: true）拒绝删除，确保数据留存
+ * 所有作品（含历史遗留的 permanent 标记作品）均允许用户主动删除，
+ * 删除后不可恢复；如需恢复默认作品集，由调用方触发 force seed 重建。
  */
 export async function deleteWork(id: string): Promise<void> {
   const db = await openDB();
-  // 先读取元数据，校验是否为永久作品
-  const work = await new Promise<StoredWork | undefined>((resolve) => {
-    const tx = db.transaction(WORKS_STORE, "readonly");
-    const req = tx.objectStore(WORKS_STORE).get(id);
-    req.onsuccess = () => resolve(req.result as StoredWork | undefined);
-    req.onerror = () => resolve(undefined);
-  });
-  if (work?.permanent) {
-    throw new Error("该作品为永久保留内容，不可删除");
-  }
   return new Promise((resolve, reject) => {
     const tx = db.transaction([WORKS_STORE, FILES_STORE], "readwrite");
     tx.objectStore(WORKS_STORE).delete(id);
@@ -211,6 +206,21 @@ export async function addDeletedMockId(id: string): Promise<void> {
         store.put([...current, id], DELETED_MOCK_KEY);
       }
     };
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+/**
+ * 清空已删除 Mock 作品 id 记录
+ * 配合 force seed 用于"恢复默认作品集"操作：清空记录后，
+ * 下次加载会重新展示所有默认作品，相当于把用户主动删除的默认内容恢复回来。
+ */
+export async function clearDeletedMockIds(): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(FILES_STORE, "readwrite");
+    tx.objectStore(FILES_STORE).delete(DELETED_MOCK_KEY);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
