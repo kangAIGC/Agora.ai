@@ -63,6 +63,7 @@ export type MigratedWorkspacePayload = {
 };
 
 // 文件名 -> 静态 mock 路径映射。优先按 name 精确匹配，避免 UUID 混乱。
+// 注意：画布节点 meta.name 可能使用别名（如"草图1"），不是原始文件名 ske-1.jpeg；此处都列出来。
 const STATIC_BY_NAME: Record<string, string> = {
   // 建筑（景德镇）
   "景德镇陶瓷文创园设计任务书.doc": "/mock-arch/景德镇陶瓷文创园设计任务书.doc",
@@ -70,12 +71,31 @@ const STATIC_BY_NAME: Record<string, string> = {
   "ske-2.jpeg": "/mock-arch/ske-2.jpeg",
   "ske-3.jpeg": "/mock-arch/ske-3.jpeg",
   "ske-4.jpeg": "/mock-arch/ske-4.jpeg",
+  "草图1": "/mock-arch/ske-1.jpeg",
+  "草图2": "/mock-arch/ske-2.jpeg",
+  "草图3": "/mock-arch/ske-3.jpeg",
+  "草图4": "/mock-arch/ske-4.jpeg",
   // 电商（绿发晶）
   "商品图底图.jpg": "/mock-dianshang/商品图底图.jpg",
+  "商品图底图": "/mock-dianshang/商品图底图.jpg",
   "模特.png": "/mock-dianshang/模特.png",
+  "模特": "/mock-dianshang/模特.png",
   "img模特.png": "/mock-dianshang/img模特.png",
   // 漫剧（神骨）
   "创意.doc": "/mock-manju/创意.doc",
+};
+
+// 兜底：按 uploads UUID（完整文件名）精确映射。
+// 即使 meta.name 无法命中（例：画布节点叫"草图1"但 content 是 uploads UUID），也能根据 UUID 定位静态资源。
+const STATIC_BY_UPLOADS: Record<string, string> = {
+  "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc": "/mock-arch/景德镇陶瓷文创园设计任务书.doc",
+  "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg": "/mock-arch/ske-1.jpeg",
+  "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg": "/mock-arch/ske-2.jpeg",
+  "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg": "/mock-arch/ske-3.jpeg",
+  "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg": "/mock-arch/ske-4.jpeg",
+  "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg": "/mock-dianshang/商品图底图.jpg",
+  "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png": "/mock-dianshang/模特.png",
+  "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc": "/mock-manju/创意.doc",
 };
 
 // 旧项目 ID -> 标准项目 ID 映射
@@ -90,9 +110,10 @@ function looksLikeUploadsPath(p: unknown): p is string {
 }
 
 function resolveStaticPath(name: string | undefined, fallbackUrl: string | undefined): string | undefined {
+  // 1. 按文件名 / 别名匹配（覆盖：sketch 别名、商品图底图、模特 等）
   if (name && STATIC_BY_NAME[name]) return STATIC_BY_NAME[name];
-  // 没有命中 name 映射时，按扩展名 + 项目上下文兜底（调用方额外传 hint 时的兼容）
-  // 此处保持 undefined，由调用方保留原值
+  // 2. 按完整 uploads UUID 路径兜底（画布节点 meta.name = "草图1" 时，只能靠 UUID 定位）
+  if (typeof fallbackUrl === "string" && STATIC_BY_UPLOADS[fallbackUrl]) return STATIC_BY_UPLOADS[fallbackUrl];
   return undefined;
 }
 
@@ -100,11 +121,16 @@ function migrateFileRefs(f: MigratedUploadFile): MigratedUploadFile {
   if (!f || typeof f !== "object") return f;
   const out: MigratedUploadFile = { ...f };
   const name = typeof f.name === "string" ? f.name : undefined;
-  const resolved = resolveStaticPath(name, typeof f.url === "string" ? f.url : undefined);
+  const urlRaw = typeof f.url === "string" ? f.url : undefined;
+  const prevRaw = typeof f.previewUrl === "string" ? f.previewUrl : undefined;
+  const resolved = resolveStaticPath(name, urlRaw) ?? resolveStaticPath(name, prevRaw);
   if (resolved) {
     if (looksLikeUploadsPath(out.url)) out.url = resolved;
     if (looksLikeUploadsPath(out.previewUrl)) out.previewUrl = resolved;
   }
+  // 兜底：如果 url / previewUrl 仍看起来像 uploads UUID，尝试直接查 UUID 表（不依赖 name）
+  if (looksLikeUploadsPath(out.url) && STATIC_BY_UPLOADS[out.url]) out.url = STATIC_BY_UPLOADS[out.url];
+  if (looksLikeUploadsPath(out.previewUrl) && STATIC_BY_UPLOADS[out.previewUrl]) out.previewUrl = STATIC_BY_UPLOADS[out.previewUrl];
   return out;
 }
 
@@ -115,7 +141,10 @@ function migrateCanvasItem(item: MigratedCanvasItem): MigratedCanvasItem {
     (item.meta && typeof item.meta === "object" && typeof (item.meta as { name?: string }).name === "string"
       ? (item.meta as { name?: string }).name
       : undefined);
-  const resolved = name ? resolveStaticPath(name, undefined) : undefined;
+  let resolved = name ? resolveStaticPath(name, undefined) : undefined;
+  if (!resolved && looksLikeUploadsPath(out.content) && STATIC_BY_UPLOADS[out.content]) {
+    resolved = STATIC_BY_UPLOADS[out.content];
+  }
   if (resolved && looksLikeUploadsPath(out.content)) out.content = resolved;
   return out;
 }
