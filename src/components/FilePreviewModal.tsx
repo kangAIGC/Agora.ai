@@ -355,7 +355,7 @@ function DocPreviewContent({ url, name }: { url: string; name: string }) {
     (async () => {
       setIsLoading(true);
       try {
-        const resp = await fetch(asset(url));
+        const resp = await fetch(asset(url), { cache: "no-cache" });
         if (!resp.ok) throw new Error(`文件获取失败 (${resp.status})`);
         const blob = await resp.blob();
 

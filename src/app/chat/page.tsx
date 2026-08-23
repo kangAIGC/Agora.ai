@@ -579,8 +579,9 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
       setIsLoading(true);
       try {
         // 获取文件内容（blob URL 和静态 URL 都可以用 fetch）
+        // cache: 'no-cache' 强制浏览器向服务器重新验证，避免部署更新后命中旧缓存
         console.log("[PreviewDocModal] fetching doc:", url);
-        const resp = await fetch(asset(url));
+        const resp = await fetch(asset(url), { cache: "no-cache" });
         if (!resp.ok) throw new Error(`文件获取失败 (${resp.status})`);
         const blob = await resp.blob();
         console.log("[PreviewDocModal] fetched blob size:", blob.size);
