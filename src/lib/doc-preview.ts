@@ -1,5 +1,9 @@
 "use client";
 
+// 静态 import mammoth 浏览器版，确保 Turbopack 把它打包进 chunk
+// （dynamic import 在 output: 'export' 模式下可能没被正确处理）
+import mammoth from "mammoth/mammoth.browser";
+
 /**
  * 浏览器端 .doc/.docx/HTML 文档预览转换工具
  *
@@ -90,7 +94,6 @@ export async function convertDocBlobToPreview(
   if (kind === "ooxml") {
     // mammoth 仅支持 OOXML (.docx)
     try {
-      const mammoth = await import("mammoth/mammoth.browser");
       const result = await mammoth.convertToHtml(
         { arrayBuffer: arrayBuffer.slice(0) },
         { styleMap: ["p[style-name='Title'] => h1.doc-title:fresh"] },
