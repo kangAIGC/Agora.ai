@@ -1,7 +1,7 @@
 {
   "projects": [
     {
-      "id": "proj-1787396780970",
+      "id": "proj-default-1",
       "name": "景德镇陶瓷文创园",
       "conversations": [
         {
@@ -26,7 +26,7 @@
               {
                 "id": "upload-1787403457050-lo2pb8wpupr",
                 "name": "景德镇陶瓷文创园设计任务书.doc",
-                "url": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+                "url": "/mock-arch/景德镇陶瓷文创园设计任务书.doc",
                 "type": "doc",
                 "timestamp": "2026-08-22T12:57:41.106Z"
               }
@@ -216,7 +216,7 @@
               {
                 "id": "upload-1787403579567-48t8w97wwpw",
                 "name": "商品图底图.jpg",
-                "url": "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg",
+                "url": "/mock-dianshang/商品图底图.jpg",
                 "type": "image",
                 "timestamp": "2026-08-22T12:59:39.610Z"
               }
@@ -340,7 +340,7 @@
               {
                 "id": "upload-1787403617781-znjnk2q278",
                 "name": "模特.png",
-                "url": "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png",
+                "url": "/mock-dianshang/模特.png",
                 "type": "image",
                 "timestamp": "2026-08-22T13:00:17.910Z"
               }
@@ -422,7 +422,7 @@
               {
                 "id": "upload-1787403662903-1pasro210u7h",
                 "name": "创意.doc",
-                "url": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+                "url": "/mock-manju/创意.doc",
                 "type": "doc",
                 "timestamp": "2026-08-22T13:01:06.081Z"
               }
@@ -663,7 +663,7 @@
   ],
   "currentProjectId": "proj-default-3",
   "filesByProject": {
-    "proj-1787396780970": {
+    "proj-default-1": {
       "generated": [
         {
           "id": "gen-1787403468271",
@@ -757,35 +757,35 @@
           "name": "ske-1.jpeg",
           "uploadedAt": "2026-08-22T12:58:25.870Z",
           "status": "success",
-          "previewUrl": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg"
+          "previewUrl": "/mock-arch/ske-1.jpeg"
         },
         {
           "id": "1787403505950-fcv52h4xs9r",
           "name": "ske-2.jpeg",
           "uploadedAt": "2026-08-22T12:58:25.950Z",
           "status": "success",
-          "previewUrl": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg"
+          "previewUrl": "/mock-arch/ske-2.jpeg"
         },
         {
           "id": "1787403506054-qigs9cm0k1",
           "name": "ske-3.jpeg",
           "uploadedAt": "2026-08-22T12:58:26.054Z",
           "status": "success",
-          "previewUrl": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg"
+          "previewUrl": "/mock-arch/ske-3.jpeg"
         },
         {
           "id": "1787403506165-prm0zvr8ai",
           "name": "ske-4.jpeg",
           "uploadedAt": "2026-08-22T12:58:26.165Z",
           "status": "success",
-          "previewUrl": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg"
+          "previewUrl": "/mock-arch/ske-4.jpeg"
         }
       ],
       "canvas": [
         {
           "id": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
           "type": "file",
-          "content": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+          "content": "/mock-arch/景德镇陶瓷文创园设计任务书.doc",
           "x": 40,
           "y": 40,
           "width": 260,
@@ -829,7 +829,7 @@
         {
           "id": "canvas-sketch-1787403505869-n1vxbzq0d8",
           "type": "image",
-          "content": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg",
+          "content": "/mock-arch/ske-1.jpeg",
           "x": 1100,
           "y": 40,
           "width": 200,
@@ -847,7 +847,7 @@
         {
           "id": "canvas-sketch-1787403505950-fcv52h4xs9r",
           "type": "image",
-          "content": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg",
+          "content": "/mock-arch/ske-2.jpeg",
           "x": 1100,
           "y": 390,
           "width": 200,
@@ -865,7 +865,7 @@
         {
           "id": "canvas-sketch-1787403506054-qigs9cm0k1",
           "type": "image",
-          "content": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg",
+          "content": "/mock-arch/ske-3.jpeg",
           "x": 1100,
           "y": 740,
           "width": 200,
@@ -883,7 +883,7 @@
         {
           "id": "canvas-sketch-1787403506165-prm0zvr8ai",
           "type": "image",
-          "content": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg",
+          "content": "/mock-arch/ske-4.jpeg",
           "x": 1100,
           "y": 1090,
           "width": 200,
@@ -1140,21 +1140,21 @@
           "name": "商品图底图.jpg",
           "uploadedAt": "2026-08-22T12:59:39.567Z",
           "status": "success",
-          "previewUrl": "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg"
+          "previewUrl": "/mock-dianshang/商品图底图.jpg"
         },
         {
           "id": "1787403617781-znjnk2q278",
           "name": "模特.png",
           "uploadedAt": "2026-08-22T13:00:17.781Z",
           "status": "success",
-          "previewUrl": "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png"
+          "previewUrl": "/mock-dianshang/模特.png"
         }
       ],
       "canvas": [
         {
           "id": "canvas-upload-1787403579567-48t8w97wwpw-1787403579611-0",
           "type": "image",
-          "content": "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg",
+          "content": "/mock-dianshang/商品图底图.jpg",
           "x": 40,
           "y": 40,
           "width": 320,
@@ -1294,7 +1294,7 @@
         {
           "id": "canvas-upload-1787403617781-znjnk2q278-1787403617911-0",
           "type": "image",
-          "content": "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png",
+          "content": "/mock-dianshang/模特.png",
           "x": 720,
           "y": 560,
           "width": 320,
@@ -1471,7 +1471,7 @@
         {
           "id": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
           "type": "file",
-          "content": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+          "content": "/mock-manju/创意.doc",
           "x": 40,
           "y": 40,
           "width": 260,
@@ -1919,7 +1919,7 @@
           {
             "id": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
             "type": "file",
-            "content": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+            "content": "/mock-manju/创意.doc",
             "x": 40,
             "y": 40,
             "width": 260,
@@ -2228,7 +2228,7 @@
         ]
       }
     },
-    "aga-files-version-proj-1787396780970__v": {
+    "aga-files-version-proj-default-1__v": {
       "version": 12,
       "updatedAt": "2026-08-22T13:02:09.520Z",
       "clientId": "c-mt4arwel-98bfkf",
@@ -2326,35 +2326,35 @@
             "name": "ske-1.jpeg",
             "uploadedAt": "2026-08-22T12:58:25.870Z",
             "status": "success",
-            "previewUrl": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg"
+            "previewUrl": "/mock-arch/ske-1.jpeg"
           },
           {
             "id": "1787403505950-fcv52h4xs9r",
             "name": "ske-2.jpeg",
             "uploadedAt": "2026-08-22T12:58:25.950Z",
             "status": "success",
-            "previewUrl": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg"
+            "previewUrl": "/mock-arch/ske-2.jpeg"
           },
           {
             "id": "1787403506054-qigs9cm0k1",
             "name": "ske-3.jpeg",
             "uploadedAt": "2026-08-22T12:58:26.054Z",
             "status": "success",
-            "previewUrl": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg"
+            "previewUrl": "/mock-arch/ske-3.jpeg"
           },
           {
             "id": "1787403506165-prm0zvr8ai",
             "name": "ske-4.jpeg",
             "uploadedAt": "2026-08-22T12:58:26.165Z",
             "status": "success",
-            "previewUrl": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg"
+            "previewUrl": "/mock-arch/ske-4.jpeg"
           }
         ],
         "canvas": [
           {
             "id": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
             "type": "file",
-            "content": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+            "content": "/mock-arch/景德镇陶瓷文创园设计任务书.doc",
             "x": 40,
             "y": 40,
             "width": 260,
@@ -2398,7 +2398,7 @@
           {
             "id": "canvas-sketch-1787403505869-n1vxbzq0d8",
             "type": "image",
-            "content": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg",
+            "content": "/mock-arch/ske-1.jpeg",
             "x": 1100,
             "y": 40,
             "width": 200,
@@ -2416,7 +2416,7 @@
           {
             "id": "canvas-sketch-1787403505950-fcv52h4xs9r",
             "type": "image",
-            "content": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg",
+            "content": "/mock-arch/ske-2.jpeg",
             "x": 1100,
             "y": 390,
             "width": 200,
@@ -2434,7 +2434,7 @@
           {
             "id": "canvas-sketch-1787403506054-qigs9cm0k1",
             "type": "image",
-            "content": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg",
+            "content": "/mock-arch/ske-3.jpeg",
             "x": 1100,
             "y": 740,
             "width": 200,
@@ -2452,7 +2452,7 @@
           {
             "id": "canvas-sketch-1787403506165-prm0zvr8ai",
             "type": "image",
-            "content": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg",
+            "content": "/mock-arch/ske-4.jpeg",
             "x": 1100,
             "y": 1090,
             "width": 200,
@@ -2725,21 +2725,21 @@
             "name": "商品图底图.jpg",
             "uploadedAt": "2026-08-22T12:59:39.567Z",
             "status": "success",
-            "previewUrl": "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg"
+            "previewUrl": "/mock-dianshang/商品图底图.jpg"
           },
           {
             "id": "1787403617781-znjnk2q278",
             "name": "模特.png",
             "uploadedAt": "2026-08-22T13:00:17.781Z",
             "status": "success",
-            "previewUrl": "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png"
+            "previewUrl": "/mock-dianshang/模特.png"
           }
         ],
         "canvas": [
           {
             "id": "canvas-upload-1787403579567-48t8w97wwpw-1787403579611-0",
             "type": "image",
-            "content": "/uploads/8c5657d7-3d0d-4c98-b28e-480c397ee4ca.jpg",
+            "content": "/mock-dianshang/商品图底图.jpg",
             "x": 40,
             "y": 40,
             "width": 320,
@@ -2879,7 +2879,7 @@
           {
             "id": "canvas-upload-1787403617781-znjnk2q278-1787403617911-0",
             "type": "image",
-            "content": "/uploads/0503ac0e-89df-4693-9c05-95ce12947fc4.png",
+            "content": "/mock-dianshang/模特.png",
             "x": 720,
             "y": 560,
             "width": 320,

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { Message, Conversation } from "./types";
+import { migrateWorkspacePayload, type MigratedProject, type MigratedFilesByProject } from "./seed-migration";
 
 export interface DesignScheme {
   id: string;
@@ -285,7 +286,12 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         const { mockGetWorkspaceState } = await import("@/lib/client-mock");
         const json = await mockGetWorkspaceState();
         if (cancelled || !json || !json.data) return;
-        const data = json.data;
+        const data = (migrateWorkspacePayload(json.data as never) ?? json.data) as {
+          projects?: MigratedProject[];
+          currentProjectId?: string | null;
+          filesByProject?: MigratedFilesByProject;
+          fileVersions?: Record<string, unknown>;
+        };
         // 1. 还原 projects（含对话历史 messagesByConversation）
         if (Array.isArray(data.projects) && data.projects.length > 0) {
           const restored = deserializeProjects(JSON.stringify(data.projects));
@@ -608,6 +614,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
       const payload = {
         projects: JSON.parse(serializeProjects(projects)),
         currentProjectId,
+        filesByProject: {},
       };
       // 静态模式：使用客户端 mock 替代服务端状态保存
       const { mockSaveWorkspaceState } = await import("@/lib/client-mock");

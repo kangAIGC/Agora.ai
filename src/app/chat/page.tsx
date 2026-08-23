@@ -42,6 +42,7 @@ import InfiniteCanvas, { type CanvasItem } from "@/components/InfiniteCanvas";
 import SaveStatusIndicator from "@/components/SaveStatusIndicator";
 import { useProject } from "@/lib/project-store";
 import type { UploadedFile, GeneratedFile, Message, Mode } from "@/lib/types";
+import { migrateFilesByProject, type MigratedFilesByProject } from "@/lib/seed-migration";
 import {
   inferSeedKey,
   getSeedProject,
@@ -1034,13 +1035,15 @@ function ChatPageInner() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) return;
-      const parsed = JSON.parse(stored, (key, value) => {
+      const parsedRaw = JSON.parse(stored, (key, value) => {
         if (key === "timestamp" && typeof value === "string") {
           const d = new Date(value);
           if (!isNaN(d.getTime())) return d;
         }
         return value;
-      }) as Record<
+      }) as MigratedFilesByProject;
+      // 迁移：把旧示例项目残留的 /uploads/<uuid>.ext 修复为静态 mock 路径
+      const parsed = (migrateFilesByProject(parsedRaw) ?? parsedRaw) as Record<
         string,
         { generated: GeneratedFile[]; text?: StoredUploadedFile[]; image?: StoredUploadedFile[]; canvas: CanvasItem[] }
       >;
@@ -1219,15 +1222,16 @@ function ChatPageInner() {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (!stored) return;
-        const parsed = JSON.parse(stored, (k: string, value: unknown) => {
+        const parsedRaw = JSON.parse(stored, (k: string, value: unknown) => {
           if (k === "timestamp" && typeof value === "string") {
             const d = new Date(value);
             if (!isNaN(d.getTime())) return d;
           }
           return value;
-        }) as Record<string, { generated: GeneratedFile[]; text?: StoredUploadedFile[]; image?: StoredUploadedFile[]; canvas: CanvasItem[] }>;
+        }) as MigratedFilesByProject;
+        const migrated = (migrateFilesByProject(parsedRaw) ?? parsedRaw) as Record<string, { generated: GeneratedFile[]; text?: StoredUploadedFile[]; image?: StoredUploadedFile[]; canvas: CanvasItem[] }>;
         const result: Record<string, { generated: GeneratedFile[]; text: UploadedFile[]; image: UploadedFile[]; canvas: CanvasItem[] }> = {};
-        for (const [pid, val] of Object.entries(parsed)) {
+        for (const [pid, val] of Object.entries(migrated)) {
           result[pid] = {
             generated: val.generated || [],
             text: (val.text || []).map(fromStored),
