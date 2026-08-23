@@ -53,7 +53,6 @@ import {
   getMockStream,
   mockUploadFile,
   mockDifyUpload,
-  mockDoc2Pdf,
 } from "@/lib/client-mock";
 import { asset } from "@/lib/asset";
 import {
@@ -566,31 +565,41 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
   const isPdfFile = lowerName.endsWith(".pdf");
 
   // 状态：loading / ready / error
-  const [convertedPdfUrl, setConvertedPdfUrl] = useState<string | null>(null);
+  const [renderHtml, setRenderHtml] = useState<string | null>(null);
+  const [renderPdfUrl, setRenderPdfUrl] = useState<string | null>(null);
   const [convertError, setConvertError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // 对 doc/docx 文件，统一通过 /api/doc2pdf 转换为 PDF（支持 blob URL 和静态 URL）
+  // 对 doc/docx 文件统一在浏览器端用 mammoth 转 HTML（OOXML）或直接渲染（HTML/PDF）
   useEffect(() => {
     if (!isDocFile) return;
     let revoked = false;
 
     (async () => {
+      setIsLoading(true);
       try {
         // 获取文件内容（blob URL 和静态 URL 都可以用 fetch）
-        const resp = await fetch(url);
+        const resp = await fetch(asset(url));
         if (!resp.ok) throw new Error(`文件获取失败 (${resp.status})`);
         const blob = await resp.blob();
-        const file = new File([blob], name, { type: blob.type });
 
-        // 静态导出模式：使用客户端 mock 替代服务端 doc2pdf
-        const result = await mockDoc2Pdf(file);
-        if (!result.available) {
-          throw new Error(result.reason);
+        const { convertDocBlobToPreview } = await import("@/lib/doc-preview");
+        const result = await convertDocBlobToPreview(blob, name);
+        if (revoked) return;
+
+        if (result.kind === "html") {
+          setRenderHtml(result.html);
+        } else if (result.kind === "pdf") {
+          setRenderPdfUrl(result.url);
+        } else {
+          setConvertError(result.reason);
         }
       } catch (err) {
         if (!revoked) {
-          setConvertError(err instanceof Error ? err.message : "转换失败");
+          setConvertError(err instanceof Error ? err.message : "解析失败");
         }
+      } finally {
+        if (!revoked) setIsLoading(false);
       }
     })();
 
@@ -599,14 +608,15 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
     };
   }, [isDocFile, url, name]);
 
-  // 最终用于 iframe 的 PDF URL
-  const finalPdfUrl = isPdfFile
-    ? url
-    : isDocFile
-      ? convertedPdfUrl
-      : url;
+  // 卸载时释放 blob URL
+  useEffect(() => {
+    return () => {
+      if (renderPdfUrl) URL.revokeObjectURL(renderPdfUrl);
+    };
+  }, [renderPdfUrl]);
 
-  const isLoading = isDocFile && !convertedPdfUrl && !convertError;
+  // 最终用于 iframe 的 PDF URL（仅对 PDF 文件 / 嗅探出 PDF 的情况适用）
+  const finalPdfUrl = isPdfFile ? url : renderPdfUrl;
 
   return (
     <div
@@ -640,25 +650,34 @@ function PreviewDocModal({ url, name, onClose, onDownload }: PreviewDocModalProp
             </button>
           </div>
         </div>
-        {/* PDF 预览区 */}
+        {/* 预览区 */}
         <div className="flex-1 min-h-0 bg-white relative">
           {isLoading && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/60">
               <Loader2 className="w-8 h-8 animate-spin text-white/40" />
-              <p className="text-sm">正在转换为 PDF...</p>
+              <p className="text-sm">正在解析文档...</p>
             </div>
           )}
           {convertError && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/60 p-8">
-              <p className="text-sm text-red-400">转换失败：{convertError}</p>
-              <p className="text-xs text-white/40">请尝试下载原文件查看</p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/60 p-8 text-center">
+              <FileText className="w-12 h-12 text-white/20" />
+              <p className="text-sm text-red-400 max-w-md">预览失败：{convertError}</p>
+              <p className="text-xs text-white/40">请使用上方"下载"按钮下载原文件，用本地 Word/WPS 打开查看</p>
             </div>
+          )}
+          {renderHtml && !isLoading && !convertError && (
+            <iframe
+              srcDoc={renderHtml}
+              title="文档预览"
+              className="w-full h-full border-0 bg-white"
+              sandbox="allow-same-origin"
+            />
           )}
           {finalPdfUrl && !isLoading && !convertError && (
             <iframe
               src={asset(finalPdfUrl)}
               title="文档预览"
-              className="w-full h-full"
+              className="w-full h-full border-0"
             />
           )}
         </div>

@@ -335,37 +335,47 @@ function VideoPreviewContent({ url }: { url: string }) {
 }
 
 /**
- * 文档预览内容（支持 doc/docx 转 PDF，pdf 直接显示）
+ * 文档预览内容（支持 doc/docx 在浏览器端通过 mammoth 转 HTML 直接渲染；pdf 直接显示）
+ * 老式 .doc (OLE2) 二进制 mammoth 不支持 → 给出明确下载引导
  */
 function DocPreviewContent({ url, name }: { url: string; name: string }) {
   const lowerName = name.toLowerCase();
   const isDocFile = lowerName.endsWith(".doc") || lowerName.endsWith(".docx");
   const isPdfFile = lowerName.endsWith(".pdf");
 
-  const [convertedPdfUrl, setConvertedPdfUrl] = useState<string | null>(null);
+  const [renderHtml, setRenderHtml] = useState<string | null>(null);
+  const [renderPdfUrl, setRenderPdfUrl] = useState<string | null>(null);
   const [convertError, setConvertError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!isDocFile) return;
     let revoked = false;
 
     (async () => {
+      setIsLoading(true);
       try {
-        const resp = await fetch(url);
+        const resp = await fetch(asset(url));
         if (!resp.ok) throw new Error(`文件获取失败 (${resp.status})`);
         const blob = await resp.blob();
-        const file = new File([blob], name, { type: blob.type });
 
-        // 静态模式：使用客户端 mock 替代服务端 doc2pdf
-        const { mockDoc2Pdf } = await import("@/lib/client-mock");
-        const result = await mockDoc2Pdf(file);
-        if (!result.available) {
-          throw new Error(result.reason);
+        const { convertDocBlobToPreview } = await import("@/lib/doc-preview");
+        const result = await convertDocBlobToPreview(blob, name);
+        if (revoked) return;
+
+        if (result.kind === "html") {
+          setRenderHtml(result.html);
+        } else if (result.kind === "pdf") {
+          setRenderPdfUrl(result.url);
+        } else {
+          setConvertError(result.reason);
         }
       } catch (err) {
         if (!revoked) {
           setConvertError(err instanceof Error ? err.message : "转换失败");
         }
+      } finally {
+        if (!revoked) setIsLoading(false);
       }
     })();
 
@@ -377,27 +387,34 @@ function DocPreviewContent({ url, name }: { url: string; name: string }) {
   // 卸载时释放 blob URL
   useEffect(() => {
     return () => {
-      if (convertedPdfUrl) URL.revokeObjectURL(convertedPdfUrl);
+      if (renderPdfUrl) URL.revokeObjectURL(renderPdfUrl);
     };
-  }, [convertedPdfUrl]);
+  }, [renderPdfUrl]);
 
-  const finalPdfUrl = isPdfFile ? url : isDocFile ? convertedPdfUrl : url;
-  const isLoading = isDocFile && !convertedPdfUrl && !convertError;
+  const finalPdfUrl = isPdfFile ? url : renderPdfUrl;
 
   return (
     <div className="absolute inset-0 bg-white">
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#1a1a1a]">
           <Loader2 className="w-8 h-8 animate-spin text-white/40" />
-          <p className="text-sm text-white/60">正在转换为 PDF...</p>
+          <p className="text-sm text-white/60">正在解析文档...</p>
         </div>
       )}
       {convertError && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#1a1a1a] p-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#1a1a1a] p-8 text-center">
           <FileText className="w-12 h-12 text-white/20" />
-          <p className="text-sm text-red-400">转换失败：{convertError}</p>
-          <p className="text-xs text-white/40">请尝试下载原文件查看</p>
+          <p className="text-sm text-red-400 max-w-md">预览失败：{convertError}</p>
+          <p className="text-xs text-white/40">请使用上方"下载"按钮下载原文件，用本地 Word/WPS 打开查看</p>
         </div>
+      )}
+      {renderHtml && !isLoading && !convertError && (
+        <iframe
+          srcDoc={renderHtml}
+          title="文档预览"
+          className="w-full h-full border-0 bg-white"
+          sandbox="allow-same-origin"
+        />
       )}
       {finalPdfUrl && !isLoading && !convertError && (
         <iframe
