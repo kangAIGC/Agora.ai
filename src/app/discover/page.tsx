@@ -138,7 +138,9 @@ export default function DiscoverPage() {
         ]);
 
         const deletedSet = new Set(deletedMockIds);
-        const remainingMocks = MOCK_WORKS.filter((w) => !deletedSet.has(w.id));
+        const filterDeleted = (works: WorkItem[]) =>
+          works.filter((w) => !deletedSet.has(w.id));
+        const remainingMocks = filterDeleted(MOCK_WORKS);
 
         // 仅保留真正的用户上传作品（ID 以 "upload-" 开头）
         const userStoredWorks = storedWorks.filter(
@@ -208,9 +210,9 @@ export default function DiscoverPage() {
         setWorks(
           applyInteractions([
             ...userWorks,
-            ...PERMANENT_ARCHITECTURE_WORKS,
-            ...PERMANENT_ECOMMERCE_WORKS,
-            ...PERMANENT_COMIC_WORKS,
+            ...filterDeleted(PERMANENT_ARCHITECTURE_WORKS),
+            ...filterDeleted(PERMANENT_ECOMMERCE_WORKS),
+            ...filterDeleted(PERMANENT_COMIC_WORKS),
             ...remainingMocks,
           ]),
         );
@@ -218,11 +220,15 @@ export default function DiscoverPage() {
         setInitialLoadComplete(true);
       } catch (err) {
         console.error("加载作品失败:", err);
+        const fallbackDeletedIds = await getDeletedMockIds().catch(() => [] as string[]);
+        const fallbackDeletedSet = new Set(fallbackDeletedIds);
+        const fallbackFilter = (works: WorkItem[]) =>
+          works.filter((w) => !fallbackDeletedSet.has(w.id));
         setWorks([
-          ...PERMANENT_ARCHITECTURE_WORKS,
-          ...PERMANENT_ECOMMERCE_WORKS,
-          ...PERMANENT_COMIC_WORKS,
-          ...MOCK_WORKS,
+          ...fallbackFilter(PERMANENT_ARCHITECTURE_WORKS),
+          ...fallbackFilter(PERMANENT_ECOMMERCE_WORKS),
+          ...fallbackFilter(PERMANENT_COMIC_WORKS),
+          ...fallbackFilter(MOCK_WORKS),
         ]);
         setInitialLoadComplete(true);
       }
