@@ -1,0 +1,2942 @@
+{
+  "projects": [
+    {
+      "id": "proj-1787396780970",
+      "name": "景德镇陶瓷文创园",
+      "conversations": [
+        {
+          "id": "conv-1",
+          "title": "新对话",
+          "timestamp": "2026-08-22T11:06:20.970Z"
+        }
+      ],
+      "messagesByConversation": {
+        "conv-1": [
+          {
+            "id": "welcome-conv-1",
+            "role": "assistant",
+            "content": "您好，我是 Agora Agent，您的AIGC设计助手，请告诉我您的实际需求。",
+            "timestamp": "2026-08-22T11:10:14.733Z"
+          },
+          {
+            "id": "u-upload-1787403457050-lo2pb8wpupr",
+            "role": "user",
+            "content": "上传了文件：景德镇陶瓷文创园设计任务书.doc",
+            "files": [
+              {
+                "id": "upload-1787403457050-lo2pb8wpupr",
+                "name": "景德镇陶瓷文创园设计任务书.doc",
+                "url": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T12:57:41.106Z"
+              }
+            ],
+            "timestamp": "2026-08-22T12:57:41.106Z"
+          },
+          {
+            "id": "u-1787403463268",
+            "role": "user",
+            "content": "生成文档",
+            "timestamp": "2026-08-22T12:57:43.268Z"
+          },
+          {
+            "id": "a-1787403463268-loading",
+            "role": "assistant",
+            "content": "已为您生成策划报告，请查看下方附件。",
+            "timestamp": "2026-08-22T12:57:43.268Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403468271",
+                "name": "策划报告.doc",
+                "url": "/mock-arch/策划报告.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T12:57:48.271Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403490509",
+            "role": "user",
+            "content": "生成prompt",
+            "timestamp": "2026-08-22T12:58:10.509Z"
+          },
+          {
+            "id": "a-1787403490509-loading",
+            "role": "assistant",
+            "content": "已为您生成参考图 Prompt，请查看下方附件。",
+            "timestamp": "2026-08-22T12:58:10.509Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403495510",
+                "name": "参考图prompt.doc",
+                "url": "/mock-arch/参考图prompt.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T12:58:15.510Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403508057",
+            "role": "user",
+            "content": "生成图像",
+            "timestamp": "2026-08-22T12:58:28.057Z"
+          },
+          {
+            "id": "a-1787403508057-loading",
+            "role": "assistant",
+            "content": "已为您生成 4 张建筑效果图，与草图一一对应，请查看下方附件。",
+            "timestamp": "2026-08-22T12:58:28.057Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403513062-0",
+                "name": "效果图1.png",
+                "url": "/mock-arch/mock-01.png",
+                "type": "image",
+                "timestamp": "2026-08-22T12:58:33.062Z"
+              },
+              {
+                "id": "gen-1787403513062-1",
+                "name": "效果图2.png",
+                "url": "/mock-arch/mock-02.png",
+                "type": "image",
+                "timestamp": "2026-08-22T12:58:33.062Z"
+              },
+              {
+                "id": "gen-1787403513062-2",
+                "name": "效果图3.png",
+                "url": "/mock-arch/mock-03.png",
+                "type": "image",
+                "timestamp": "2026-08-22T12:58:33.062Z"
+              },
+              {
+                "id": "gen-1787403513062-3",
+                "name": "效果图4.png",
+                "url": "/mock-arch/mock-04.png",
+                "type": "image",
+                "timestamp": "2026-08-22T12:58:33.062Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403523860",
+            "role": "user",
+            "content": "生成视频",
+            "timestamp": "2026-08-22T12:58:43.860Z"
+          },
+          {
+            "id": "a-1787403523860-loading",
+            "role": "assistant",
+            "content": "已为您生成 4 个视频，与效果图一一对应，请查看下方附件。",
+            "timestamp": "2026-08-22T12:58:43.860Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-video-1787403528862-1",
+                "name": "mock-v1.mp4",
+                "url": "/mock-arch/mock-v1.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T12:58:48.862Z"
+              },
+              {
+                "id": "gen-video-1787403528862-2",
+                "name": "mock-v2.mp4",
+                "url": "/mock-arch/mock-v2.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T12:58:48.862Z"
+              },
+              {
+                "id": "gen-video-1787403528862-3",
+                "name": "mock-v3.mp4",
+                "url": "/mock-arch/mock-v3.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T12:58:48.862Z"
+              },
+              {
+                "id": "gen-video-1787403528862-4",
+                "name": "mock-v4.mp4",
+                "url": "/mock-arch/mock-v4.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T12:58:48.862Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403546601",
+            "role": "user",
+            "content": "生成网页",
+            "timestamp": "2026-08-22T12:59:06.601Z"
+          },
+          {
+            "id": "a-1787403546601-loading",
+            "role": "assistant",
+            "content": "已为您生成网页，与 4 个视频建立关联，请查看下方附件。",
+            "timestamp": "2026-08-22T12:59:06.601Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-html-1787403551602",
+                "name": "流水为脉 · 坊巷成园.html",
+                "url": "/mock-arch/流水为脉 · 坊巷成园.html",
+                "type": "html",
+                "timestamp": "2026-08-22T12:59:11.602Z"
+              }
+            ]
+          }
+        ]
+      },
+      "activeConversationId": "conv-1",
+      "createdAt": "2026-08-22T11:06:20.970Z"
+    },
+    {
+      "id": "proj-default-2",
+      "name": "绿发晶白水晶拼色树叶吊坠手链",
+      "conversations": [
+        {
+          "id": "conv-1787411037260-stlac0pb33o",
+          "title": "新对话",
+          "timestamp": "2026-08-22T15:03:57.260Z"
+        }
+      ],
+      "messagesByConversation": {
+        "conv-1787411037260-stlac0pb33o": [
+          {
+            "id": "welcome-conv-1787411037260-stlac0pb33o",
+            "role": "assistant",
+            "content": "您好，我是 Agora Agent，您的AIGC设计助手，请告诉我您的实际需求。",
+            "timestamp": "2026-08-22T15:03:57.260Z"
+          },
+          {
+            "id": "u-upload-1787411179553-mizf239qrz",
+            "role": "user",
+            "content": "上传了文件：商品图底图.jpg",
+            "files": [
+              {
+                "id": "upload-1787411179553-mizf239qrz",
+                "name": "商品图底图.jpg",
+                "url": "/uploads/3476f29a-d095-4a32-9110-89ad126d2f4e.jpg",
+                "type": "image",
+                "timestamp": "2026-08-22T15:06:20.567Z"
+              }
+            ],
+            "timestamp": "2026-08-22T15:06:20.567Z"
+          },
+          {
+            "id": "u-1787411185609",
+            "role": "user",
+            "content": "生成文档",
+            "timestamp": "2026-08-22T15:06:25.609Z"
+          },
+          {
+            "id": "a-1787411185609-loading",
+            "role": "assistant",
+            "content": "已为您生成商品简介，请查看下方附件。",
+            "timestamp": "2026-08-22T15:06:25.609Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787411190610",
+                "name": "商品简介.doc",
+                "url": "/mock-dianshang/商品简介.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T15:06:30.610Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787411219803",
+            "role": "user",
+            "content": "生成prompt",
+            "timestamp": "2026-08-22T15:06:59.803Z"
+          },
+          {
+            "id": "a-1787411219803-loading",
+            "role": "assistant",
+            "content": "已为您生成图片 Prompt，请查看下方附件。",
+            "timestamp": "2026-08-22T15:06:59.803Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787411224808",
+                "name": "图片prompt.doc",
+                "url": "/mock-dianshang/图片prompt.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T15:07:04.808Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787411228198",
+            "role": "user",
+            "content": "生成图像",
+            "timestamp": "2026-08-22T15:07:08.198Z"
+          },
+          {
+            "id": "a-1787411228198-loading",
+            "role": "assistant",
+            "content": "已为您生成 4 张图片，请查看下方附件。每张图都与图片 Prompt 有连线。",
+            "timestamp": "2026-08-22T15:07:08.198Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787411233204-1",
+                "name": "img1.png",
+                "url": "/mock-dianshang/img1.png",
+                "type": "image",
+                "timestamp": "2026-08-22T15:07:13.204Z"
+              },
+              {
+                "id": "gen-1787411233204-2",
+                "name": "img2.png",
+                "url": "/mock-dianshang/img2.png",
+                "type": "image",
+                "timestamp": "2026-08-22T15:07:13.204Z"
+              },
+              {
+                "id": "gen-1787411233204-3",
+                "name": "img3.png",
+                "url": "/mock-dianshang/img3.png",
+                "type": "image",
+                "timestamp": "2026-08-22T15:07:13.204Z"
+              },
+              {
+                "id": "gen-1787411233204-4",
+                "name": "img4.png",
+                "url": "/mock-dianshang/img4.png",
+                "type": "image",
+                "timestamp": "2026-08-22T15:07:13.204Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787411241748",
+            "role": "user",
+            "content": "生成prompt",
+            "timestamp": "2026-08-22T15:07:21.748Z"
+          },
+          {
+            "id": "a-1787411241748-loading",
+            "role": "assistant",
+            "content": "已为您生成视频 Prompt，请查看下方附件。",
+            "timestamp": "2026-08-22T15:07:21.748Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787411246756",
+                "name": "视频prompt.doc",
+                "url": "/mock-dianshang/视频prompt.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T15:07:26.756Z"
+              }
+            ]
+          },
+          {
+            "id": "u-upload-1787411251844-wida667jlf",
+            "role": "user",
+            "content": "上传了文件：模特.png",
+            "files": [
+              {
+                "id": "upload-1787411251844-wida667jlf",
+                "name": "模特.png",
+                "url": "/uploads/b9733b16-5273-4148-a5a1-f2528aa7a310.png",
+                "type": "image",
+                "timestamp": "2026-08-22T15:07:31.950Z"
+              }
+            ],
+            "timestamp": "2026-08-22T15:07:31.950Z"
+          },
+          {
+            "id": "u-1787411254034",
+            "role": "user",
+            "content": "生成视频",
+            "timestamp": "2026-08-22T15:07:34.034Z"
+          },
+          {
+            "id": "a-1787411254034-loading",
+            "role": "assistant",
+            "content": "已为您生成视频，请查看下方附件。",
+            "timestamp": "2026-08-22T15:07:34.034Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-video-1787411259036",
+                "name": "1.mp4",
+                "url": "/mock-dianshang/1.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T15:07:39.036Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787411266151",
+            "role": "user",
+            "content": "生成网页",
+            "timestamp": "2026-08-22T15:07:46.151Z"
+          },
+          {
+            "id": "a-1787411266151-loading",
+            "role": "assistant",
+            "content": "已为您生成网页，请查看下方附件。",
+            "timestamp": "2026-08-22T15:07:46.151Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-html-1787411271151",
+                "name": "绿发晶白水晶拼色树叶吊坠手链.html",
+                "url": "/mock-dianshang/绿发晶白水晶拼色树叶吊坠手链.html",
+                "type": "html",
+                "timestamp": "2026-08-22T15:07:51.151Z"
+              }
+            ]
+          }
+        ]
+      },
+      "activeConversationId": "conv-1787411037260-stlac0pb33o",
+      "createdAt": "2026-08-22T11:06:20.970Z"
+    },
+    {
+      "id": "proj-default-3",
+      "name": "《神骨》漫剧",
+      "conversations": [
+        {
+          "id": "conv-1",
+          "title": "新对话",
+          "timestamp": "2026-08-22T11:06:20.970Z"
+        }
+      ],
+      "messagesByConversation": {
+        "conv-1": [
+          {
+            "id": "welcome",
+            "role": "assistant",
+            "content": "您好，我是 Agora Agent，您的AIGC设计助手，请告诉我您的实际需求。",
+            "timestamp": "2026-08-22T11:06:20.970Z"
+          },
+          {
+            "id": "u-upload-1787403662903-1pasro210u7h",
+            "role": "user",
+            "content": "上传了文件：创意.doc",
+            "files": [
+              {
+                "id": "upload-1787403662903-1pasro210u7h",
+                "name": "创意.doc",
+                "url": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:06.081Z"
+              }
+            ],
+            "timestamp": "2026-08-22T13:01:06.081Z"
+          },
+          {
+            "id": "u-1787403667776",
+            "role": "user",
+            "content": "生成文档",
+            "timestamp": "2026-08-22T13:01:07.776Z"
+          },
+          {
+            "id": "a-1787403667776-loading",
+            "role": "assistant",
+            "content": "已为您生成剧本，请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:07.776Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403672778",
+                "name": "剧本.doc",
+                "url": "/mock-manju/剧本.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:12.778Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403677620",
+            "role": "user",
+            "content": "生成prompt",
+            "timestamp": "2026-08-22T13:01:17.620Z"
+          },
+          {
+            "id": "a-1787403677620-loading",
+            "role": "assistant",
+            "content": "已为您生成人物、场景、道具文档，请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:17.620Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403682620-1",
+                "name": "人物.doc",
+                "url": "/mock-manju/人物.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:22.620Z"
+              },
+              {
+                "id": "gen-1787403682620-2",
+                "name": "场景.doc",
+                "url": "/mock-manju/场景.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:22.620Z"
+              },
+              {
+                "id": "gen-1787403682620-3",
+                "name": "道具.doc",
+                "url": "/mock-manju/道具.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:22.620Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403690856",
+            "role": "user",
+            "content": "生成图像",
+            "timestamp": "2026-08-22T13:01:30.856Z"
+          },
+          {
+            "id": "a-1787403690856-loading",
+            "role": "assistant",
+            "content": "已为您生成9张图片（人物3张、场景3张、道具3张），请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:30.856Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403695857-r1",
+                "name": "苏挽.png",
+                "url": "/mock-manju/苏挽.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-r2",
+                "name": "萧珩.png",
+                "url": "/mock-manju/萧珩.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-r3",
+                "name": "玄青上人.png",
+                "url": "/mock-manju/玄青上人.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-s1",
+                "name": "诛仙台.png",
+                "url": "/mock-manju/诛仙台.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-s2",
+                "name": "青云大殿.png",
+                "url": "/mock-manju/青云大殿.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-s3",
+                "name": "灭门旧夜.png",
+                "url": "/mock-manju/灭门旧夜.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-p1",
+                "name": "墨玉牌.png",
+                "url": "/mock-manju/墨玉牌.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-p2",
+                "name": "墨断剑红绳.png",
+                "url": "/mock-manju/墨断剑红绳.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              },
+              {
+                "id": "gen-1787403695857-p3",
+                "name": "半块碎玉.png",
+                "url": "/mock-manju/半块碎玉.png",
+                "type": "image",
+                "timestamp": "2026-08-22T13:01:35.857Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403701699",
+            "role": "user",
+            "content": "生成prompt",
+            "timestamp": "2026-08-22T13:01:41.699Z"
+          },
+          {
+            "id": "a-1787403701699-loading",
+            "role": "assistant",
+            "content": "已为您生成分镜稿，请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:41.699Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-1787403706704",
+                "name": "分镜稿.doc",
+                "url": "/mock-manju/分镜稿.doc",
+                "type": "doc",
+                "timestamp": "2026-08-22T13:01:46.704Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403708904",
+            "role": "user",
+            "content": "生成视频",
+            "timestamp": "2026-08-22T13:01:48.904Z"
+          },
+          {
+            "id": "a-1787403708904-loading",
+            "role": "assistant",
+            "content": "已为您生成视频，请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:48.904Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-video-1787403713905",
+                "name": "视频0-30s.mp4",
+                "url": "/mock-manju/视频0-30s.mp4",
+                "type": "video",
+                "timestamp": "2026-08-22T13:01:53.906Z"
+              }
+            ]
+          },
+          {
+            "id": "u-1787403717460",
+            "role": "user",
+            "content": "生成网页",
+            "timestamp": "2026-08-22T13:01:57.460Z"
+          },
+          {
+            "id": "a-1787403717460-loading",
+            "role": "assistant",
+            "content": "已为您生成网页，请查看下方附件。",
+            "timestamp": "2026-08-22T13:01:57.460Z",
+            "isLoading": false,
+            "files": [
+              {
+                "id": "gen-html-1787403722545",
+                "name": "html.html",
+                "url": "/mock-manju/html.html",
+                "type": "html",
+                "timestamp": "2026-08-22T13:02:02.545Z"
+              }
+            ]
+          }
+        ]
+      },
+      "activeConversationId": "conv-1",
+      "createdAt": "2026-08-22T11:06:20.970Z"
+    },
+    {
+      "id": "proj-pinned-blank",
+      "name": "空白项目",
+      "conversations": [
+        {
+          "id": "conv-1",
+          "title": "新对话",
+          "timestamp": "2026-08-22T11:06:20.970Z"
+        }
+      ],
+      "messagesByConversation": {
+        "conv-1": [
+          {
+            "id": "welcome-pinned",
+            "role": "assistant",
+            "content": "这是一个固定的空白项目，您可以在此自由创建画布工作流。",
+            "timestamp": "2026-08-22T11:06:20.970Z"
+          }
+        ]
+      },
+      "activeConversationId": "conv-1",
+      "createdAt": "2026-08-22T11:06:20.970Z",
+      "pinned": true
+    }
+  ],
+  "currentProjectId": "proj-default-3",
+  "filesByProject": {
+    "proj-1787396780970": {
+      "generated": [
+        {
+          "id": "gen-1787403468271",
+          "name": "策划报告.doc",
+          "url": "/mock-arch/策划报告.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T12:57:48.271Z"
+        },
+        {
+          "id": "gen-1787403495510",
+          "name": "参考图prompt.doc",
+          "url": "/mock-arch/参考图prompt.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T12:58:15.510Z"
+        },
+        {
+          "id": "gen-1787403513062-0",
+          "name": "效果图1.png",
+          "url": "/mock-arch/mock-01.png",
+          "type": "image",
+          "timestamp": "2026-08-22T12:58:33.062Z"
+        },
+        {
+          "id": "gen-1787403513062-1",
+          "name": "效果图2.png",
+          "url": "/mock-arch/mock-02.png",
+          "type": "image",
+          "timestamp": "2026-08-22T12:58:33.062Z"
+        },
+        {
+          "id": "gen-1787403513062-2",
+          "name": "效果图3.png",
+          "url": "/mock-arch/mock-03.png",
+          "type": "image",
+          "timestamp": "2026-08-22T12:58:33.062Z"
+        },
+        {
+          "id": "gen-1787403513062-3",
+          "name": "效果图4.png",
+          "url": "/mock-arch/mock-04.png",
+          "type": "image",
+          "timestamp": "2026-08-22T12:58:33.062Z"
+        },
+        {
+          "id": "gen-video-1787403528862-1",
+          "name": "mock-v1.mp4",
+          "url": "/mock-arch/mock-v1.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T12:58:48.862Z"
+        },
+        {
+          "id": "gen-video-1787403528862-2",
+          "name": "mock-v2.mp4",
+          "url": "/mock-arch/mock-v2.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T12:58:48.862Z"
+        },
+        {
+          "id": "gen-video-1787403528862-3",
+          "name": "mock-v3.mp4",
+          "url": "/mock-arch/mock-v3.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T12:58:48.862Z"
+        },
+        {
+          "id": "gen-video-1787403528862-4",
+          "name": "mock-v4.mp4",
+          "url": "/mock-arch/mock-v4.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T12:58:48.862Z"
+        },
+        {
+          "id": "gen-html-1787403551602",
+          "name": "流水为脉 · 坊巷成园.html",
+          "url": "/mock-arch/流水为脉 · 坊巷成园.html",
+          "type": "html",
+          "timestamp": "2026-08-22T12:59:11.602Z"
+        }
+      ],
+      "text": [
+        {
+          "id": "1787403457050-lo2pb8wpupr",
+          "file": {},
+          "name": "景德镇陶瓷文创园设计任务书.doc",
+          "uploadedAt": "2026-08-22T12:57:37.050Z",
+          "status": "success"
+        }
+      ],
+      "image": [
+        {
+          "id": "1787403505869-n1vxbzq0d8",
+          "file": {},
+          "name": "ske-1.jpeg",
+          "uploadedAt": "2026-08-22T12:58:25.870Z",
+          "status": "success",
+          "previewUrl": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg"
+        },
+        {
+          "id": "1787403505950-fcv52h4xs9r",
+          "file": {},
+          "name": "ske-2.jpeg",
+          "uploadedAt": "2026-08-22T12:58:25.950Z",
+          "status": "success",
+          "previewUrl": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg"
+        },
+        {
+          "id": "1787403506054-qigs9cm0k1",
+          "file": {},
+          "name": "ske-3.jpeg",
+          "uploadedAt": "2026-08-22T12:58:26.054Z",
+          "status": "success",
+          "previewUrl": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg"
+        },
+        {
+          "id": "1787403506165-prm0zvr8ai",
+          "file": {},
+          "name": "ske-4.jpeg",
+          "uploadedAt": "2026-08-22T12:58:26.165Z",
+          "status": "success",
+          "previewUrl": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg"
+        }
+      ],
+      "canvas": [
+        {
+          "id": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
+          "type": "file",
+          "content": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+          "x": 40,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 10,
+          "meta": {
+            "name": "景德镇陶瓷文创园设计任务书.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403468271-1787403468272-0",
+          "type": "file",
+          "content": "/mock-arch/策划报告.doc",
+          "x": 380,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 11,
+          "connectionFrom": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
+          "meta": {
+            "name": "策划报告.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403495510-1787403495512-0",
+          "type": "file",
+          "content": "/mock-arch/参考图prompt.doc",
+          "x": 720,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 12,
+          "connectionFrom": "canvas-gen-1787403468271-1787403468272-0",
+          "meta": {
+            "name": "参考图prompt.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-sketch-1787403505869-n1vxbzq0d8",
+          "type": "image",
+          "content": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg",
+          "x": 1100,
+          "y": 40,
+          "width": 200,
+          "height": 150,
+          "zIndex": 23,
+          "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+          "connectionColors": [
+            "#6b7280"
+          ],
+          "meta": {
+            "name": "草图1",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-sketch-1787403505950-fcv52h4xs9r",
+          "type": "image",
+          "content": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg",
+          "x": 1100,
+          "y": 390,
+          "width": 200,
+          "height": 150,
+          "zIndex": 24,
+          "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+          "connectionColors": [
+            "#6b7280"
+          ],
+          "meta": {
+            "name": "草图2",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-sketch-1787403506054-qigs9cm0k1",
+          "type": "image",
+          "content": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg",
+          "x": 1100,
+          "y": 740,
+          "width": 200,
+          "height": 150,
+          "zIndex": 25,
+          "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+          "connectionColors": [
+            "#6b7280"
+          ],
+          "meta": {
+            "name": "草图3",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-sketch-1787403506165-prm0zvr8ai",
+          "type": "image",
+          "content": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg",
+          "x": 1100,
+          "y": 1090,
+          "width": 200,
+          "height": 150,
+          "zIndex": 26,
+          "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+          "connectionColors": [
+            "#6b7280"
+          ],
+          "meta": {
+            "name": "草图4",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403513062-0",
+          "type": "image",
+          "content": "/mock-arch/mock-01.png",
+          "x": 1380,
+          "y": -35,
+          "width": 400,
+          "height": 300,
+          "zIndex": 27,
+          "connectionFrom": "canvas-sketch-1787403505869-n1vxbzq0d8",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "效果图1.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403513062-1",
+          "type": "image",
+          "content": "/mock-arch/mock-02.png",
+          "x": 1380,
+          "y": 315,
+          "width": 400,
+          "height": 300,
+          "zIndex": 28,
+          "connectionFrom": "canvas-sketch-1787403505950-fcv52h4xs9r",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "效果图2.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403513062-2",
+          "type": "image",
+          "content": "/mock-arch/mock-03.png",
+          "x": 1380,
+          "y": 665,
+          "width": 400,
+          "height": 300,
+          "zIndex": 29,
+          "connectionFrom": "canvas-sketch-1787403506054-qigs9cm0k1",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "效果图3.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403513062-3",
+          "type": "image",
+          "content": "/mock-arch/mock-04.png",
+          "x": 1380,
+          "y": 1015,
+          "width": 400,
+          "height": 300,
+          "zIndex": 30,
+          "connectionFrom": "canvas-sketch-1787403506165-prm0zvr8ai",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "效果图4.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787403528862-1",
+          "type": "video",
+          "content": "/mock-arch/mock-v1.mp4",
+          "x": 1860,
+          "y": -65,
+          "width": 480,
+          "height": 360,
+          "zIndex": 41,
+          "connectionFrom": "canvas-gen-1787403513062-0",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "mock-v1.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787403528862-2",
+          "type": "video",
+          "content": "/mock-arch/mock-v2.mp4",
+          "x": 1860,
+          "y": 285,
+          "width": 480,
+          "height": 360,
+          "zIndex": 42,
+          "connectionFrom": "canvas-gen-1787403513062-1",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "mock-v2.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787403528862-3",
+          "type": "video",
+          "content": "/mock-arch/mock-v3.mp4",
+          "x": 1860,
+          "y": 635,
+          "width": 480,
+          "height": 360,
+          "zIndex": 43,
+          "connectionFrom": "canvas-gen-1787403513062-2",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "mock-v3.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787403528862-4",
+          "type": "video",
+          "content": "/mock-arch/mock-v4.mp4",
+          "x": 1860,
+          "y": 985,
+          "width": 480,
+          "height": 360,
+          "zIndex": 44,
+          "connectionFrom": "canvas-gen-1787403513062-3",
+          "connectionColors": [
+            "#3b82f6"
+          ],
+          "meta": {
+            "name": "mock-v4.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-html-1787403551602",
+          "type": "html",
+          "content": "/mock-arch/流水为脉 · 坊巷成园.html",
+          "x": 2460,
+          "y": 40,
+          "width": 900,
+          "height": 1500,
+          "zIndex": 55,
+          "connectionFrom": [
+            "canvas-gen-video-1787403528862-1",
+            "canvas-gen-video-1787403528862-2",
+            "canvas-gen-video-1787403528862-3",
+            "canvas-gen-video-1787403528862-4"
+          ],
+          "connectionColors": [
+            "#fbbf24"
+          ],
+          "meta": {
+            "name": "流水为脉 · 坊巷成园.html",
+            "fileType": "html"
+          }
+        }
+      ]
+    },
+    "proj-default-2": {
+      "generated": [
+        {
+          "id": "gen-1787411190610",
+          "name": "商品简介.doc",
+          "url": "/mock-dianshang/商品简介.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T15:06:30.610Z"
+        },
+        {
+          "id": "gen-1787411224808",
+          "name": "图片prompt.doc",
+          "url": "/mock-dianshang/图片prompt.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T15:07:04.808Z"
+        },
+        {
+          "id": "gen-1787411233204-1",
+          "name": "img1.png",
+          "url": "/mock-dianshang/img1.png",
+          "type": "image",
+          "timestamp": "2026-08-22T15:07:13.204Z"
+        },
+        {
+          "id": "gen-1787411233204-2",
+          "name": "img2.png",
+          "url": "/mock-dianshang/img2.png",
+          "type": "image",
+          "timestamp": "2026-08-22T15:07:13.204Z"
+        },
+        {
+          "id": "gen-1787411233204-3",
+          "name": "img3.png",
+          "url": "/mock-dianshang/img3.png",
+          "type": "image",
+          "timestamp": "2026-08-22T15:07:13.204Z"
+        },
+        {
+          "id": "gen-1787411233204-4",
+          "name": "img4.png",
+          "url": "/mock-dianshang/img4.png",
+          "type": "image",
+          "timestamp": "2026-08-22T15:07:13.204Z"
+        },
+        {
+          "id": "gen-1787411246756",
+          "name": "视频prompt.doc",
+          "url": "/mock-dianshang/视频prompt.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T15:07:26.756Z"
+        },
+        {
+          "id": "gen-video-1787411259036",
+          "name": "1.mp4",
+          "url": "/mock-dianshang/1.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T15:07:39.036Z"
+        },
+        {
+          "id": "gen-html-1787411271151",
+          "name": "绿发晶白水晶拼色树叶吊坠手链.html",
+          "url": "/mock-dianshang/绿发晶白水晶拼色树叶吊坠手链.html",
+          "type": "html",
+          "timestamp": "2026-08-22T15:07:51.151Z"
+        }
+      ],
+      "text": [],
+      "image": [
+        {
+          "id": "1787411179553-mizf239qrz",
+          "file": {},
+          "name": "商品图底图.jpg",
+          "uploadedAt": "2026-08-22T15:06:19.553Z",
+          "status": "success",
+          "previewUrl": "/uploads/3476f29a-d095-4a32-9110-89ad126d2f4e.jpg"
+        },
+        {
+          "id": "1787411251844-wida667jlf",
+          "file": {},
+          "name": "模特.png",
+          "uploadedAt": "2026-08-22T15:07:31.845Z",
+          "status": "success",
+          "previewUrl": "/uploads/b9733b16-5273-4148-a5a1-f2528aa7a310.png"
+        }
+      ],
+      "canvas": [
+        {
+          "id": "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+          "type": "image",
+          "content": "/uploads/3476f29a-d095-4a32-9110-89ad126d2f4e.jpg",
+          "x": 40,
+          "y": 40,
+          "width": 320,
+          "height": 240,
+          "zIndex": 10,
+          "meta": {
+            "name": "商品图底图.jpg",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411190610-1787411190612-0",
+          "type": "file",
+          "content": "/mock-dianshang/商品简介.doc",
+          "x": 440,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 11,
+          "connectionFrom": "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+          "meta": {
+            "name": "商品简介.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411224808-1787411224809-0",
+          "type": "file",
+          "content": "/mock-dianshang/图片prompt.doc",
+          "x": 780,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 12,
+          "connectionFrom": "canvas-gen-1787411190610-1787411190612-0",
+          "meta": {
+            "name": "图片prompt.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411233204-1",
+          "type": "image",
+          "content": "/mock-dianshang/img1.png",
+          "x": 1160,
+          "y": 40,
+          "width": 400,
+          "height": 300,
+          "zIndex": 23,
+          "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "img1.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411233204-2",
+          "type": "image",
+          "content": "/mock-dianshang/img2.png",
+          "x": 1160,
+          "y": 380,
+          "width": 400,
+          "height": 300,
+          "zIndex": 24,
+          "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "img2.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411233204-3",
+          "type": "image",
+          "content": "/mock-dianshang/img3.png",
+          "x": 1160,
+          "y": 720,
+          "width": 400,
+          "height": 300,
+          "zIndex": 25,
+          "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "img3.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411233204-4",
+          "type": "image",
+          "content": "/mock-dianshang/img4.png",
+          "x": 1160,
+          "y": 1060,
+          "width": 400,
+          "height": 300,
+          "zIndex": 26,
+          "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "img4.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787411246756",
+          "type": "file",
+          "content": "/mock-dianshang/视频prompt.doc",
+          "x": 1640,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 22,
+          "connectionFrom": [
+            "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+            "canvas-gen-1787411233204-1",
+            "canvas-gen-1787411233204-2",
+            "canvas-gen-1787411233204-3",
+            "canvas-gen-1787411233204-4"
+          ],
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "视频prompt.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-upload-1787411251844-wida667jlf-1787411251950-0",
+          "type": "image",
+          "content": "/uploads/b9733b16-5273-4148-a5a1-f2528aa7a310.png",
+          "x": 720,
+          "y": 560,
+          "width": 320,
+          "height": 240,
+          "zIndex": 18,
+          "meta": {
+            "name": "模特.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787411259036",
+          "type": "video",
+          "content": "/mock-dianshang/1.mp4",
+          "x": 1980,
+          "y": 40,
+          "width": 480,
+          "height": 360,
+          "zIndex": 39,
+          "connectionFrom": "canvas-gen-1787411246756",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "1.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-html-1787411271151",
+          "type": "html",
+          "content": "/mock-dianshang/绿发晶白水晶拼色树叶吊坠手链.html",
+          "x": 2580,
+          "y": 40,
+          "width": 900,
+          "height": 1500,
+          "zIndex": 50,
+          "connectionFrom": "canvas-gen-video-1787411259036",
+          "connectionColors": [
+            "#fbbf24"
+          ],
+          "meta": {
+            "name": "绿发晶白水晶拼色树叶吊坠手链.html",
+            "fileType": "html"
+          }
+        }
+      ]
+    },
+    "proj-default-3": {
+      "generated": [
+        {
+          "id": "gen-1787403672778",
+          "name": "剧本.doc",
+          "url": "/mock-manju/剧本.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T13:01:12.778Z"
+        },
+        {
+          "id": "gen-1787403682620-1",
+          "name": "人物.doc",
+          "url": "/mock-manju/人物.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T13:01:22.620Z"
+        },
+        {
+          "id": "gen-1787403682620-2",
+          "name": "场景.doc",
+          "url": "/mock-manju/场景.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T13:01:22.620Z"
+        },
+        {
+          "id": "gen-1787403682620-3",
+          "name": "道具.doc",
+          "url": "/mock-manju/道具.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T13:01:22.620Z"
+        },
+        {
+          "id": "gen-1787403695857-r1",
+          "name": "苏挽.png",
+          "url": "/mock-manju/苏挽.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-r2",
+          "name": "萧珩.png",
+          "url": "/mock-manju/萧珩.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-r3",
+          "name": "玄青上人.png",
+          "url": "/mock-manju/玄青上人.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-s1",
+          "name": "诛仙台.png",
+          "url": "/mock-manju/诛仙台.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-s2",
+          "name": "青云大殿.png",
+          "url": "/mock-manju/青云大殿.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-s3",
+          "name": "灭门旧夜.png",
+          "url": "/mock-manju/灭门旧夜.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-p1",
+          "name": "墨玉牌.png",
+          "url": "/mock-manju/墨玉牌.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-p2",
+          "name": "墨断剑红绳.png",
+          "url": "/mock-manju/墨断剑红绳.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403695857-p3",
+          "name": "半块碎玉.png",
+          "url": "/mock-manju/半块碎玉.png",
+          "type": "image",
+          "timestamp": "2026-08-22T13:01:35.857Z"
+        },
+        {
+          "id": "gen-1787403706704",
+          "name": "分镜稿.doc",
+          "url": "/mock-manju/分镜稿.doc",
+          "type": "doc",
+          "timestamp": "2026-08-22T13:01:46.704Z"
+        },
+        {
+          "id": "gen-video-1787403713905",
+          "name": "视频0-30s.mp4",
+          "url": "/mock-manju/视频0-30s.mp4",
+          "type": "video",
+          "timestamp": "2026-08-22T13:01:53.906Z"
+        },
+        {
+          "id": "gen-html-1787403722545",
+          "name": "html.html",
+          "url": "/mock-manju/html.html",
+          "type": "html",
+          "timestamp": "2026-08-22T13:02:02.545Z"
+        }
+      ],
+      "text": [
+        {
+          "id": "1787403662903-1pasro210u7h",
+          "file": {},
+          "name": "创意.doc",
+          "uploadedAt": "2026-08-22T13:01:02.903Z",
+          "status": "success"
+        }
+      ],
+      "image": [],
+      "canvas": [
+        {
+          "id": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
+          "type": "file",
+          "content": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+          "x": 40,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 10,
+          "meta": {
+            "name": "创意.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403672778-1787403672778-0",
+          "type": "file",
+          "content": "/mock-manju/剧本.doc",
+          "x": 380,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 11,
+          "connectionFrom": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
+          "meta": {
+            "name": "剧本.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403682620-1",
+          "type": "file",
+          "content": "/mock-manju/人物.doc",
+          "x": 720,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 17,
+          "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "人物.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403682620-2",
+          "type": "file",
+          "content": "/mock-manju/场景.doc",
+          "x": 720,
+          "y": 300,
+          "width": 260,
+          "height": 200,
+          "zIndex": 18,
+          "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "场景.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403682620-3",
+          "type": "file",
+          "content": "/mock-manju/道具.doc",
+          "x": 1051.237798453003,
+          "y": 619.3261728572544,
+          "width": 260,
+          "height": 200,
+          "zIndex": 12,
+          "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "道具.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-r1",
+          "type": "image",
+          "content": "/mock-manju/苏挽.png",
+          "x": 1100,
+          "y": 40,
+          "width": 300,
+          "height": 225,
+          "zIndex": 25,
+          "connectionFrom": "canvas-gen-1787403682620-1",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "苏挽.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-r2",
+          "type": "image",
+          "content": "/mock-manju/萧珩.png",
+          "x": 1440,
+          "y": 40,
+          "width": 300,
+          "height": 225,
+          "zIndex": 26,
+          "connectionFrom": "canvas-gen-1787403682620-1",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "萧珩.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-r3",
+          "type": "image",
+          "content": "/mock-manju/玄青上人.png",
+          "x": 1780,
+          "y": 40,
+          "width": 300,
+          "height": 225,
+          "zIndex": 27,
+          "connectionFrom": "canvas-gen-1787403682620-1",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "玄青上人.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-s1",
+          "type": "image",
+          "content": "/mock-manju/诛仙台.png",
+          "x": 1100,
+          "y": 325,
+          "width": 300,
+          "height": 225,
+          "zIndex": 28,
+          "connectionFrom": "canvas-gen-1787403682620-2",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "诛仙台.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-s2",
+          "type": "image",
+          "content": "/mock-manju/青云大殿.png",
+          "x": 1440,
+          "y": 325,
+          "width": 300,
+          "height": 225,
+          "zIndex": 29,
+          "connectionFrom": "canvas-gen-1787403682620-2",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "青云大殿.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-s3",
+          "type": "image",
+          "content": "/mock-manju/灭门旧夜.png",
+          "x": 1780,
+          "y": 325,
+          "width": 300,
+          "height": 225,
+          "zIndex": 30,
+          "connectionFrom": "canvas-gen-1787403682620-2",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "灭门旧夜.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-p1",
+          "type": "image",
+          "content": "/mock-manju/墨玉牌.png",
+          "x": 1100,
+          "y": 610,
+          "width": 300,
+          "height": 225,
+          "zIndex": 31,
+          "connectionFrom": "canvas-gen-1787403682620-3",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "墨玉牌.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-p2",
+          "type": "image",
+          "content": "/mock-manju/墨断剑红绳.png",
+          "x": 1440,
+          "y": 610,
+          "width": 300,
+          "height": 225,
+          "zIndex": 32,
+          "connectionFrom": "canvas-gen-1787403682620-3",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "墨断剑红绳.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403695857-p3",
+          "type": "image",
+          "content": "/mock-manju/半块碎玉.png",
+          "x": 1780,
+          "y": 610,
+          "width": 300,
+          "height": 225,
+          "zIndex": 33,
+          "connectionFrom": "canvas-gen-1787403682620-3",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "半块碎玉.png",
+            "fileType": "image"
+          }
+        },
+        {
+          "id": "canvas-gen-1787403706704",
+          "type": "file",
+          "content": "/mock-manju/分镜稿.doc",
+          "x": 2160,
+          "y": 40,
+          "width": 260,
+          "height": 200,
+          "zIndex": 29,
+          "connectionFrom": [
+            "canvas-gen-1787403695857-r1",
+            "canvas-gen-1787403695857-r2",
+            "canvas-gen-1787403695857-r3",
+            "canvas-gen-1787403695857-s1",
+            "canvas-gen-1787403695857-s2",
+            "canvas-gen-1787403695857-s3",
+            "canvas-gen-1787403695857-p1",
+            "canvas-gen-1787403695857-p2",
+            "canvas-gen-1787403695857-p3"
+          ],
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "分镜稿.doc",
+            "fileType": "doc"
+          }
+        },
+        {
+          "id": "canvas-gen-video-1787403713905",
+          "type": "video",
+          "content": "/mock-manju/视频0-30s.mp4",
+          "x": 2500,
+          "y": 40,
+          "width": 480,
+          "height": 360,
+          "zIndex": 45,
+          "connectionFrom": "canvas-gen-1787403706704",
+          "connectionColors": [
+            "#a78bfa"
+          ],
+          "meta": {
+            "name": "视频0-30s.mp4",
+            "fileType": "video"
+          }
+        },
+        {
+          "id": "canvas-gen-html-1787403722545",
+          "type": "html",
+          "content": "/mock-manju/html.html",
+          "x": 3100,
+          "y": 40,
+          "width": 900,
+          "height": 1500,
+          "zIndex": 56,
+          "connectionFrom": "canvas-gen-video-1787403713905",
+          "connectionColors": [
+            "#fbbf24"
+          ],
+          "meta": {
+            "name": "html.html",
+            "fileType": "html"
+          }
+        }
+      ]
+    },
+    "proj-pinned-blank": {
+      "generated": [],
+      "text": [],
+      "image": [],
+      "canvas": []
+    }
+  },
+  "fileVersions": {
+    "aga-files-version-proj-default-3__v": {
+      "version": 2,
+      "updatedAt": "2026-08-22T15:08:41.452Z",
+      "clientId": "c-mt4idsx7-wy69oo",
+      "data": {
+        "generated": [
+          {
+            "id": "gen-1787403672778",
+            "name": "剧本.doc",
+            "url": "/mock-manju/剧本.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T13:01:12.778Z"
+          },
+          {
+            "id": "gen-1787403682620-1",
+            "name": "人物.doc",
+            "url": "/mock-manju/人物.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T13:01:22.620Z"
+          },
+          {
+            "id": "gen-1787403682620-2",
+            "name": "场景.doc",
+            "url": "/mock-manju/场景.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T13:01:22.620Z"
+          },
+          {
+            "id": "gen-1787403682620-3",
+            "name": "道具.doc",
+            "url": "/mock-manju/道具.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T13:01:22.620Z"
+          },
+          {
+            "id": "gen-1787403695857-r1",
+            "name": "苏挽.png",
+            "url": "/mock-manju/苏挽.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-r2",
+            "name": "萧珩.png",
+            "url": "/mock-manju/萧珩.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-r3",
+            "name": "玄青上人.png",
+            "url": "/mock-manju/玄青上人.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-s1",
+            "name": "诛仙台.png",
+            "url": "/mock-manju/诛仙台.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-s2",
+            "name": "青云大殿.png",
+            "url": "/mock-manju/青云大殿.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-s3",
+            "name": "灭门旧夜.png",
+            "url": "/mock-manju/灭门旧夜.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-p1",
+            "name": "墨玉牌.png",
+            "url": "/mock-manju/墨玉牌.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-p2",
+            "name": "墨断剑红绳.png",
+            "url": "/mock-manju/墨断剑红绳.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403695857-p3",
+            "name": "半块碎玉.png",
+            "url": "/mock-manju/半块碎玉.png",
+            "type": "image",
+            "timestamp": "2026-08-22T13:01:35.857Z"
+          },
+          {
+            "id": "gen-1787403706704",
+            "name": "分镜稿.doc",
+            "url": "/mock-manju/分镜稿.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T13:01:46.704Z"
+          },
+          {
+            "id": "gen-video-1787403713905",
+            "name": "视频0-30s.mp4",
+            "url": "/mock-manju/视频0-30s.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T13:01:53.906Z"
+          },
+          {
+            "id": "gen-html-1787403722545",
+            "name": "html.html",
+            "url": "/mock-manju/html.html",
+            "type": "html",
+            "timestamp": "2026-08-22T13:02:02.545Z"
+          }
+        ],
+        "text": [
+          {
+            "id": "1787403662903-1pasro210u7h",
+            "name": "创意.doc",
+            "uploadedAt": "2026-08-22T13:01:02.903Z",
+            "status": "success"
+          }
+        ],
+        "image": [],
+        "canvas": [
+          {
+            "id": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
+            "type": "file",
+            "content": "/uploads/7e587c87-0b79-4c8d-9b4f-5a6375fdcc26.doc",
+            "x": 40,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 10,
+            "meta": {
+              "name": "创意.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403672778-1787403672778-0",
+            "type": "file",
+            "content": "/mock-manju/剧本.doc",
+            "x": 380,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 11,
+            "connectionFrom": "canvas-upload-1787403662903-1pasro210u7h-1787403666081-0",
+            "meta": {
+              "name": "剧本.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403682620-1",
+            "type": "file",
+            "content": "/mock-manju/人物.doc",
+            "x": 720,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 17,
+            "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "人物.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403682620-2",
+            "type": "file",
+            "content": "/mock-manju/场景.doc",
+            "x": 720,
+            "y": 300,
+            "width": 260,
+            "height": 200,
+            "zIndex": 18,
+            "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "场景.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403682620-3",
+            "type": "file",
+            "content": "/mock-manju/道具.doc",
+            "x": 1051.237798453003,
+            "y": 619.3261728572544,
+            "width": 260,
+            "height": 200,
+            "zIndex": 12,
+            "connectionFrom": "canvas-gen-1787403672778-1787403672778-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "道具.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-r1",
+            "type": "image",
+            "content": "/mock-manju/苏挽.png",
+            "x": 1100,
+            "y": 40,
+            "width": 300,
+            "height": 225,
+            "zIndex": 25,
+            "connectionFrom": "canvas-gen-1787403682620-1",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "苏挽.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-r2",
+            "type": "image",
+            "content": "/mock-manju/萧珩.png",
+            "x": 1440,
+            "y": 40,
+            "width": 300,
+            "height": 225,
+            "zIndex": 26,
+            "connectionFrom": "canvas-gen-1787403682620-1",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "萧珩.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-r3",
+            "type": "image",
+            "content": "/mock-manju/玄青上人.png",
+            "x": 1780,
+            "y": 40,
+            "width": 300,
+            "height": 225,
+            "zIndex": 27,
+            "connectionFrom": "canvas-gen-1787403682620-1",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "玄青上人.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-s1",
+            "type": "image",
+            "content": "/mock-manju/诛仙台.png",
+            "x": 1100,
+            "y": 325,
+            "width": 300,
+            "height": 225,
+            "zIndex": 28,
+            "connectionFrom": "canvas-gen-1787403682620-2",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "诛仙台.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-s2",
+            "type": "image",
+            "content": "/mock-manju/青云大殿.png",
+            "x": 1440,
+            "y": 325,
+            "width": 300,
+            "height": 225,
+            "zIndex": 29,
+            "connectionFrom": "canvas-gen-1787403682620-2",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "青云大殿.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-s3",
+            "type": "image",
+            "content": "/mock-manju/灭门旧夜.png",
+            "x": 1780,
+            "y": 325,
+            "width": 300,
+            "height": 225,
+            "zIndex": 30,
+            "connectionFrom": "canvas-gen-1787403682620-2",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "灭门旧夜.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-p1",
+            "type": "image",
+            "content": "/mock-manju/墨玉牌.png",
+            "x": 1100,
+            "y": 610,
+            "width": 300,
+            "height": 225,
+            "zIndex": 31,
+            "connectionFrom": "canvas-gen-1787403682620-3",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "墨玉牌.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-p2",
+            "type": "image",
+            "content": "/mock-manju/墨断剑红绳.png",
+            "x": 1440,
+            "y": 610,
+            "width": 300,
+            "height": 225,
+            "zIndex": 32,
+            "connectionFrom": "canvas-gen-1787403682620-3",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "墨断剑红绳.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403695857-p3",
+            "type": "image",
+            "content": "/mock-manju/半块碎玉.png",
+            "x": 1780,
+            "y": 610,
+            "width": 300,
+            "height": 225,
+            "zIndex": 33,
+            "connectionFrom": "canvas-gen-1787403682620-3",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "半块碎玉.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403706704",
+            "type": "file",
+            "content": "/mock-manju/分镜稿.doc",
+            "x": 2160,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 29,
+            "connectionFrom": [
+              "canvas-gen-1787403695857-r1",
+              "canvas-gen-1787403695857-r2",
+              "canvas-gen-1787403695857-r3",
+              "canvas-gen-1787403695857-s1",
+              "canvas-gen-1787403695857-s2",
+              "canvas-gen-1787403695857-s3",
+              "canvas-gen-1787403695857-p1",
+              "canvas-gen-1787403695857-p2",
+              "canvas-gen-1787403695857-p3"
+            ],
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "分镜稿.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787403713905",
+            "type": "video",
+            "content": "/mock-manju/视频0-30s.mp4",
+            "x": 2500,
+            "y": 40,
+            "width": 480,
+            "height": 360,
+            "zIndex": 45,
+            "connectionFrom": "canvas-gen-1787403706704",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "视频0-30s.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-html-1787403722545",
+            "type": "html",
+            "content": "/mock-manju/html.html",
+            "x": 3100,
+            "y": 40,
+            "width": 900,
+            "height": 1500,
+            "zIndex": 56,
+            "connectionFrom": "canvas-gen-video-1787403713905",
+            "connectionColors": [
+              "#fbbf24"
+            ],
+            "meta": {
+              "name": "html.html",
+              "fileType": "html"
+            }
+          }
+        ]
+      }
+    },
+    "aga-files-version-proj-1787396780970__v": {
+      "version": 2,
+      "updatedAt": "2026-08-22T15:08:41.451Z",
+      "clientId": "c-mt4idsx7-wy69oo",
+      "data": {
+        "generated": [
+          {
+            "id": "gen-1787403468271",
+            "name": "策划报告.doc",
+            "url": "/mock-arch/策划报告.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T12:57:48.271Z"
+          },
+          {
+            "id": "gen-1787403495510",
+            "name": "参考图prompt.doc",
+            "url": "/mock-arch/参考图prompt.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T12:58:15.510Z"
+          },
+          {
+            "id": "gen-1787403513062-0",
+            "name": "效果图1.png",
+            "url": "/mock-arch/mock-01.png",
+            "type": "image",
+            "timestamp": "2026-08-22T12:58:33.062Z"
+          },
+          {
+            "id": "gen-1787403513062-1",
+            "name": "效果图2.png",
+            "url": "/mock-arch/mock-02.png",
+            "type": "image",
+            "timestamp": "2026-08-22T12:58:33.062Z"
+          },
+          {
+            "id": "gen-1787403513062-2",
+            "name": "效果图3.png",
+            "url": "/mock-arch/mock-03.png",
+            "type": "image",
+            "timestamp": "2026-08-22T12:58:33.062Z"
+          },
+          {
+            "id": "gen-1787403513062-3",
+            "name": "效果图4.png",
+            "url": "/mock-arch/mock-04.png",
+            "type": "image",
+            "timestamp": "2026-08-22T12:58:33.062Z"
+          },
+          {
+            "id": "gen-video-1787403528862-1",
+            "name": "mock-v1.mp4",
+            "url": "/mock-arch/mock-v1.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T12:58:48.862Z"
+          },
+          {
+            "id": "gen-video-1787403528862-2",
+            "name": "mock-v2.mp4",
+            "url": "/mock-arch/mock-v2.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T12:58:48.862Z"
+          },
+          {
+            "id": "gen-video-1787403528862-3",
+            "name": "mock-v3.mp4",
+            "url": "/mock-arch/mock-v3.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T12:58:48.862Z"
+          },
+          {
+            "id": "gen-video-1787403528862-4",
+            "name": "mock-v4.mp4",
+            "url": "/mock-arch/mock-v4.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T12:58:48.862Z"
+          },
+          {
+            "id": "gen-html-1787403551602",
+            "name": "流水为脉 · 坊巷成园.html",
+            "url": "/mock-arch/流水为脉 · 坊巷成园.html",
+            "type": "html",
+            "timestamp": "2026-08-22T12:59:11.602Z"
+          }
+        ],
+        "text": [
+          {
+            "id": "1787403457050-lo2pb8wpupr",
+            "name": "景德镇陶瓷文创园设计任务书.doc",
+            "uploadedAt": "2026-08-22T12:57:37.050Z",
+            "status": "success"
+          }
+        ],
+        "image": [
+          {
+            "id": "1787403505869-n1vxbzq0d8",
+            "name": "ske-1.jpeg",
+            "uploadedAt": "2026-08-22T12:58:25.870Z",
+            "status": "success",
+            "previewUrl": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg"
+          },
+          {
+            "id": "1787403505950-fcv52h4xs9r",
+            "name": "ske-2.jpeg",
+            "uploadedAt": "2026-08-22T12:58:25.950Z",
+            "status": "success",
+            "previewUrl": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg"
+          },
+          {
+            "id": "1787403506054-qigs9cm0k1",
+            "name": "ske-3.jpeg",
+            "uploadedAt": "2026-08-22T12:58:26.054Z",
+            "status": "success",
+            "previewUrl": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg"
+          },
+          {
+            "id": "1787403506165-prm0zvr8ai",
+            "name": "ske-4.jpeg",
+            "uploadedAt": "2026-08-22T12:58:26.165Z",
+            "status": "success",
+            "previewUrl": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg"
+          }
+        ],
+        "canvas": [
+          {
+            "id": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
+            "type": "file",
+            "content": "/uploads/9b601a61-eb6d-4a28-bc15-42f497f55767.doc",
+            "x": 40,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 10,
+            "meta": {
+              "name": "景德镇陶瓷文创园设计任务书.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403468271-1787403468272-0",
+            "type": "file",
+            "content": "/mock-arch/策划报告.doc",
+            "x": 380,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 11,
+            "connectionFrom": "canvas-upload-1787403457050-lo2pb8wpupr-1787403461107-0",
+            "meta": {
+              "name": "策划报告.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403495510-1787403495512-0",
+            "type": "file",
+            "content": "/mock-arch/参考图prompt.doc",
+            "x": 720,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 12,
+            "connectionFrom": "canvas-gen-1787403468271-1787403468272-0",
+            "meta": {
+              "name": "参考图prompt.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-sketch-1787403505869-n1vxbzq0d8",
+            "type": "image",
+            "content": "/uploads/92066011-79eb-485a-983c-c3906188ab67.jpeg",
+            "x": 1100,
+            "y": 40,
+            "width": 200,
+            "height": 150,
+            "zIndex": 23,
+            "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+            "connectionColors": [
+              "#6b7280"
+            ],
+            "meta": {
+              "name": "草图1",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-sketch-1787403505950-fcv52h4xs9r",
+            "type": "image",
+            "content": "/uploads/78602b84-f23d-4b3f-94eb-b59ebd6d83f8.jpeg",
+            "x": 1100,
+            "y": 390,
+            "width": 200,
+            "height": 150,
+            "zIndex": 24,
+            "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+            "connectionColors": [
+              "#6b7280"
+            ],
+            "meta": {
+              "name": "草图2",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-sketch-1787403506054-qigs9cm0k1",
+            "type": "image",
+            "content": "/uploads/6ded11c9-f19b-4b2a-92ff-7ea0bdeff6e6.jpeg",
+            "x": 1100,
+            "y": 740,
+            "width": 200,
+            "height": 150,
+            "zIndex": 25,
+            "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+            "connectionColors": [
+              "#6b7280"
+            ],
+            "meta": {
+              "name": "草图3",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-sketch-1787403506165-prm0zvr8ai",
+            "type": "image",
+            "content": "/uploads/aadc972f-db3e-407e-a7e8-f5560e5f2310.jpeg",
+            "x": 1100,
+            "y": 1090,
+            "width": 200,
+            "height": 150,
+            "zIndex": 26,
+            "connectionFrom": "canvas-gen-1787403495510-1787403495512-0",
+            "connectionColors": [
+              "#6b7280"
+            ],
+            "meta": {
+              "name": "草图4",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403513062-0",
+            "type": "image",
+            "content": "/mock-arch/mock-01.png",
+            "x": 1380,
+            "y": -35,
+            "width": 400,
+            "height": 300,
+            "zIndex": 27,
+            "connectionFrom": "canvas-sketch-1787403505869-n1vxbzq0d8",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "效果图1.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403513062-1",
+            "type": "image",
+            "content": "/mock-arch/mock-02.png",
+            "x": 1380,
+            "y": 315,
+            "width": 400,
+            "height": 300,
+            "zIndex": 28,
+            "connectionFrom": "canvas-sketch-1787403505950-fcv52h4xs9r",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "效果图2.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403513062-2",
+            "type": "image",
+            "content": "/mock-arch/mock-03.png",
+            "x": 1380,
+            "y": 665,
+            "width": 400,
+            "height": 300,
+            "zIndex": 29,
+            "connectionFrom": "canvas-sketch-1787403506054-qigs9cm0k1",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "效果图3.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787403513062-3",
+            "type": "image",
+            "content": "/mock-arch/mock-04.png",
+            "x": 1380,
+            "y": 1015,
+            "width": 400,
+            "height": 300,
+            "zIndex": 30,
+            "connectionFrom": "canvas-sketch-1787403506165-prm0zvr8ai",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "效果图4.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787403528862-1",
+            "type": "video",
+            "content": "/mock-arch/mock-v1.mp4",
+            "x": 1860,
+            "y": -65,
+            "width": 480,
+            "height": 360,
+            "zIndex": 41,
+            "connectionFrom": "canvas-gen-1787403513062-0",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "mock-v1.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787403528862-2",
+            "type": "video",
+            "content": "/mock-arch/mock-v2.mp4",
+            "x": 1860,
+            "y": 285,
+            "width": 480,
+            "height": 360,
+            "zIndex": 42,
+            "connectionFrom": "canvas-gen-1787403513062-1",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "mock-v2.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787403528862-3",
+            "type": "video",
+            "content": "/mock-arch/mock-v3.mp4",
+            "x": 1860,
+            "y": 635,
+            "width": 480,
+            "height": 360,
+            "zIndex": 43,
+            "connectionFrom": "canvas-gen-1787403513062-2",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "mock-v3.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787403528862-4",
+            "type": "video",
+            "content": "/mock-arch/mock-v4.mp4",
+            "x": 1860,
+            "y": 985,
+            "width": 480,
+            "height": 360,
+            "zIndex": 44,
+            "connectionFrom": "canvas-gen-1787403513062-3",
+            "connectionColors": [
+              "#3b82f6"
+            ],
+            "meta": {
+              "name": "mock-v4.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-html-1787403551602",
+            "type": "html",
+            "content": "/mock-arch/流水为脉 · 坊巷成园.html",
+            "x": 2460,
+            "y": 40,
+            "width": 900,
+            "height": 1500,
+            "zIndex": 55,
+            "connectionFrom": [
+              "canvas-gen-video-1787403528862-1",
+              "canvas-gen-video-1787403528862-2",
+              "canvas-gen-video-1787403528862-3",
+              "canvas-gen-video-1787403528862-4"
+            ],
+            "connectionColors": [
+              "#fbbf24"
+            ],
+            "meta": {
+              "name": "流水为脉 · 坊巷成园.html",
+              "fileType": "html"
+            }
+          }
+        ]
+      }
+    },
+    "aga-files-version-proj-pinned-blank__v": {
+      "version": 2,
+      "updatedAt": "2026-08-22T15:08:41.452Z",
+      "clientId": "c-mt4idsx7-wy69oo",
+      "data": {
+        "generated": [],
+        "text": [],
+        "image": [],
+        "canvas": []
+      }
+    },
+    "aga-files-version-proj-default-2__v": {
+      "version": 2,
+      "updatedAt": "2026-08-22T15:08:41.452Z",
+      "clientId": "c-mt4idsx7-wy69oo",
+      "data": {
+        "generated": [
+          {
+            "id": "gen-1787411190610",
+            "name": "商品简介.doc",
+            "url": "/mock-dianshang/商品简介.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T15:06:30.610Z"
+          },
+          {
+            "id": "gen-1787411224808",
+            "name": "图片prompt.doc",
+            "url": "/mock-dianshang/图片prompt.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T15:07:04.808Z"
+          },
+          {
+            "id": "gen-1787411233204-1",
+            "name": "img1.png",
+            "url": "/mock-dianshang/img1.png",
+            "type": "image",
+            "timestamp": "2026-08-22T15:07:13.204Z"
+          },
+          {
+            "id": "gen-1787411233204-2",
+            "name": "img2.png",
+            "url": "/mock-dianshang/img2.png",
+            "type": "image",
+            "timestamp": "2026-08-22T15:07:13.204Z"
+          },
+          {
+            "id": "gen-1787411233204-3",
+            "name": "img3.png",
+            "url": "/mock-dianshang/img3.png",
+            "type": "image",
+            "timestamp": "2026-08-22T15:07:13.204Z"
+          },
+          {
+            "id": "gen-1787411233204-4",
+            "name": "img4.png",
+            "url": "/mock-dianshang/img4.png",
+            "type": "image",
+            "timestamp": "2026-08-22T15:07:13.204Z"
+          },
+          {
+            "id": "gen-1787411246756",
+            "name": "视频prompt.doc",
+            "url": "/mock-dianshang/视频prompt.doc",
+            "type": "doc",
+            "timestamp": "2026-08-22T15:07:26.756Z"
+          },
+          {
+            "id": "gen-video-1787411259036",
+            "name": "1.mp4",
+            "url": "/mock-dianshang/1.mp4",
+            "type": "video",
+            "timestamp": "2026-08-22T15:07:39.036Z"
+          },
+          {
+            "id": "gen-html-1787411271151",
+            "name": "绿发晶白水晶拼色树叶吊坠手链.html",
+            "url": "/mock-dianshang/绿发晶白水晶拼色树叶吊坠手链.html",
+            "type": "html",
+            "timestamp": "2026-08-22T15:07:51.151Z"
+          }
+        ],
+        "text": [],
+        "image": [
+          {
+            "id": "1787411179553-mizf239qrz",
+            "name": "商品图底图.jpg",
+            "uploadedAt": "2026-08-22T15:06:19.553Z",
+            "status": "success",
+            "previewUrl": "/uploads/3476f29a-d095-4a32-9110-89ad126d2f4e.jpg"
+          },
+          {
+            "id": "1787411251844-wida667jlf",
+            "name": "模特.png",
+            "uploadedAt": "2026-08-22T15:07:31.845Z",
+            "status": "success",
+            "previewUrl": "/uploads/b9733b16-5273-4148-a5a1-f2528aa7a310.png"
+          }
+        ],
+        "canvas": [
+          {
+            "id": "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+            "type": "image",
+            "content": "/uploads/3476f29a-d095-4a32-9110-89ad126d2f4e.jpg",
+            "x": 40,
+            "y": 40,
+            "width": 320,
+            "height": 240,
+            "zIndex": 10,
+            "meta": {
+              "name": "商品图底图.jpg",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411190610-1787411190612-0",
+            "type": "file",
+            "content": "/mock-dianshang/商品简介.doc",
+            "x": 440,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 11,
+            "connectionFrom": "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+            "meta": {
+              "name": "商品简介.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411224808-1787411224809-0",
+            "type": "file",
+            "content": "/mock-dianshang/图片prompt.doc",
+            "x": 780,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 12,
+            "connectionFrom": "canvas-gen-1787411190610-1787411190612-0",
+            "meta": {
+              "name": "图片prompt.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411233204-1",
+            "type": "image",
+            "content": "/mock-dianshang/img1.png",
+            "x": 1160,
+            "y": 40,
+            "width": 400,
+            "height": 300,
+            "zIndex": 23,
+            "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "img1.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411233204-2",
+            "type": "image",
+            "content": "/mock-dianshang/img2.png",
+            "x": 1160,
+            "y": 380,
+            "width": 400,
+            "height": 300,
+            "zIndex": 24,
+            "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "img2.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411233204-3",
+            "type": "image",
+            "content": "/mock-dianshang/img3.png",
+            "x": 1160,
+            "y": 720,
+            "width": 400,
+            "height": 300,
+            "zIndex": 25,
+            "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "img3.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411233204-4",
+            "type": "image",
+            "content": "/mock-dianshang/img4.png",
+            "x": 1160,
+            "y": 1060,
+            "width": 400,
+            "height": 300,
+            "zIndex": 26,
+            "connectionFrom": "canvas-gen-1787411224808-1787411224809-0",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "img4.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-1787411246756",
+            "type": "file",
+            "content": "/mock-dianshang/视频prompt.doc",
+            "x": 1640,
+            "y": 40,
+            "width": 260,
+            "height": 200,
+            "zIndex": 22,
+            "connectionFrom": [
+              "canvas-upload-1787411179553-mizf239qrz-1787411180571-0",
+              "canvas-gen-1787411233204-1",
+              "canvas-gen-1787411233204-2",
+              "canvas-gen-1787411233204-3",
+              "canvas-gen-1787411233204-4"
+            ],
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "视频prompt.doc",
+              "fileType": "doc"
+            }
+          },
+          {
+            "id": "canvas-upload-1787411251844-wida667jlf-1787411251950-0",
+            "type": "image",
+            "content": "/uploads/b9733b16-5273-4148-a5a1-f2528aa7a310.png",
+            "x": 720,
+            "y": 560,
+            "width": 320,
+            "height": 240,
+            "zIndex": 18,
+            "meta": {
+              "name": "模特.png",
+              "fileType": "image"
+            }
+          },
+          {
+            "id": "canvas-gen-video-1787411259036",
+            "type": "video",
+            "content": "/mock-dianshang/1.mp4",
+            "x": 1980,
+            "y": 40,
+            "width": 480,
+            "height": 360,
+            "zIndex": 39,
+            "connectionFrom": "canvas-gen-1787411246756",
+            "connectionColors": [
+              "#a78bfa"
+            ],
+            "meta": {
+              "name": "1.mp4",
+              "fileType": "video"
+            }
+          },
+          {
+            "id": "canvas-gen-html-1787411271151",
+            "type": "html",
+            "content": "/mock-dianshang/绿发晶白水晶拼色树叶吊坠手链.html",
+            "x": 2580,
+            "y": 40,
+            "width": 900,
+            "height": 1500,
+            "zIndex": 50,
+            "connectionFrom": "canvas-gen-video-1787411259036",
+            "connectionColors": [
+              "#fbbf24"
+            ],
+            "meta": {
+              "name": "绿发晶白水晶拼色树叶吊坠手链.html",
+              "fileType": "html"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "savedAt": "2026-08-22T15:08:41.480Z"
+}
