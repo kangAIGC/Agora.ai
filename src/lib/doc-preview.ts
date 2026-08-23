@@ -21,7 +21,7 @@ import mammoth from "mammoth/mammoth.browser";
 export type DocPreviewResult =
   | { kind: "html"; html: string; warnings?: string[]; sourceType: "ooxml" | "html" | "text" }
   | { kind: "pdf"; url: string }
-  | { kind: "unsupported"; reason: string; suggestDownload: true; sourceType: "ole2" | "unknown" };
+  | { kind: "unsupported"; reason: string; suggestDownload: true; sourceType: "ooxml" | "ole2" | "unknown" };
 
 const ZIP_MAGIC = [0x50, 0x4b, 0x03, 0x04]; // PK\x03\x04 (OOXML .docx / zip)
 const OLE2_MAGIC = [0xd0, 0xcf, 0x11, 0xe0]; // D0 CF 11 E0 (老式 .doc 二进制)
