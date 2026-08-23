@@ -302,9 +302,32 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
           persistProjectsSync(restored);
         }
         // 2. 还原 currentProjectId
+        // ⚠️ 兼容 chat/page.tsx 的 ?project=proj-xxx URL 参数优先原则：
+        //   如果用户已在 URL 中指定项目，chat/page.tsx 会抢先一步（或随后）切换 currentProjectId。
+        //   这里仅在 currentProjectId 当前为空 / 无效（在 restored 中不存在）时才使用 seed 默认值。
+        //   同时，若 URL 确实带 ?project= 且与 seed.currentProjectId 冲突，则以 URL 为准。
         if (typeof data.currentProjectId === "string" && data.currentProjectId) {
-          localStorage.setItem(STORAGE_KEY_CURRENT, data.currentProjectId);
-          setCurrentProjectId(data.currentProjectId);
+          let shouldUseSeed = true;
+          try {
+            const curUrl = new URL(window.location.href);
+            const urlProj = curUrl.searchParams.get("project");
+            const restoredIds = new Set(Array.isArray(data.projects) ? data.projects.map((p) => p.id) : []);
+            if (urlProj && restoredIds.has(urlProj)) {
+              shouldUseSeed = false;
+              localStorage.setItem(STORAGE_KEY_CURRENT, urlProj);
+              setCurrentProjectId(urlProj);
+            } else if (
+              currentProjectId &&
+              restoredIds.has(currentProjectId) &&
+              currentProjectId !== data.currentProjectId
+            ) {
+              shouldUseSeed = false;
+            }
+          } catch { /* SSR 或 window 不可用：回退使用 seed */ }
+          if (shouldUseSeed) {
+            localStorage.setItem(STORAGE_KEY_CURRENT, data.currentProjectId);
+            setCurrentProjectId(data.currentProjectId);
+          }
         }
         // 3. 还原 filesByProject + 版本号 → 通过自定义事件通知 chat 页面
         if (data.filesByProject && typeof data.filesByProject === "object") {
