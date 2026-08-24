@@ -12,7 +12,8 @@ import { asset } from "@/lib/asset";
 
 const navItems = [
   { label: "首页", href: "/", icon: Home },
-  { label: "工作台", href: "/chat?project=proj-pinned-blank", icon: Bot },
+  // 用 hash 传 project（不用 query）：query 会在静态导出+basePath 下触发客户端路由预取失败→404 闪现
+  { label: "工作台", href: "/chat#project=proj-pinned-blank", icon: Bot },
   { label: "社区", href: "/discover", icon: Compass },
   { label: "个人", href: "/profile", icon: User },
 ];
@@ -75,8 +76,8 @@ export default function Header() {
             <nav className="flex-none flex items-center gap-0.5 sm:gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                // 提取 href 的 pathname 部分（去掉 query string），用于 active 判断
-                const itemPath = item.href.split("?")[0];
+                // 提取 href 的 pathname 部分（去掉 query 或 hash），用于 active 判断
+                const itemPath = item.href.split(/[?#]/)[0];
                 const isActive =
                   pathname === itemPath ||
                   (itemPath !== "/" && pathname.startsWith(itemPath));

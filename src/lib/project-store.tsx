@@ -302,15 +302,19 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
           persistProjectsSync(restored);
         }
         // 2. 还原 currentProjectId
-        // ⚠️ 兼容 chat/page.tsx 的 ?project=proj-xxx URL 参数优先原则：
+        // ⚠️ 兼容 chat/page.tsx 的 #project=proj-xxx URL hash 优先原则：
         //   如果用户已在 URL 中指定项目，chat/page.tsx 会抢先一步（或随后）切换 currentProjectId。
         //   这里仅在 currentProjectId 当前为空 / 无效（在 restored 中不存在）时才使用 seed 默认值。
-        //   同时，若 URL 确实带 ?project= 且与 seed.currentProjectId 冲突，则以 URL 为准。
+        //   同时，若 URL 确实带 #project= 且与 seed.currentProjectId 冲突，则以 URL 为准。
         if (typeof data.currentProjectId === "string" && data.currentProjectId) {
           let shouldUseSeed = true;
           try {
             const curUrl = new URL(window.location.href);
-            const urlProj = curUrl.searchParams.get("project");
+            // 从 hash 读取 project（与 chat/page.tsx 一致，用 hash 避免 query 触发 404）
+            const urlProj = (() => {
+              const m = curUrl.hash.match(/project=([^&]+)/);
+              return m ? decodeURIComponent(m[1]) : null;
+            })();
             const restoredIds = new Set(Array.isArray(data.projects) ? data.projects.map((p) => p.id) : []);
             if (urlProj && restoredIds.has(urlProj)) {
               shouldUseSeed = false;
