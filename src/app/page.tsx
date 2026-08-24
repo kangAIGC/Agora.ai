@@ -231,7 +231,8 @@ export default function Home() {
                 onClick={() => {
                   setIsTransitioning(true);
                   window.setTimeout(() => {
-                    router.push("/chat?project=proj-pinned-blank");
+                    // 用 hash 传 project，避免 query 在静态导出+basePath 下触发客户端路由 404
+                    router.push("/chat#project=proj-pinned-blank");
                   }, 500);
                 }}
               >

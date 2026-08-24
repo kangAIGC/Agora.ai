@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   FileText,
@@ -769,16 +769,24 @@ function ChatPageInner() {
     runGlobalAppSeed();
   }, []);
 
-  // ============ URL 参数 ?project=xxx → 自动切换到指定项目 ============
+  // ============ URL hash #project=xxx → 自动切换到指定项目 ============
   // 用于首页聊天框点击和导航栏"工作台"按钮统一跳转到"空白项目"（proj-pinned-blank）
-  // ⚠️ 修复：URL 参数仅在首次加载时消费一次，成功后立即清除 URL 中的 project 参数
-  //   避免后续用户手动切换项目时，因 currentProjectId 变化触发 useEffect 再次切回 URL 指定项目
-  const searchParams = useSearchParams();
+  // 用 hash 而非 query：query 在静态导出+basePath 下会触发客户端路由预取失败导致 404 闪现；
+  // hash 不影响路由路径，安全。首次加载消费一次后立即清除 URL 中的 project hash，
+  // 避免后续用户手动切换项目时，因 currentProjectId 变化触发 useEffect 再次切回 hash 指定项目
   const router = useRouter();
-  const urlProjectId = searchParams.get("project");
+  const [urlProjectId, setUrlProjectId] = useState<string | null>(null);
   const urlParamConsumedRef = useRef(false);
   useEffect(() => {
-    // 仅在 URL 存在 project 参数且尚未被消费时执行
+    try {
+      const m = window.location.hash.match(/project=([^&]+)/);
+      setUrlProjectId(m ? decodeURIComponent(m[1]) : null);
+    } catch {
+      setUrlProjectId(null);
+    }
+  }, []);
+  useEffect(() => {
+    // 仅在 URL 存在 project hash 且尚未被消费时执行
     if (!urlProjectId || urlParamConsumedRef.current) return;
     // 等待 projects 加载完毕
     if (!projects || projects.length === 0) return;
@@ -787,12 +795,12 @@ function ChatPageInner() {
       urlParamConsumedRef.current = true;
       return;
     }
-    // 如果当前已是目标项目，也标记为已消费并清除参数（防止后续死循环）
+    // 如果当前已是目标项目，也标记为已消费并清除 hash（防止后续死循环）
     if (currentProjectId === urlProjectId) {
       urlParamConsumedRef.current = true;
       try {
         const newUrl = new URL(window.location.href);
-        newUrl.searchParams.delete("project");
+        newUrl.hash = "";
         router.replace(newUrl.pathname + newUrl.search, { scroll: false });
       } catch { /* ignore */ }
       return;
@@ -800,12 +808,12 @@ function ChatPageInner() {
     // 标记消费并切换
     urlParamConsumedRef.current = true;
     switchProject(urlProjectId);
-    // 切换后清除 URL 中的 project 参数，使用 replace 不产生历史记录
+    // 切换后清除 URL 中的 project hash，使用 replace 不产生历史记录
     // 放在 setTimeout 以等待 currentProjectId 同步后再清参
     setTimeout(() => {
       try {
         const newUrl = new URL(window.location.href);
-        newUrl.searchParams.delete("project");
+        newUrl.hash = "";
         router.replace(newUrl.pathname + newUrl.search, { scroll: false });
       } catch { /* ignore */ }
     }, 0);
@@ -4303,8 +4311,8 @@ function ChatPageInner() {
 }
 
 // ============ 默认导出：包裹 Suspense 边界 ============
-// Next.js 16 生产构建要求 useSearchParams() 必须在 Suspense 边界内，
-// 否则会触发 CSR bailout 导致静态导出失败。
+// 曾因 useSearchParams() 需要 Suspense 边界（否则 CSR bailout 导致静态导出失败）；
+// 现已改用 hash 读取 project，不再依赖 useSearchParams，Suspense 作为安全兜底保留。
 
 export default function ChatPage() {
   return (
