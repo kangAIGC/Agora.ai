@@ -18,6 +18,10 @@ export const BASE_PATH = "/Agora.ai";
 export const TOS_BASE_URL =
   (process.env.NEXT_PUBLIC_TOS_BASE_URL || "").replace(/\/$/, "");
 
+// 只有这些媒体资源类型会上传到 TOS 并走 TOS 加速；
+// HTML/doc/JSON 等非媒体文件留在本地 GitHub Pages（basePath），避免 iframe 跨域或未上传导致 404
+const TOS_ASSET_RE = /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i;
+
 /**
  * 为绝对路径添加 basePath 前缀，或在配置 TOS 时转为 TOS 公开桶 URL。
  *
@@ -42,9 +46,10 @@ export function asset(path: string | null | undefined): string {
   if (!path.startsWith("/")) return path;
   // 已带 basePath 前缀，避免重复
   if (path === BASE_PATH || path.startsWith(BASE_PATH + "/")) return path;
-  // 配置了 TOS 时，本地绝对路径 → TOS 公开桶 URL
+  // 配置了 TOS 时：图片/视频等已上传 TOS 的媒体资源走 TOS；HTML/doc/JSON 等留本地 basePath
   if (TOS_BASE_URL) {
-    return TOS_BASE_URL + path;
+    if (TOS_ASSET_RE.test(path)) return TOS_BASE_URL + path;
+    return BASE_PATH + path;
   }
   return BASE_PATH + path;
 }
