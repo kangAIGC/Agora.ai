@@ -39,6 +39,12 @@ jobs:
         env:
           COZE_PROJECT_ENV: PROD
           NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_TOS_BASE_URL: ${{ secrets.NEXT_PUBLIC_TOS_BASE_URL }}
+
+      - name: Rewrite local asset URLs to TOS
+        run: node scripts/rewrite-tos-urls.mjs
+        env:
+          NEXT_PUBLIC_TOS_BASE_URL: ${{ secrets.NEXT_PUBLIC_TOS_BASE_URL }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
