@@ -151,10 +151,10 @@ export const PERMANENT_COMIC_WORKS: WorkItem[] = [
     liked: true,
     createdAt: new Date(2026, 6, 15).getTime(),
   },
-  // ===== 2 个工作流 =====
+  // ===== 1 个工作流 =====
   {
     id: "comic-perm-wf-1",
-    title: "古风仙侠角色立绘生成工作流",
+    title: "古风仙侠漫剧一键生成工作流",
     preview: "/mock-manju/玄青上人.png",
     domain: "comic",
     contentType: "workflow",
@@ -165,25 +165,12 @@ export const PERMANENT_COMIC_WORKS: WorkItem[] = [
     liked: true,
     createdAt: new Date(2026, 7, 18).getTime(),
   },
-  {
-    id: "comic-perm-wf-2",
-    title: "漫剧分镜到成片全自动生产工作流",
-    preview: "/mock-manju/青云大殿.png",
-    domain: "comic",
-    contentType: "workflow",
-    author: { name: "ComicFlow" },
-    likes: 792,
-    favoriteCount: 203,
-    commentCount: 67,
-    favorited: true,
-    createdAt: new Date(2026, 7, 20).getTime(),
-  },
 ];
 
 /** 预期数量常量（验证基准） */
 export const EXPECTED_COMIC_IMAGES = 9;
 export const EXPECTED_COMIC_VIDEOS = 1;
-export const EXPECTED_COMIC_WORKFLOWS = 2;
+export const EXPECTED_COMIC_WORKFLOWS = 1;
 
 /**
  * 判断 ID 是否为漫剧永久作品
@@ -194,7 +181,7 @@ export function isPermanentComicWork(id: string): boolean {
 
 /**
  * 验证永久漫剧作品集数量一致性
- * 确保：恰好 9 张图片 + 1 个视频 + 2 个工作流，不多不少
+ * 确保：恰好 9 张图片 + 1 个视频 + 1 个工作流，不多不少
  */
 export function validatePermanentComicWorks(): {
   valid: boolean;
