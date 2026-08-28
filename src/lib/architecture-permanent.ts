@@ -175,10 +175,10 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
     commentCount: 6,
     createdAt: new Date(2026, 5, 20).getTime(),
   },
-  // ===== 2 个工作流 =====
+  // ===== 1 个工作流 =====
   {
     id: "arch-perm-wf-1",
-    title: "山地建筑概念方案生成工作流",
+    title: "建筑概念方案一键生成工作流",
     preview: "/mock-arch/mock-01.png",
     domain: "architecture",
     contentType: "workflow",
@@ -189,25 +189,12 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
     liked: true,
     createdAt: new Date(2026, 6, 20).getTime(),
   },
-  {
-    id: "arch-perm-wf-2",
-    title: "城市综合体渲染出图工作流",
-    preview: "/mock-arch/mock-03.png",
-    domain: "architecture",
-    contentType: "workflow",
-    author: { name: "RenderFlow" },
-    likes: 278,
-    favoriteCount: 72,
-    commentCount: 18,
-    favorited: true,
-    createdAt: new Date(2026, 6, 12).getTime(),
-  },
 ];
 
 /** 预期数量常量（验证基准） */
 export const EXPECTED_ARCH_IMAGES = 8;
 export const EXPECTED_ARCH_VIDEOS = 4;
-export const EXPECTED_ARCH_WORKFLOWS = 2;
+export const EXPECTED_ARCH_WORKFLOWS = 1;
 
 /**
  * 判断 ID 是否为建筑永久作品
@@ -218,7 +205,7 @@ export function isPermanentArchitectureWork(id: string): boolean {
 
 /**
  * 验证永久建筑作品集数量一致性
- * 确保：恰好 8 张图片 + 4 个视频 + 2 个工作流，不多不少
+ * 确保：恰好 8 张图片 + 4 个视频 + 1 个工作流，不多不少
  */
 export function validatePermanentArchitectureWorks(): {
   valid: boolean;
