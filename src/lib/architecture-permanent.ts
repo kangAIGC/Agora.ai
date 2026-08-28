@@ -8,7 +8,7 @@ import { seedWorks } from "@/lib/ugc-storage";
  * 建筑社区永久作品数据集
  *
  * 设计目标：
- * - 恰好 8 张图片 + 4 个视频，共 12 条作品
+ * - 恰好 8 张图片 + 4 个视频 + 2 个工作流，共 14 条作品
  * - 数据硬编码在源码中，天然跨刷新 / 服务重启持久（源码即数据）
  * - 同时种子到 IndexedDB（数据库留存），并标记 permanent: true 防删
  * - ID 统一前缀 arch-perm-，删除逻辑据此拦截
@@ -20,7 +20,7 @@ export const ARCH_PERM_PREFIX = "arch-perm-";
 const ARCH_PERM_SEEDED_FLAG = "aga-arch-perm-seeded-v1";
 
 /**
- * 永久建筑作品（8 图 + 4 视频）
+ * 永久建筑作品（8 图 + 4 视频 + 2 工作流）
  * 全部引用本地 /mock-arch/ 静态文件，确保稳定可访问
  */
 export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
@@ -175,11 +175,39 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
     commentCount: 6,
     createdAt: new Date(2026, 5, 20).getTime(),
   },
+  // ===== 2 个工作流 =====
+  {
+    id: "arch-perm-wf-1",
+    title: "山地建筑概念方案生成工作流",
+    preview: "/mock-arch/mock-01.png",
+    domain: "architecture",
+    contentType: "workflow",
+    author: { name: "DesignFlow" },
+    likes: 342,
+    favoriteCount: 89,
+    commentCount: 26,
+    liked: true,
+    createdAt: new Date(2026, 6, 20).getTime(),
+  },
+  {
+    id: "arch-perm-wf-2",
+    title: "城市综合体渲染出图工作流",
+    preview: "/mock-arch/mock-03.png",
+    domain: "architecture",
+    contentType: "workflow",
+    author: { name: "RenderFlow" },
+    likes: 278,
+    favoriteCount: 72,
+    commentCount: 18,
+    favorited: true,
+    createdAt: new Date(2026, 6, 12).getTime(),
+  },
 ];
 
 /** 预期数量常量（验证基准） */
 export const EXPECTED_ARCH_IMAGES = 8;
 export const EXPECTED_ARCH_VIDEOS = 4;
+export const EXPECTED_ARCH_WORKFLOWS = 2;
 
 /**
  * 判断 ID 是否为建筑永久作品
@@ -190,12 +218,13 @@ export function isPermanentArchitectureWork(id: string): boolean {
 
 /**
  * 验证永久建筑作品集数量一致性
- * 确保：恰好 8 张图片 + 4 个视频，不多不少
+ * 确保：恰好 8 张图片 + 4 个视频 + 2 个工作流，不多不少
  */
 export function validatePermanentArchitectureWorks(): {
   valid: boolean;
   imageCount: number;
   videoCount: number;
+  workflowCount: number;
   total: number;
 } {
   const imageCount = PERMANENT_ARCHITECTURE_WORKS.filter(
@@ -204,13 +233,18 @@ export function validatePermanentArchitectureWorks(): {
   const videoCount = PERMANENT_ARCHITECTURE_WORKS.filter(
     (w) => w.contentType === "video",
   ).length;
+  const workflowCount = PERMANENT_ARCHITECTURE_WORKS.filter(
+    (w) => w.contentType === "workflow",
+  ).length;
   const valid =
     imageCount === EXPECTED_ARCH_IMAGES &&
-    videoCount === EXPECTED_ARCH_VIDEOS;
+    videoCount === EXPECTED_ARCH_VIDEOS &&
+    workflowCount === EXPECTED_ARCH_WORKFLOWS;
   return {
     valid,
     imageCount,
     videoCount,
+    workflowCount,
     total: PERMANENT_ARCHITECTURE_WORKS.length,
   };
 }

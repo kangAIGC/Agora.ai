@@ -8,7 +8,7 @@ import { seedWorks } from "@/lib/ugc-storage";
  * 漫剧社区永久作品数据集
  *
  * 设计目标：
- * - 恰好 9 张图片 + 1 个视频，共 10 条作品
+ * - 恰好 9 张图片 + 1 个视频 + 2 个工作流，共 12 条作品
  * - 数据硬编码在源码中，天然跨刷新 / 服务重启持久（源码即数据）
  * - 同时种子到 IndexedDB（数据库留存），并标记 permanent: true 防删
  * - ID 统一前缀 comic-perm-，删除逻辑据此拦截
@@ -20,7 +20,7 @@ export const COMIC_PERM_PREFIX = "comic-perm-";
 const COMIC_PERM_SEEDED_FLAG = "aga-comic-perm-seeded-v1";
 
 /**
- * 永久漫剧作品（9 图 + 1 视频）
+ * 永久漫剧作品（9 图 + 1 视频 + 2 工作流）
  * 全部引用本地 /mock-manju/ 静态文件，确保稳定可访问
  */
 export const PERMANENT_COMIC_WORKS: WorkItem[] = [
@@ -151,11 +151,39 @@ export const PERMANENT_COMIC_WORKS: WorkItem[] = [
     liked: true,
     createdAt: new Date(2026, 6, 15).getTime(),
   },
+  // ===== 2 个工作流 =====
+  {
+    id: "comic-perm-wf-1",
+    title: "古风仙侠角色立绘生成工作流",
+    preview: "/mock-manju/玄青上人.png",
+    domain: "comic",
+    contentType: "workflow",
+    author: { name: "CharFlow" },
+    likes: 683,
+    favoriteCount: 157,
+    commentCount: 48,
+    liked: true,
+    createdAt: new Date(2026, 7, 18).getTime(),
+  },
+  {
+    id: "comic-perm-wf-2",
+    title: "漫剧分镜到成片全自动生产工作流",
+    preview: "/mock-manju/青云大殿.png",
+    domain: "comic",
+    contentType: "workflow",
+    author: { name: "ComicFlow" },
+    likes: 792,
+    favoriteCount: 203,
+    commentCount: 67,
+    favorited: true,
+    createdAt: new Date(2026, 7, 20).getTime(),
+  },
 ];
 
 /** 预期数量常量（验证基准） */
 export const EXPECTED_COMIC_IMAGES = 9;
 export const EXPECTED_COMIC_VIDEOS = 1;
+export const EXPECTED_COMIC_WORKFLOWS = 2;
 
 /**
  * 判断 ID 是否为漫剧永久作品
@@ -166,12 +194,13 @@ export function isPermanentComicWork(id: string): boolean {
 
 /**
  * 验证永久漫剧作品集数量一致性
- * 确保：恰好 9 张图片 + 1 个视频，不多不少
+ * 确保：恰好 9 张图片 + 1 个视频 + 2 个工作流，不多不少
  */
 export function validatePermanentComicWorks(): {
   valid: boolean;
   imageCount: number;
   videoCount: number;
+  workflowCount: number;
   total: number;
 } {
   const imageCount = PERMANENT_COMIC_WORKS.filter(
@@ -180,13 +209,18 @@ export function validatePermanentComicWorks(): {
   const videoCount = PERMANENT_COMIC_WORKS.filter(
     (w) => w.contentType === "video",
   ).length;
+  const workflowCount = PERMANENT_COMIC_WORKS.filter(
+    (w) => w.contentType === "workflow",
+  ).length;
   const valid =
     imageCount === EXPECTED_COMIC_IMAGES &&
-    videoCount === EXPECTED_COMIC_VIDEOS;
+    videoCount === EXPECTED_COMIC_VIDEOS &&
+    workflowCount === EXPECTED_COMIC_WORKFLOWS;
   return {
     valid,
     imageCount,
     videoCount,
+    workflowCount,
     total: PERMANENT_COMIC_WORKS.length,
   };
 }

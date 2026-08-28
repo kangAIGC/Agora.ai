@@ -8,7 +8,7 @@ import { seedWorks } from "@/lib/ugc-storage";
  * 电商社区永久作品数据集
  *
  * 设计目标：
- * - 恰好 4 张图片 + 5 个视频，共 9 条作品
+ * - 恰好 4 张图片 + 5 个视频 + 2 个工作流，共 11 条作品
  * - 数据硬编码在源码中，天然跨刷新 / 服务重启持久（源码即数据）
  * - 同时种子到 IndexedDB（数据库留存），并标记 permanent: true 防删
  * - ID 统一前缀 ecom-perm-，删除逻辑据此拦截
@@ -20,7 +20,7 @@ export const ECOM_PERM_PREFIX = "ecom-perm-";
 const ECOM_PERM_SEEDED_FLAG = "aga-ecom-perm-seeded-v1";
 
 /**
- * 永久电商作品（4 图 + 5 视频）
+ * 永久电商作品（4 图 + 5 视频 + 2 工作流）
  * 全部引用本地 /mock-dianshang/ 静态文件，确保稳定可访问
  */
 export const PERMANENT_ECOMMERCE_WORKS: WorkItem[] = [
@@ -138,11 +138,39 @@ export const PERMANENT_ECOMMERCE_WORKS: WorkItem[] = [
     commentCount: 13,
     createdAt: new Date(2026, 6, 5).getTime(),
   },
+  // ===== 2 个工作流 =====
+  {
+    id: "ecom-perm-wf-1",
+    title: "商品详情页主图一键生成工作流",
+    preview: "/mock-dianshang/img2.png",
+    domain: "ecommerce",
+    contentType: "workflow",
+    author: { name: "GoodsFlow" },
+    likes: 420,
+    favoriteCount: 112,
+    commentCount: 31,
+    liked: true,
+    createdAt: new Date(2026, 7, 15).getTime(),
+  },
+  {
+    id: "ecom-perm-wf-2",
+    title: "模特场景图智能合成工作流",
+    preview: "/mock-dianshang/img模特.png",
+    domain: "ecommerce",
+    contentType: "workflow",
+    author: { name: "SceneFlow" },
+    likes: 356,
+    favoriteCount: 88,
+    commentCount: 25,
+    favorited: true,
+    createdAt: new Date(2026, 7, 12).getTime(),
+  },
 ];
 
 /** 预期数量常量（验证基准） */
 export const EXPECTED_ECOM_IMAGES = 4;
 export const EXPECTED_ECOM_VIDEOS = 5;
+export const EXPECTED_ECOM_WORKFLOWS = 2;
 
 /**
  * 判断 ID 是否为电商永久作品
@@ -153,13 +181,14 @@ export function isPermanentEcommerceWork(id: string): boolean {
 
 /**
  * 验证永久电商作品集数量一致性
- * 确保：恰好 4 张图片 + 5 个视频，不多不少
+ * 确保：恰好 4 张图片 + 5 个视频 + 2 个工作流，不多不少
  * 返回校验结果与实际数量
  */
 export function validatePermanentEcommerceWorks(): {
   valid: boolean;
   imageCount: number;
   videoCount: number;
+  workflowCount: number;
   total: number;
 } {
   const imageCount = PERMANENT_ECOMMERCE_WORKS.filter(
@@ -168,13 +197,18 @@ export function validatePermanentEcommerceWorks(): {
   const videoCount = PERMANENT_ECOMMERCE_WORKS.filter(
     (w) => w.contentType === "video",
   ).length;
+  const workflowCount = PERMANENT_ECOMMERCE_WORKS.filter(
+    (w) => w.contentType === "workflow",
+  ).length;
   const valid =
     imageCount === EXPECTED_ECOM_IMAGES &&
-    videoCount === EXPECTED_ECOM_VIDEOS;
+    videoCount === EXPECTED_ECOM_VIDEOS &&
+    workflowCount === EXPECTED_ECOM_WORKFLOWS;
   return {
     valid,
     imageCount,
     videoCount,
+    workflowCount,
     total: PERMANENT_ECOMMERCE_WORKS.length,
   };
 }
