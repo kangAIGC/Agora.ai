@@ -2,10 +2,16 @@
 
 import type { WorkItem } from "@/components/WorkCard";
 import type { StoredWork, WorkScope } from "@/lib/ugc-storage";
-import { seedWorks as seedWorksDB } from "@/lib/ugc-storage";
+import {
+  seedWorks as seedWorksDB,
+  deleteWorksByScope as clearScopeWorks,
+} from "@/lib/ugc-storage";
 
-export const PROFILE_SEED_FLAG = "aga-profile-seeded-v6";
-export const GLOBAL_APP_SEED_FLAG = "aga-app-seeded-v2";
+export const PROFILE_SEED_FLAG = "aga-profile-seeded-v7";
+export const GLOBAL_APP_SEED_FLAG = "aga-app-seeded-v3";
+/** 点赞/收藏 localStorage 的版本后缀，跟随 PROFILE_SEED_FLAG 升级可强制用最新种子覆盖旧数据 */
+const LIKED_WORKS_KEY = "aga-profile-liked-works::v7";
+const FAVORITED_WORKS_KEY = "aga-profile-favorited-works::v7";
 
 // ============ Profile 12 条发布作品（硬编码 mock，4建筑 + 4电商 + 4漫剧） ============
 export const PROFILE_SEED_WORKS: StoredWork[] = [
@@ -219,12 +225,29 @@ export async function runGlobalAppSeed(force = false): Promise<void> {
   if (!force && localStorage.getItem(GLOBAL_APP_SEED_FLAG) === "1") return;
 
   try {
-    // 1) Profile seed（发布的12条作品）
-    if (force || !localStorage.getItem(PROFILE_SEED_FLAG)) {
+    // 1) Profile seed（发布作品）— 检测到 flag 升级时强制清 scope=profile 旧记录重写
+    const profileVersionChanged =
+      !!localStorage.getItem("aga-profile-seeded-v5") ||
+      !!localStorage.getItem("aga-profile-seeded-v6") &&
+        !localStorage.getItem(PROFILE_SEED_FLAG);
+    if (force || !localStorage.getItem(PROFILE_SEED_FLAG) || profileVersionChanged) {
+      // 清理历史旧版本 flag 与脏 scope 数据
+      try {
+        localStorage.removeItem("aga-profile-seeded-v5");
+        localStorage.removeItem("aga-profile-seeded-v6");
+        localStorage.removeItem("aga-profile-liked-works");
+        localStorage.removeItem("aga-profile-favorited-works");
+      } catch {
+        /* ignore */
+      }
+      try {
+        if (clearScopeWorks) await clearScopeWorks("profile").catch(() => {});
+      } catch {
+        /* ignore */
+      }
       try {
         await seedWorksDB(PROFILE_SEED_WORKS);
       } catch (e) {
-        // IndexedDB 异常时，仍写 flag，避免反复尝试阻塞页面；profile 组件仍能 fallback 显示 mock
         console.warn("[app-seed] seedWorksDB 失败，将使用内存 mock 回退:", e);
       }
       try {
@@ -234,24 +257,16 @@ export async function runGlobalAppSeed(force = false): Promise<void> {
       }
     }
 
-    // 2) Liked seed（点赞4条，localStorage）
+    // 2) Liked seed（点赞种子）— 每次版本升级或首次启动强制覆盖（无用户自定义点赞场景）
     try {
-      const key = "aga-profile-liked-works";
-      const existing = localStorage.getItem(key);
-      if (!existing) {
-        localStorage.setItem(key, JSON.stringify(LIKED_SEED_WORKS));
-      }
+      localStorage.setItem(LIKED_WORKS_KEY, JSON.stringify(LIKED_SEED_WORKS));
     } catch {
       /* ignore */
     }
 
-    // 3) Favorited seed（收藏3条，localStorage）
+    // 3) Favorited seed（收藏种子）— 同上
     try {
-      const favKey = "aga-profile-favorited-works";
-      const existingFav = localStorage.getItem(favKey);
-      if (!existingFav) {
-        localStorage.setItem(favKey, JSON.stringify(FAVORITED_SEED_WORKS));
-      }
+      localStorage.setItem(FAVORITED_WORKS_KEY, JSON.stringify(FAVORITED_SEED_WORKS));
     } catch {
       /* ignore */
     }

@@ -26,6 +26,10 @@ import {
   FAVORITED_SEED_WORKS,
 } from "@/lib/app-seed";
 
+/** 与 app-seed.ts 的版本 key 保持一致（跟随种子升级强制刷新点赞/收藏） */
+const LIKED_WORKS_KEY = "aga-profile-liked-works::v7";
+const FAVORITED_WORKS_KEY = "aga-profile-favorited-works::v7";
+
 // ============ 文件名处理工具 ============
 const MAX_TITLE_LENGTH = 50;
 
@@ -111,74 +115,93 @@ export default function ProfilePage() {
 
   const blobUrlsRef = useRef<Set<string>>(new Set());
 
+  /** 从 StoredWork 数组生成 WorkItem（统一使用 seed 的静态 previewUrl，避免 IndexedDB 没写完全导致 fallback 失效） */
+  const buildItemsFromStored = (stored: StoredWork[]): WorkItem[] =>
+    stored
+      .filter((w) => w.previewUrl)
+      .map((w) => ({
+        id: w.id,
+        title: w.title,
+        preview: w.previewUrl!,
+        domain: w.domain,
+        contentType: w.contentType,
+        author: w.author,
+        likes: w.likes,
+        liked: w.liked,
+        favorited: w.favorited,
+        favoriteCount: w.favoriteCount ?? 0,
+        commentCount: w.commentCount ?? 0,
+      }));
+
   // 加载我的作品：先跑全局 seed，再从 IndexedDB 读取；失败时降级使用硬编码静态 mock
   useEffect(() => {
     const loadWorks = async () => {
       try {
-        // 执行全局 seed（幂等），确保任何浏览器打开都有 12 条默认作品
+        // 执行全局 seed（幂等），确保任何浏览器打开都有默认作品
         await runGlobalAppSeed();
 
         // 读取 profile 模块的作品（按 scope 隔离）
-        const storedWorks = await getWorksByScope("profile").catch(() => []);
+        const storedWorks: StoredWork[] = await getWorksByScope("profile").catch(() => []);
         storedWorks.sort((a, b) => b.createdAt - a.createdAt);
-        const blobs: Map<string, Blob> = await getFileBlobs(
-          storedWorks.map((w) => w.id),
-        ).catch(() => new Map());
 
-        // IndexedDB 里有作品，就用它
-        let items: WorkItem[] = storedWorks
-          .map((w) => {
-            const blob = blobs.get(w.id);
-            const preview = blob
-              ? (() => {
-                  const url = URL.createObjectURL(blob);
-                  blobUrlsRef.current.add(url);
-                  return url;
-                })()
-              : w.previewUrl;
-            if (!preview) return null;
-            return {
-              id: w.id, title: w.title, preview,
-              domain: w.domain, contentType: w.contentType,
-              author: w.author, likes: w.likes, liked: w.liked, favorited: w.favorited,
-              favoriteCount: w.favoriteCount ?? 0,
-              commentCount: w.commentCount ?? 0,
-            } as WorkItem;
-          })
-          .filter((w): w is WorkItem => w !== null);
+        // 优先使用 IndexedDB 中的 stored（即使 FILES_STORE 为空、无 blob 也用静态 URL 渲染，保证不空白）
+        let items: WorkItem[] = buildItemsFromStored(storedWorks);
 
-        // 如果 IndexedDB 中没有作品（例如写入完全失败），直接用静态 seed 保证不空
+        // 若 IndexedDB 还没写入任何数据（seed 升级竞态），直接用静态 seed 兜底，保证页面不空
         if (items.length === 0) {
-          const fallback: StoredWork[] = getStaticWorksByScope("profile");
-          fallback.sort((a, b) => b.createdAt - a.createdAt);
-          items = fallback
-            .filter((w) => w.previewUrl)
-            .map((w) => ({
-              id: w.id, title: w.title,
-              preview: w.previewUrl!,
-              domain: w.domain, contentType: w.contentType,
-              author: w.author, likes: w.likes, liked: w.liked, favorited: w.favorited,
-              favoriteCount: w.favoriteCount ?? 0,
-              commentCount: w.commentCount ?? 0,
-            }));
+          const fallback: StoredWork[] = [...PROFILE_SEED_WORKS].sort(
+            (a, b) => b.createdAt - a.createdAt,
+          );
+          items = buildItemsFromStored(fallback);
+        }
+
+        // 额外尝试用 FILES_STORE 替换 blob URL（若 seed 有上传文件）
+        try {
+          if (storedWorks.length > 0) {
+            const ids = storedWorks.map((w) => w.id);
+            const blobs: Map<string, Blob> = await getFileBlobs(ids).catch(
+              () => new Map(),
+            );
+            if (blobs.size > 0) {
+              items = storedWorks
+                .map((w) => {
+                  const blob = blobs.get(w.id);
+                  const preview = blob
+                    ? (() => {
+                        const url = URL.createObjectURL(blob);
+                        blobUrlsRef.current.add(url);
+                        return url;
+                      })()
+                    : w.previewUrl;
+                  if (!preview) return null;
+                  return {
+                    id: w.id,
+                    title: w.title,
+                    preview,
+                    domain: w.domain,
+                    contentType: w.contentType,
+                    author: w.author,
+                    likes: w.likes,
+                    liked: w.liked,
+                    favorited: w.favorited,
+                    favoriteCount: w.favoriteCount ?? 0,
+                    commentCount: w.commentCount ?? 0,
+                  } as WorkItem;
+                })
+                .filter((w): w is WorkItem => w !== null);
+            }
+          }
+        } catch {
+          /* ignore — 即使 blob 加载失败也保留静态 URL 渲染 */
         }
 
         setMyWorks(items);
       } catch (err) {
         console.error("加载我的作品失败，使用静态 mock:", err);
-        const fallback: StoredWork[] = [...PROFILE_SEED_WORKS].sort((a, b) => b.createdAt - a.createdAt);
-        setMyWorks(
-          fallback
-            .filter((w) => w.previewUrl)
-            .map((w) => ({
-              id: w.id, title: w.title,
-              preview: w.previewUrl!,
-              domain: w.domain, contentType: w.contentType,
-              author: w.author, likes: w.likes, liked: w.liked, favorited: w.favorited,
-              favoriteCount: w.favoriteCount ?? 0,
-              commentCount: w.commentCount ?? 0,
-            })),
+        const fallback: StoredWork[] = [...PROFILE_SEED_WORKS].sort(
+          (a, b) => b.createdAt - a.createdAt,
         );
+        setMyWorks(buildItemsFromStored(fallback));
       }
     };
     loadWorks();
@@ -203,7 +226,7 @@ export default function ProfilePage() {
     const load = async () => {
       await runGlobalAppSeed();
       try {
-        const raw = localStorage.getItem("aga-profile-liked-works");
+        const raw = localStorage.getItem(LIKED_WORKS_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -225,7 +248,7 @@ export default function ProfilePage() {
     const load = async () => {
       await runGlobalAppSeed();
       try {
-        const raw = localStorage.getItem("aga-profile-favorited-works");
+        const raw = localStorage.getItem(FAVORITED_WORKS_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -374,7 +397,7 @@ export default function ProfilePage() {
   const handleDeleteLiked = (id: string) => {
     const updated = likedWorks.filter((w) => w.id !== id);
     setLikedWorks(updated);
-    localStorage.setItem("aga-profile-liked-works", JSON.stringify(updated));
+    localStorage.setItem(LIKED_WORKS_KEY, JSON.stringify(updated));
     toast.success("已移除");
   };
 
@@ -382,7 +405,7 @@ export default function ProfilePage() {
   const handleRenameLiked = (id: string, newTitle: string) => {
     const updated = likedWorks.map((w) => (w.id === id ? { ...w, title: newTitle } : w));
     setLikedWorks(updated);
-    localStorage.setItem("aga-profile-liked-works", JSON.stringify(updated));
+    localStorage.setItem(LIKED_WORKS_KEY, JSON.stringify(updated));
     toast.success("已重命名");
   };
 
@@ -650,7 +673,7 @@ export default function ProfilePage() {
                       );
                       setLikedWorks(updated);
                       // 持久化到 localStorage
-                      localStorage.setItem("aga-profile-liked-works", JSON.stringify(updated));
+                      localStorage.setItem(LIKED_WORKS_KEY, JSON.stringify(updated));
                     }}
                     onDelete={handleDeleteLiked}
                     onRename={handleRenameLiked}
@@ -706,12 +729,12 @@ export default function ProfilePage() {
                         w.id === id ? { ...w, liked: !w.liked, likes: w.likes + (w.liked ? -1 : 1) } : w
                       );
                       setFavoritedWorks(updated);
-                      localStorage.setItem("aga-profile-favorited-works", JSON.stringify(updated));
+                      localStorage.setItem(FAVORITED_WORKS_KEY, JSON.stringify(updated));
                     }}
                     onFavorite={(id) => {
                       const updated = favoritedWorks.filter((w) => w.id !== id);
                       setFavoritedWorks(updated);
-                      localStorage.setItem("aga-profile-favorited-works", JSON.stringify(updated));
+                      localStorage.setItem(FAVORITED_WORKS_KEY, JSON.stringify(updated));
                       toast.success("已取消收藏");
                     }}
                     onComment={setCommentTarget}
@@ -747,18 +770,18 @@ export default function ProfilePage() {
             } else if (mainTab === "liked") {
               const updated = likedWorks.map((w) => w.id === id ? { ...w, liked: !w.liked, likes: w.likes + (w.liked ? -1 : 1) } : w);
               setLikedWorks(updated);
-              localStorage.setItem("aga-profile-liked-works", JSON.stringify(updated));
+              localStorage.setItem(LIKED_WORKS_KEY, JSON.stringify(updated));
             } else if (mainTab === "favorited") {
               const updated = favoritedWorks.map((w) => w.id === id ? { ...w, liked: !w.liked, likes: w.likes + (w.liked ? -1 : 1) } : w);
               setFavoritedWorks(updated);
-              localStorage.setItem("aga-profile-favorited-works", JSON.stringify(updated));
+              localStorage.setItem(FAVORITED_WORKS_KEY, JSON.stringify(updated));
             }
           }}
           onFavorite={(id) => {
             if (mainTab === "favorited") {
               const updated = favoritedWorks.filter((w) => w.id !== id);
               setFavoritedWorks(updated);
-              localStorage.setItem("aga-profile-favorited-works", JSON.stringify(updated));
+              localStorage.setItem(FAVORITED_WORKS_KEY, JSON.stringify(updated));
               toast.success("已取消收藏");
             } else {
               toast.success("已收藏");
