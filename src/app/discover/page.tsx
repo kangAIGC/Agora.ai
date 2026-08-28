@@ -20,18 +20,21 @@ import {
 import { runGlobalAppSeed } from "@/lib/app-seed";
 import {
   PERMANENT_ECOMMERCE_WORKS,
+  ECOM_PERM_PREFIX,
   isPermanentEcommerceWork,
   seedPermanentEcommerceWorks,
   validatePermanentEcommerceWorks,
 } from "@/lib/ecommerce-permanent";
 import {
   PERMANENT_COMIC_WORKS,
+  COMIC_PERM_PREFIX,
   isPermanentComicWork,
   seedPermanentComicWorks,
   validatePermanentComicWorks,
 } from "@/lib/comic-permanent";
 import {
   PERMANENT_ARCHITECTURE_WORKS,
+  ARCH_PERM_PREFIX,
   isPermanentArchitectureWork,
   seedPermanentArchitectureWorks,
   validatePermanentArchitectureWorks,
@@ -95,6 +98,23 @@ export default function DiscoverPage() {
   useEffect(() => {
     (async () => {
       try {
+        // 清理由历史架构（aga-perm-works 独立库）残留的永久作品数据：
+        // 该 DB 已被 aga-ugc 统一 works store 取代，但老用户浏览器中可能仍存在，
+        // 直接删除整个库，避免旧版本删除过的作品通过任何 fallback 路径重新出现
+        try {
+          if (typeof indexedDB !== "undefined" && indexedDB.databases) {
+            const dbs = await indexedDB.databases().catch(() => [] as IDBDatabaseInfo[]);
+            dbs.forEach((d) => {
+              if (d.name === "aga-perm-works") {
+                try { indexedDB.deleteDatabase(d.name); } catch { /* 忽略删除失败 */ }
+              }
+            });
+          } else if (typeof indexedDB !== "undefined") {
+            // indexedDB.databases 不可用时尝试直接按名称尝试删除
+            try { indexedDB.deleteDatabase("aga-perm-works"); } catch { /* ignore */ }
+          }
+        } catch { /* 忽略所有 IndexedDB 清理异常 */ }
+
         // 恢复上次保存的筛选/UI状态
         const savedState = loadDiscoverState();
         if (savedState) {
@@ -127,7 +147,7 @@ export default function DiscoverPage() {
         }
         // 种子永久建筑作品到 IndexedDB（数据库留存），源码数组仍是展示数据源
         await seedPermanentArchitectureWorks().catch(() => {});
-        // 验证永久建筑数据集数量一致性：恰好 8 图 + 4 视频
+        // 验证永久建筑数据集数量一致性：恰好 6 图 + 4 视频 + 1 工作流
         const archValidation = validatePermanentArchitectureWorks();
         if (!archValidation.valid) {
           console.warn("[architecture-permanent] 永久数据集数量异常:", archValidation);
@@ -139,13 +159,22 @@ export default function DiscoverPage() {
         ]);
 
         const deletedSet = new Set(deletedMockIds);
+        // 保险层：把历史上删除过的永久作品硬编码 id 也加入过滤集合，
+        // 避免极个别浏览器中旧版本 seed 残留导致已删除内容再次显示
+        // arch-perm-img-5 = 极简住宅外观表现；arch-perm-img-7 = 生态绿色建筑效果
+        deletedSet.add("arch-perm-img-5");
+        deletedSet.add("arch-perm-img-7");
         const filterDeleted = (works: WorkItem[]) =>
           works.filter((w) => !deletedSet.has(w.id));
         const remainingMocks = filterDeleted(MOCK_WORKS);
 
-        // 仅保留真正的用户上传作品（ID 以 "upload-" 开头）
+        // 仅保留真正的用户上传作品（ID 以 "upload-" 开头），
+        // 并额外排除 permanent 三个前缀作为兜底（避免 seed 层的历史数据通过非预期路径泄漏）
+        const PERM_PREFIXES = [ARCH_PERM_PREFIX, COMIC_PERM_PREFIX, ECOM_PERM_PREFIX];
         const userStoredWorks = storedWorks.filter(
-          (w) => w.id.startsWith("upload-")
+          (w) =>
+            w.id.startsWith("upload-") &&
+            !PERM_PREFIXES.some((p) => w.id.startsWith(p))
         );
 
         userStoredWorks.sort((a, b) => b.createdAt - a.createdAt);
@@ -538,9 +567,14 @@ export default function DiscoverPage() {
       ]);
       // 清空已删除 Mock 记录，让默认作品集在下次加载时全部可见
       await clearDeletedMockIds().catch(() => {});
-      // 重新拉取社区作品并合并展示
+      // 重新拉取社区作品并合并展示（恢复默认后，历史上硬删除的 2 条永久建筑图仍需过滤）
       const storedWorks = await getWorksByScope("community").catch(() => [] as StoredWork[]);
-      const userStoredWorks = storedWorks.filter((w) => w.id.startsWith("upload-"));
+      const RESTORE_PERM_PREFIXES = [ARCH_PERM_PREFIX, COMIC_PERM_PREFIX, ECOM_PERM_PREFIX];
+      const userStoredWorks = storedWorks.filter(
+        (w) =>
+          w.id.startsWith("upload-") &&
+          !RESTORE_PERM_PREFIXES.some((p) => w.id.startsWith(p)),
+      );
       userStoredWorks.sort((a, b) => b.createdAt - a.createdAt);
       const blobs: Map<string, Blob> = await getFileBlobs(
         userStoredWorks.map((w) => w.id),

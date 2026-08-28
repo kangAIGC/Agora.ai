@@ -2,7 +2,7 @@
 
 import type { WorkItem } from "@/components/WorkCard";
 import type { StoredWork } from "@/lib/ugc-storage";
-import { seedWorks } from "@/lib/ugc-storage";
+import { seedWorks, deleteWorksByIdPrefix } from "@/lib/ugc-storage";
 
 /**
  * 建筑社区永久作品数据集
@@ -17,14 +17,14 @@ import { seedWorks } from "@/lib/ugc-storage";
 export const ARCH_PERM_PREFIX = "arch-perm-";
 
 /** 数据留存标记：写入 localStorage，避免重复种子 */
-const ARCH_PERM_SEEDED_FLAG = "aga-arch-perm-seeded-v1";
+const ARCH_PERM_SEEDED_FLAG = "aga-arch-perm-seeded-v2";
 
 /**
- * 永久建筑作品（8 图 + 4 视频 + 2 工作流）
+ * 永久建筑作品（6 图 + 4 视频 + 1 工作流）
  * 全部引用本地 /mock-arch/ 静态文件，确保稳定可访问
  */
 export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
-  // ===== 8 张图片 =====
+  // ===== 6 张图片 =====
   {
     id: "arch-perm-img-1",
     title: "山地梯田建筑效果图",
@@ -219,7 +219,8 @@ export function validatePermanentArchitectureWorks(): {
  */
 export async function seedPermanentArchitectureWorks(force = false): Promise<void> {
   if (typeof window === "undefined") return;
-  if (!force && localStorage.getItem(ARCH_PERM_SEEDED_FLAG) === "1") return;
+  const alreadySeeded = localStorage.getItem(ARCH_PERM_SEEDED_FLAG) === "1";
+  if (!force && alreadySeeded) return;
 
   const stored: StoredWork[] = PERMANENT_ARCHITECTURE_WORKS.map((w) => ({
     id: w.id,
@@ -240,6 +241,10 @@ export async function seedPermanentArchitectureWorks(force = false): Promise<voi
   }));
 
   try {
+    // 版本升级或 force 重置：先清除当前前缀下所有旧记录，避免源码已删除的 id 残留
+    if (force || !alreadySeeded) {
+      await deleteWorksByIdPrefix(ARCH_PERM_PREFIX).catch(() => {});
+    }
     await seedWorks(stored);
     localStorage.setItem(ARCH_PERM_SEEDED_FLAG, "1");
   } catch (e) {

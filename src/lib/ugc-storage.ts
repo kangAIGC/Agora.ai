@@ -204,6 +204,32 @@ export async function deleteWorksByScope(scope: WorkScope): Promise<void> {
   });
 }
 
+/**
+ * 按 ID 前缀批量删除作品元数据（永久作品版本升级场景专用）
+ * 旧版本永久作品的 ID 前缀固定，升级时先清空对应前缀下的所有记录，
+ * 再重新 seed，避免源码中已删除的 id 长期残留。
+ */
+export async function deleteWorksByIdPrefix(prefix: string): Promise<void> {
+  if (!prefix) return;
+  const all = await getAllWorks();
+  const targets = all.filter((w) => typeof w.id === "string" && w.id.startsWith(prefix));
+  if (targets.length === 0) return;
+  const db = await openDB();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(WORKS_STORE, "readwrite");
+    const store = tx.objectStore(WORKS_STORE);
+    let done = 0;
+    for (const w of targets) {
+      const req = store.delete(w.id);
+      req.onsuccess = req.onerror = () => {
+        done++;
+        if (done === targets.length) resolve();
+      };
+    }
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 // ============ 已删除的 Mock 作品 id 列表 ============
 // Mock 数据无法从源数组删除，故持久化"已删除 id"集合，加载时过滤
 const DELETED_MOCK_KEY = "__deleted_mock_ids__";

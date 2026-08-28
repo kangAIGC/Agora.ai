@@ -2,7 +2,7 @@
 
 import type { WorkItem } from "@/components/WorkCard";
 import type { StoredWork } from "@/lib/ugc-storage";
-import { seedWorks } from "@/lib/ugc-storage";
+import { seedWorks, deleteWorksByIdPrefix } from "@/lib/ugc-storage";
 
 /**
  * 电商社区永久作品数据集
@@ -17,7 +17,7 @@ import { seedWorks } from "@/lib/ugc-storage";
 export const ECOM_PERM_PREFIX = "ecom-perm-";
 
 /** 数据留存标记：写入 localStorage，避免重复种子 */
-const ECOM_PERM_SEEDED_FLAG = "aga-ecom-perm-seeded-v1";
+const ECOM_PERM_SEEDED_FLAG = "aga-ecom-perm-seeded-v2";
 
 /**
  * 永久电商作品（4 图 + 5 视频 + 2 工作流）
@@ -208,7 +208,8 @@ export function validatePermanentEcommerceWorks(): {
  */
 export async function seedPermanentEcommerceWorks(force = false): Promise<void> {
   if (typeof window === "undefined") return;
-  if (!force && localStorage.getItem(ECOM_PERM_SEEDED_FLAG) === "1") return;
+  const alreadySeeded = localStorage.getItem(ECOM_PERM_SEEDED_FLAG) === "1";
+  if (!force && alreadySeeded) return;
 
   // 转换为 StoredWork 并标记永久
   const stored: StoredWork[] = PERMANENT_ECOMMERCE_WORKS.map((w) => ({
@@ -230,6 +231,10 @@ export async function seedPermanentEcommerceWorks(force = false): Promise<void> 
   }));
 
   try {
+    // 版本升级或 force 重置：先清除当前前缀下所有旧记录，避免源码已删除的 id 残留
+    if (force || !alreadySeeded) {
+      await deleteWorksByIdPrefix(ECOM_PERM_PREFIX).catch(() => {});
+    }
     await seedWorks(stored);
     localStorage.setItem(ECOM_PERM_SEEDED_FLAG, "1");
   } catch (e) {
