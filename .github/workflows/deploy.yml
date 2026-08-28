@@ -46,6 +46,9 @@ jobs:
         env:
           NEXT_PUBLIC_TOS_BASE_URL: ${{ secrets.NEXT_PUBLIC_TOS_BASE_URL }}
 
+      - name: Generate GitHub Pages 404.html（消除冷启动 404 闪屏）
+        run: node scripts/generate-gh-pages-404.mjs
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

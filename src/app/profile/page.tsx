@@ -394,6 +394,11 @@ export default function ProfilePage() {
 
   const likedImageCount = likedWorks.filter((w) => w.contentType === "image").length;
   const likedVideoCount = likedWorks.filter((w) => w.contentType === "video").length;
+  const likedWorkflowCount = likedWorks.filter((w) => w.contentType === "workflow").length;
+
+  const favoritedImageCount = favoritedWorks.filter((w) => w.contentType === "image").length;
+  const favoritedVideoCount = favoritedWorks.filter((w) => w.contentType === "video").length;
+  const favoritedWorkflowCount = favoritedWorks.filter((w) => w.contentType === "workflow").length;
 
   const subTabs: { key: SubFilter; label: string; count: number }[] = [
     { key: "all", label: "全部", count: myWorks.length },
@@ -406,6 +411,14 @@ export default function ProfilePage() {
     { key: "all", label: "全部", count: likedWorks.length },
     { key: "image", label: "图像", count: likedImageCount },
     { key: "video", label: "视频", count: likedVideoCount },
+    { key: "workflow", label: "工作流", count: likedWorkflowCount },
+  ];
+
+  const favoritedSubTabs: { key: SubFilter; label: string; count: number }[] = [
+    { key: "all", label: "全部", count: favoritedWorks.length },
+    { key: "image", label: "图像", count: favoritedImageCount },
+    { key: "video", label: "视频", count: favoritedVideoCount },
+    { key: "workflow", label: "工作流", count: favoritedWorkflowCount },
   ];
 
   const filteredLikedWorks = useMemo(() => {
@@ -616,6 +629,7 @@ export default function ProfilePage() {
                 >
                   {tab.key === "image" && <ImageIcon className="w-3.5 h-3.5" />}
                   {tab.key === "video" && <VideoIcon className="w-3.5 h-3.5" />}
+                  {tab.key === "workflow" && <Workflow className="w-3.5 h-3.5" />}
                   <span>{tab.label}</span>
                   <span className={`${subFilter === tab.key ? "text-black/60" : "text-white/40"}`}>
                     ({tab.count})
@@ -658,9 +672,9 @@ export default function ProfilePage() {
 
         {mainTab === "favorited" && (
           <>
-            {/* 子筛选 Tab：图像 / 视频 */}
+            {/* 子筛选 Tab：图像 / 视频 / 工作流 */}
             <div className="flex items-center gap-2 mb-6">
-              {likedSubTabs.map((tab) => (
+              {favoritedSubTabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setSubFilter(tab.key)}
@@ -672,7 +686,11 @@ export default function ProfilePage() {
                 >
                   {tab.key === "image" && <ImageIcon className="w-3.5 h-3.5" />}
                   {tab.key === "video" && <VideoIcon className="w-3.5 h-3.5" />}
+                  {tab.key === "workflow" && <Workflow className="w-3.5 h-3.5" />}
                   <span>{tab.label}</span>
+                  <span className={`${subFilter === tab.key ? "text-black/60" : "text-white/40"}`}>
+                    ({tab.count})
+                  </span>
                 </button>
               ))}
             </div>
