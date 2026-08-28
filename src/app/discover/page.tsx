@@ -66,6 +66,7 @@ const CONTENT_TYPES: { key: ContentType | null; label: string }[] = [
   { key: null, label: "全部" },
   { key: "image", label: "图像" },
   { key: "video", label: "视频" },
+  { key: "workflow", label: "工作流" },
 ];
 
 export default function DiscoverPage() {

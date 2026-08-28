@@ -1,12 +1,12 @@
 "use client";
 
-import { Heart, Bookmark, Copy, User, Trash2, Pencil, Check, X, Video, FileCode, FileText, MessageCircle, ChevronDown, Clock } from "lucide-react";
+import { Heart, Bookmark, Copy, User, Trash2, Pencil, Check, X, Video, FileCode, FileText, MessageCircle, ChevronDown, Clock, Workflow } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { asset } from "@/lib/asset";
 
 export type Domain = "architecture" | "ecommerce" | "comic";
-export type ContentType = "design" | "image" | "video" | "html";
+export type ContentType = "design" | "image" | "video" | "html" | "workflow";
 
 export interface WorkItem {
   id: string;
@@ -40,6 +40,7 @@ const typeLabels: Record<ContentType, string> = {
   image: "图像",
   video: "视频",
   html: "网页",
+  workflow: "工作流",
 };
 
 function formatWorkDate(ts: number): string {
@@ -228,6 +229,19 @@ export default function WorkCard({ item, onLike, onFavorite, onDelete, onRename,
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-500/10 to-purple-500/10">
             <FileText className="w-10 h-10 text-blue-400/60 mb-2" />
             <span className="text-xs text-white/40">文档作品</span>
+          </div>
+        )}
+        {item.contentType === "workflow" && (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-indigo-500/10">
+            <img
+              src={asset(item.preview)}
+              alt={item.title}
+              className="absolute inset-0 w-full h-full object-cover opacity-30 transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="relative z-10 flex flex-col items-center justify-center bg-black/30 rounded-2xl px-4 py-3 backdrop-blur-[2px]">
+              <Workflow className="w-10 h-10 text-cyan-300/80 mb-2" />
+              <span className="text-xs text-white/60 font-medium">工作流作品</span>
+            </div>
           </div>
         )}
 
