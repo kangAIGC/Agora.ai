@@ -8,7 +8,7 @@ import { seedWorks } from "@/lib/ugc-storage";
  * 建筑社区永久作品数据集
  *
  * 设计目标：
- * - 恰好 8 张图片 + 4 个视频 + 2 个工作流，共 14 条作品
+ * - 恰好 6 张图片 + 4 个视频 + 1 个工作流，共 11 条作品
  * - 数据硬编码在源码中，天然跨刷新 / 服务重启持久（源码即数据）
  * - 同时种子到 IndexedDB（数据库留存），并标记 permanent: true 防删
  * - ID 统一前缀 arch-perm-，删除逻辑据此拦截
@@ -76,18 +76,6 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
     createdAt: new Date(2026, 6, 2).getTime(),
   },
   {
-    id: "arch-perm-img-5",
-    title: "极简住宅外观表现",
-    preview: "/mock-arch/5.png",
-    domain: "architecture",
-    contentType: "image",
-    author: { name: "RenderPro" },
-    likes: 224,
-    favoriteCount: 38,
-    commentCount: 10,
-    createdAt: new Date(2026, 7, 5).getTime(),
-  },
-  {
     id: "arch-perm-img-6",
     title: "工业风改造空间渲染",
     preview: "/mock-arch/mock-01.png",
@@ -98,19 +86,6 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
     favoriteCount: 19,
     commentCount: 4,
     createdAt: new Date(2026, 7, 15).getTime(),
-  },
-  {
-    id: "arch-perm-img-7",
-    title: "生态绿色建筑效果",
-    preview: "/mock-arch/7.png",
-    domain: "architecture",
-    contentType: "image",
-    author: { name: "RenderPro" },
-    likes: 267,
-    favoriteCount: 52,
-    commentCount: 15,
-    favorited: true,
-    createdAt: new Date(2026, 6, 20).getTime(),
   },
   {
     id: "arch-perm-img-8",
@@ -192,7 +167,7 @@ export const PERMANENT_ARCHITECTURE_WORKS: WorkItem[] = [
 ];
 
 /** 预期数量常量（验证基准） */
-export const EXPECTED_ARCH_IMAGES = 8;
+export const EXPECTED_ARCH_IMAGES = 6;
 export const EXPECTED_ARCH_VIDEOS = 4;
 export const EXPECTED_ARCH_WORKFLOWS = 1;
 
