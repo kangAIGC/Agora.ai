@@ -3,55 +3,58 @@
 import Script from "next/script";
 
 /**
- * 自定义 404 页面
+ * Next.js 内置 404 兜底（App Router export 时写一份 out/404.html，但我们会在
+ * build 后用 scripts/generate-gh-pages-404.mjs 覆盖它，这里只作为开发 fallback）
  *
- * GitHub Pages + Next.js 静态导出 + basePath 已知 Bug：
- *   next/link 会把 href="/chat" 渲染为 /basePath/chat；
- *   当客户端路由失败（e.g. 冷启动、硬跳转或 query 参数带 project）时，
- *   Next.js 回退到 404 页面，同时 GitHub Pages 的路径处理偶尔会
- *   叠加第二次 basePath，导致 /Agora.ai/Agora.ai/... 404。
- *
- * 此页面在 <head> 同步执行一个脚本，立即检测并修复 URL，避免死链。
+ * 设计原则：
+ *   1) 不展示"404"大字，避免闪屏 —— 背景=页面背景色，内容空白
+ *   2) 首屏同步脚本：对已知路由（/chat、/discover、/profile、/material、/membership）
+ *      做 history.replaceState，消除 GitHub Pages + trailingSlash 造成的
+ *      "404 返回 200 页"的短暂地址错乱
+ *   3) 其他未知路径则在 2s 后静默跳首页（不做视觉提示）
  */
 export default function NotFound() {
   return (
     <html lang="zh-CN">
       <head>
         <meta name="robots" content="noindex" />
-        {/* inline 同步脚本：在页面完全加载前就执行，避免用户看到一闪而过的 404 */}
-        <Script id="gh-pages-basepath-fix" strategy="beforeInteractive">
+        <style>{`html,body{background:#0a0a0a;margin:0;padding:0;min-height:100vh}`}</style>
+        <Script id="aga-client-404-fix" strategy="beforeInteractive">
           {`
             (function () {
               try {
                 var BASE = "/Agora.ai";
+                var KNOWN = ["","/chat","/discover","/profile","/material","/membership","/design","/render","/video","/ppt"];
                 var p = location.pathname;
-                // /Agora.ai/Agora.ai  -> /Agora.ai/
                 var dup = BASE + BASE;
                 if (p.indexOf(dup) === 0) {
-                  var suffix = p.substring(dup.length);
-                  if (!suffix || suffix === "/") suffix = "/";
-                  else if (suffix.charAt(0) !== "/") suffix = "/" + suffix;
-                  location.replace(BASE + suffix + location.search + location.hash);
+                  var s = p.substring(dup.length);
+                  if (!s || s === "/") s = "/";
+                  else if (s.charAt(0) !== "/") s = "/" + s;
+                  location.replace(BASE + s + location.search + location.hash);
                   return;
                 }
-                // 其他 404：2 秒后跳首页
-                setTimeout(function () {
-                  location.replace(BASE + "/" + location.search + location.hash);
-                }, 1500);
-              } catch (e) {
-                setTimeout(function () { location.replace("/"); }, 1500);
+                var rel = p;
+                if (rel.indexOf(BASE) === 0) rel = rel.substring(BASE.length);
+                if (rel === "") rel = "/";
+                if (rel.length > 1 && rel.charAt(rel.length-1) === "/") rel = rel.substring(0, rel.length-1);
+                if (KNOWN.indexOf(rel) >= 0) {
+                  var target = BASE + (rel === "/" ? "/" : rel + "/");
+                  if (target !== location.pathname) {
+                    history.replaceState(null, "", target + location.search + location.hash);
+                    location.reload(true);
+                  }
+                  return;
+                }
+                setTimeout(function(){ location.replace(BASE + "/" + location.search + location.hash); }, 1500);
+              } catch(e) {
+                setTimeout(function(){ location.replace("/"); }, 1500);
               }
             })();
           `}
         </Script>
       </head>
-      <body style={{ background: "#000", color: "#888", fontFamily: "system-ui,sans-serif", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", margin: 0 }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: 48, margin: 0, color: "#fff" }}>404</p>
-          <p>正在跳转到正确页面…</p>
-          <p style={{ fontSize: 12, opacity: 0.5, marginTop: 32 }}>Redirecting to correct URL…</p>
-        </div>
-      </body>
+      <body />
     </html>
   );
 }

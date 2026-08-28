@@ -4,8 +4,8 @@ import type { WorkItem } from "@/components/WorkCard";
 import type { StoredWork, WorkScope } from "@/lib/ugc-storage";
 import { seedWorks as seedWorksDB } from "@/lib/ugc-storage";
 
-export const PROFILE_SEED_FLAG = "aga-profile-seeded-v5";
-export const GLOBAL_APP_SEED_FLAG = "aga-app-seeded-v1";
+export const PROFILE_SEED_FLAG = "aga-profile-seeded-v6";
+export const GLOBAL_APP_SEED_FLAG = "aga-app-seeded-v2";
 
 // ============ Profile 12 条发布作品（硬编码 mock，4建筑 + 4电商 + 4漫剧） ============
 export const PROFILE_SEED_WORKS: StoredWork[] = [
@@ -72,6 +72,22 @@ export const PROFILE_SEED_WORKS: StoredWork[] = [
     author: { name: "Aigc.Kang" }, likes: 132, favoriteCount: 28, commentCount: 11, fileType: "image/png",
     createdAt: Date.now() - 3600000, scope: "profile", previewUrl: "/mock-manju/墨玉牌.png",
   },
+  // 工作流 × 3（每个领域 1 条）
+  {
+    id: "pub-wf-arch", title: "建筑概念方案一键生成工作流", domain: "architecture", contentType: "workflow",
+    author: { name: "Aigc.Kang" }, likes: 97, favoriteCount: 21, commentCount: 8, fileType: "application/agora-workflow",
+    createdAt: Date.now() - 86400000 * 1.5, scope: "profile", previewUrl: "/mock-arch/mock-01.png",
+  },
+  {
+    id: "pub-wf-ecom", title: "商品详情页一键生成工作流", domain: "ecommerce", contentType: "workflow",
+    author: { name: "Aigc.Kang" }, likes: 84, favoriteCount: 18, commentCount: 5, fileType: "application/agora-workflow",
+    createdAt: Date.now() - 86400000 * 0.75, scope: "profile", previewUrl: "/mock-dianshang/img1.png",
+  },
+  {
+    id: "pub-wf-comic", title: "古风仙侠漫剧一键生成工作流", domain: "comic", contentType: "workflow",
+    author: { name: "Aigc.Kang" }, likes: 158, favoriteCount: 41, commentCount: 15, fileType: "application/agora-workflow",
+    createdAt: Date.now() - 7200000, scope: "profile", previewUrl: "/mock-manju/青云大殿.png",
+  },
 ];
 
 // ============ 点赞的 4 条作品（硬编码 mock，localStorage） ============
@@ -124,6 +140,18 @@ export const LIKED_SEED_WORKS: WorkItem[] = [
     commentCount: 3,
     liked: true,
   },
+  {
+    id: "liked-5",
+    title: "建筑概念方案一键生成工作流",
+    preview: "/mock-arch/mock-03.png",
+    domain: "architecture",
+    contentType: "workflow",
+    author: { name: "ArchDesign" },
+    likes: 512,
+    favoriteCount: 96,
+    commentCount: 22,
+    liked: true,
+  },
 ];
 
 // ============ 收藏的 3 条作品（硬编码 mock，localStorage） ============
@@ -162,6 +190,18 @@ export const FAVORITED_SEED_WORKS: WorkItem[] = [
     likes: 467,
     favoriteCount: 210,
     commentCount: 38,
+    favorited: true,
+  },
+  {
+    id: "fav-4",
+    title: "古风仙侠漫剧一键生成工作流",
+    preview: "/mock-manju/青云大殿.png",
+    domain: "comic",
+    contentType: "workflow",
+    author: { name: "漫剧工作室" },
+    likes: 628,
+    favoriteCount: 204,
+    commentCount: 41,
     favorited: true,
   },
 ];
