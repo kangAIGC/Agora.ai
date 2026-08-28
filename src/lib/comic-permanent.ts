@@ -2,7 +2,7 @@
 
 import type { WorkItem } from "@/components/WorkCard";
 import type { StoredWork } from "@/lib/ugc-storage";
-import { seedWorks } from "@/lib/ugc-storage";
+import { seedWorks, deleteWorksByIdPrefix } from "@/lib/ugc-storage";
 
 /**
  * 漫剧社区永久作品数据集
@@ -17,7 +17,7 @@ import { seedWorks } from "@/lib/ugc-storage";
 export const COMIC_PERM_PREFIX = "comic-perm-";
 
 /** 数据留存标记：写入 localStorage，避免重复种子 */
-const COMIC_PERM_SEEDED_FLAG = "aga-comic-perm-seeded-v1";
+const COMIC_PERM_SEEDED_FLAG = "aga-comic-perm-seeded-v2";
 
 /**
  * 永久漫剧作品（9 图 + 1 视频 + 2 工作流）
@@ -220,7 +220,8 @@ export function validatePermanentComicWorks(): {
  */
 export async function seedPermanentComicWorks(force = false): Promise<void> {
   if (typeof window === "undefined") return;
-  if (!force && localStorage.getItem(COMIC_PERM_SEEDED_FLAG) === "1") return;
+  const alreadySeeded = localStorage.getItem(COMIC_PERM_SEEDED_FLAG) === "1";
+  if (!force && alreadySeeded) return;
 
   const stored: StoredWork[] = PERMANENT_COMIC_WORKS.map((w) => ({
     id: w.id,
@@ -241,6 +242,10 @@ export async function seedPermanentComicWorks(force = false): Promise<void> {
   }));
 
   try {
+    // 版本升级或 force 重置：先清除当前前缀下所有旧记录，避免源码已删除的 id 残留
+    if (force || !alreadySeeded) {
+      await deleteWorksByIdPrefix(COMIC_PERM_PREFIX).catch(() => {});
+    }
     await seedWorks(stored);
     localStorage.setItem(COMIC_PERM_SEEDED_FLAG, "1");
   } catch (e) {
