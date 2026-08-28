@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import {
   User, Edit3, Heart, MessageCircle, Bookmark,
   Image as ImageIcon, Video as VideoIcon, MoreHorizontal,
-  Copy, Share2, X, Plus, Upload, FileVideo,
+  Copy, Share2, X, Plus, Upload, FileVideo, Workflow,
 } from "lucide-react";
 import { toast } from "sonner";
 import WorkCard, { type WorkItem, type Domain } from "@/components/WorkCard";
@@ -71,7 +71,7 @@ const MOCK_PROFILE = {
 };
 
 type MainTab = "publish" | "liked" | "favorited";
-type SubFilter = "all" | "image" | "video";
+type SubFilter = "all" | "image" | "video" | "workflow";
 
 // ============ Mock: 点赞的4个作品（已移至 lib/app-seed.ts LIKED_SEED_WORKS，此处保持向后兼容） ============
 const MOCK_LIKED_SEED: WorkItem[] = [...LIKED_SEED_WORKS] as WorkItem[];
@@ -389,6 +389,7 @@ export default function ProfilePage() {
   // 统计数据
   const imageCount = myWorks.filter((w) => w.contentType === "image").length;
   const videoCount = myWorks.filter((w) => w.contentType === "video").length;
+  const workflowCount = myWorks.filter((w) => w.contentType === "workflow").length;
   const totalLikes = myWorks.reduce((sum, w) => sum + (w.likes || 0), 0);
 
   const likedImageCount = likedWorks.filter((w) => w.contentType === "image").length;
@@ -398,6 +399,7 @@ export default function ProfilePage() {
     { key: "all", label: "全部", count: myWorks.length },
     { key: "image", label: "图像", count: imageCount },
     { key: "video", label: "视频", count: videoCount },
+    { key: "workflow", label: "工作流", count: workflowCount },
   ];
 
   const likedSubTabs: { key: SubFilter; label: string; count: number }[] = [
@@ -533,6 +535,7 @@ export default function ProfilePage() {
                 >
                   {tab.key === "image" && <ImageIcon className="w-3.5 h-3.5" />}
                   {tab.key === "video" && <VideoIcon className="w-3.5 h-3.5" />}
+                  {tab.key === "workflow" && <Workflow className="w-3.5 h-3.5" />}
                   <span>{tab.label}</span>
                   <span className={`${subFilter === tab.key ? "text-black/60" : "text-white/40"}`}>
                     ({tab.count})
@@ -583,7 +586,7 @@ export default function ProfilePage() {
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <ImageIcon className="w-16 h-16 text-white/10 mb-4" />
                 <h3 className="text-lg font-medium text-white/70 mb-2">
-                  {subFilter === "all" ? "还没有发布任何作品" : `还没有发布${subFilter === "image" ? "图像" : "视频"}作品`}
+                  {subFilter === "all" ? "还没有发布任何作品" : `还没有发布${subFilter === "image" ? "图像" : subFilter === "video" ? "视频" : "工作流"}作品`}
                 </h3>
                 <p className="text-sm text-white/40 mb-6">前往工作台，开启你的 AI 创作之旅</p>
                 <a
